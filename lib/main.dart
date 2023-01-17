@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:spimo/data/book_repository.dart';
 import 'package:spimo/domain/book/book.dart';
+import 'package:spimo/domain/repository/books_repository.dart';
 import 'package:spimo/firebase_options.dart';
 
 void main() async {
@@ -41,7 +41,7 @@ class MyHomePage extends HookConsumerWidget {
     useEffect(() {
       Future(() async {
         final searchedBookList =
-            await ref.read(bookProvider).getBooks('良いコード悪いコード');
+            await ref.read(booksProvider).getBooks('良いコード悪いコード');
         books.value = searchedBookList;
       });
       return null;

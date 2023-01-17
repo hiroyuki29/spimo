@@ -1,17 +1,14 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spimo/data/google_books_apis/model/google_books_api_response.dart';
 import 'package:spimo/domain/book/book.dart';
 import 'package:http/http.dart' as http;
-import 'package:spimo/domain/google_books_apis/google_books_api_response.dart';
+import 'package:spimo/domain/repository/books_repository.dart';
 
-final bookProvider = Provider<BookRepository>((ref) {
-  return BookRepository();
-});
+class GoogleBooksRepository implements BooksRepository {
+  GoogleBooksRepository();
 
-class BookRepository {
-  BookRepository();
-
+  @override
   Future<List<Book>> getBooks(String keyword) async {
     var url =
         Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': keyword});

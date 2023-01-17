@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:spimo/data/google_books_apis/model/volume_info.dart';
 import 'package:spimo/domain/book/book.dart';
-import 'package:spimo/domain/google_books_apis/volume_info.dart';
 
 part 'google_book.freezed.dart';
 part 'google_book.g.dart';

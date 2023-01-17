@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/data/book_repository.dart';
-import 'package:spimo/domain/book/google_book.dart';
+import 'package:spimo/domain/book/book.dart';
 import 'package:spimo/firebase_options.dart';
 
 void main() async {
@@ -36,12 +36,13 @@ class MyHomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final books = useState<List<GoogleBook?>>([]);
+    final books = useState<List<Book>>([]);
 
     useEffect(() {
       Future(() async {
-        final googleBooks = await ref.read(bookProvider).getBooks('良いコード悪いコード');
-        books.value = googleBooks.items;
+        final searchedBookList =
+            await ref.read(bookProvider).getBooks('良いコード悪いコード');
+        books.value = searchedBookList;
       });
       return null;
     }, []);
@@ -49,7 +50,7 @@ class MyHomePage extends HookConsumerWidget {
         body: SafeArea(
       child: books.value.isEmpty
           ? const Text('データなし')
-          : Text(books.value.first!.volumeInfo['title']),
+          : Text(books.value[0].title),
     ));
   }
 }

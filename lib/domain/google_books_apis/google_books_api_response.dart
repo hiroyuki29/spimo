@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:spimo/domain/book/book.dart';
-import 'package:spimo/domain/book/google_book.dart';
+import 'package:spimo/domain/google_books_apis/google_book.dart';
 
 part 'google_books_api_response.freezed.dart';
 part 'google_books_api_response.g.dart';

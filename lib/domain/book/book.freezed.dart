@@ -23,8 +23,8 @@ mixin _$Book {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   List<String?> get authors => throw _privateConstructorUsedError;
-  Map<String, dynamic> get imageLinks => throw _privateConstructorUsedError;
-  int get pageCount => throw _privateConstructorUsedError;
+  String? get imageLinks => throw _privateConstructorUsedError;
+  int? get pageCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,8 +40,8 @@ abstract class $BookCopyWith<$Res> {
       {String id,
       String title,
       List<String?> authors,
-      Map<String, dynamic> imageLinks,
-      int pageCount});
+      String? imageLinks,
+      int? pageCount});
 }
 
 /// @nodoc
@@ -60,8 +60,8 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? id = null,
     Object? title = null,
     Object? authors = null,
-    Object? imageLinks = null,
-    Object? pageCount = null,
+    Object? imageLinks = freezed,
+    Object? pageCount = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -76,14 +76,14 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.authors
           : authors // ignore: cast_nullable_to_non_nullable
               as List<String?>,
-      imageLinks: null == imageLinks
+      imageLinks: freezed == imageLinks
           ? _value.imageLinks
           : imageLinks // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      pageCount: null == pageCount
+              as String?,
+      pageCount: freezed == pageCount
           ? _value.pageCount
           : pageCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -98,8 +98,8 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
       {String id,
       String title,
       List<String?> authors,
-      Map<String, dynamic> imageLinks,
-      int pageCount});
+      String? imageLinks,
+      int? pageCount});
 }
 
 /// @nodoc
@@ -114,8 +114,8 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
     Object? id = null,
     Object? title = null,
     Object? authors = null,
-    Object? imageLinks = null,
-    Object? pageCount = null,
+    Object? imageLinks = freezed,
+    Object? pageCount = freezed,
   }) {
     return _then(_$_Book(
       id: null == id
@@ -130,14 +130,14 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value._authors
           : authors // ignore: cast_nullable_to_non_nullable
               as List<String?>,
-      imageLinks: null == imageLinks
-          ? _value._imageLinks
+      imageLinks: freezed == imageLinks
+          ? _value.imageLinks
           : imageLinks // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
-      pageCount: null == pageCount
+              as String?,
+      pageCount: freezed == pageCount
           ? _value.pageCount
           : pageCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -149,10 +149,9 @@ class _$_Book implements _Book {
       {required this.id,
       required this.title,
       required final List<String?> authors,
-      required final Map<String, dynamic> imageLinks,
-      required this.pageCount})
-      : _authors = authors,
-        _imageLinks = imageLinks;
+      this.imageLinks,
+      this.pageCount})
+      : _authors = authors;
 
   factory _$_Book.fromJson(Map<String, dynamic> json) => _$$_BookFromJson(json);
 
@@ -168,16 +167,10 @@ class _$_Book implements _Book {
     return EqualUnmodifiableListView(_authors);
   }
 
-  final Map<String, dynamic> _imageLinks;
   @override
-  Map<String, dynamic> get imageLinks {
-    if (_imageLinks is EqualUnmodifiableMapView) return _imageLinks;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_imageLinks);
-  }
-
+  final String? imageLinks;
   @override
-  final int pageCount;
+  final int? pageCount;
 
   @override
   String toString() {
@@ -192,21 +185,16 @@ class _$_Book implements _Book {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             const DeepCollectionEquality().equals(other._authors, _authors) &&
-            const DeepCollectionEquality()
-                .equals(other._imageLinks, _imageLinks) &&
+            (identical(other.imageLinks, imageLinks) ||
+                other.imageLinks == imageLinks) &&
             (identical(other.pageCount, pageCount) ||
                 other.pageCount == pageCount));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      const DeepCollectionEquality().hash(_authors),
-      const DeepCollectionEquality().hash(_imageLinks),
-      pageCount);
+  int get hashCode => Object.hash(runtimeType, id, title,
+      const DeepCollectionEquality().hash(_authors), imageLinks, pageCount);
 
   @JsonKey(ignore: true)
   @override
@@ -227,8 +215,8 @@ abstract class _Book implements Book {
       {required final String id,
       required final String title,
       required final List<String?> authors,
-      required final Map<String, dynamic> imageLinks,
-      required final int pageCount}) = _$_Book;
+      final String? imageLinks,
+      final int? pageCount}) = _$_Book;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
@@ -239,9 +227,9 @@ abstract class _Book implements Book {
   @override
   List<String?> get authors;
   @override
-  Map<String, dynamic> get imageLinks;
+  String? get imageLinks;
   @override
-  int get pageCount;
+  int? get pageCount;
   @override
   @JsonKey(ignore: true)
   _$$_BookCopyWith<_$_Book> get copyWith => throw _privateConstructorUsedError;

@@ -9,8 +9,8 @@ class Book with _$Book {
     required String id,
     required String title,
     required List<String?> authors,
-    required Map<String, dynamic> imageLinks,
-    required int pageCount,
+    String? imageLinks,
+    int? pageCount,
   }) = _Book;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);

@@ -21,7 +21,7 @@ GoogleBook _$GoogleBookFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$GoogleBook {
   String get id => throw _privateConstructorUsedError;
-  Map<String, dynamic> get volumeInfo => throw _privateConstructorUsedError;
+  VolumeInfo get volumeInfo => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +35,9 @@ abstract class $GoogleBookCopyWith<$Res> {
           GoogleBook value, $Res Function(GoogleBook) then) =
       _$GoogleBookCopyWithImpl<$Res, GoogleBook>;
   @useResult
-  $Res call({String id, Map<String, dynamic> volumeInfo});
+  $Res call({String id, VolumeInfo volumeInfo});
+
+  $VolumeInfoCopyWith<$Res> get volumeInfo;
 }
 
 /// @nodoc
@@ -62,8 +64,16 @@ class _$GoogleBookCopyWithImpl<$Res, $Val extends GoogleBook>
       volumeInfo: null == volumeInfo
           ? _value.volumeInfo
           : volumeInfo // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as VolumeInfo,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $VolumeInfoCopyWith<$Res> get volumeInfo {
+    return $VolumeInfoCopyWith<$Res>(_value.volumeInfo, (value) {
+      return _then(_value.copyWith(volumeInfo: value) as $Val);
+    });
   }
 }
 
@@ -75,7 +85,10 @@ abstract class _$$_GoogleBookCopyWith<$Res>
       __$$_GoogleBookCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, Map<String, dynamic> volumeInfo});
+  $Res call({String id, VolumeInfo volumeInfo});
+
+  @override
+  $VolumeInfoCopyWith<$Res> get volumeInfo;
 }
 
 /// @nodoc
@@ -98,32 +111,25 @@ class __$$_GoogleBookCopyWithImpl<$Res>
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       volumeInfo: null == volumeInfo
-          ? _value._volumeInfo
+          ? _value.volumeInfo
           : volumeInfo // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
+              as VolumeInfo,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_GoogleBook implements _GoogleBook {
-  const _$_GoogleBook(
-      {required this.id, required final Map<String, dynamic> volumeInfo})
-      : _volumeInfo = volumeInfo;
+class _$_GoogleBook extends _GoogleBook {
+  const _$_GoogleBook({required this.id, required this.volumeInfo}) : super._();
 
   factory _$_GoogleBook.fromJson(Map<String, dynamic> json) =>
       _$$_GoogleBookFromJson(json);
 
   @override
   final String id;
-  final Map<String, dynamic> _volumeInfo;
   @override
-  Map<String, dynamic> get volumeInfo {
-    if (_volumeInfo is EqualUnmodifiableMapView) return _volumeInfo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_volumeInfo);
-  }
+  final VolumeInfo volumeInfo;
 
   @override
   String toString() {
@@ -136,14 +142,13 @@ class _$_GoogleBook implements _GoogleBook {
         (other.runtimeType == runtimeType &&
             other is _$_GoogleBook &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality()
-                .equals(other._volumeInfo, _volumeInfo));
+            (identical(other.volumeInfo, volumeInfo) ||
+                other.volumeInfo == volumeInfo));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, const DeepCollectionEquality().hash(_volumeInfo));
+  int get hashCode => Object.hash(runtimeType, id, volumeInfo);
 
   @JsonKey(ignore: true)
   @override
@@ -159,10 +164,11 @@ class _$_GoogleBook implements _GoogleBook {
   }
 }
 
-abstract class _GoogleBook implements GoogleBook {
+abstract class _GoogleBook extends GoogleBook {
   const factory _GoogleBook(
       {required final String id,
-      required final Map<String, dynamic> volumeInfo}) = _$_GoogleBook;
+      required final VolumeInfo volumeInfo}) = _$_GoogleBook;
+  const _GoogleBook._() : super._();
 
   factory _GoogleBook.fromJson(Map<String, dynamic> json) =
       _$_GoogleBook.fromJson;
@@ -170,7 +176,7 @@ abstract class _GoogleBook implements GoogleBook {
   @override
   String get id;
   @override
-  Map<String, dynamic> get volumeInfo;
+  VolumeInfo get volumeInfo;
   @override
   @JsonKey(ignore: true)
   _$$_GoogleBookCopyWith<_$_GoogleBook> get copyWith =>

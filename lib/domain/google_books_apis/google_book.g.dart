@@ -9,7 +9,8 @@ part of 'google_book.dart';
 _$_GoogleBook _$$_GoogleBookFromJson(Map<String, dynamic> json) =>
     _$_GoogleBook(
       id: json['id'] as String,
-      volumeInfo: json['volumeInfo'] as Map<String, dynamic>,
+      volumeInfo:
+          VolumeInfo.fromJson(json['volumeInfo'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_GoogleBookToJson(_$_GoogleBook instance) =>

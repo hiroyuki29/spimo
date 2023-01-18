@@ -22,6 +22,8 @@ class GoogleBook with _$GoogleBook {
       id: id,
       title: volumeInfo.title,
       authors: volumeInfo.authors,
+      pageCount: volumeInfo.pageCount ?? 0,
+      imageLinks: volumeInfo.imageLinks?.thumbnail ?? '',
     );
   }
 }

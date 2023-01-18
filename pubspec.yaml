@@ -54,6 +54,7 @@ dependencies:
   
   # 通信
   http: ^0.13.5
+  speech_to_text: ^6.1.1
   
 
 dev_dependencies:

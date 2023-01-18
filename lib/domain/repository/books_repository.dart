@@ -7,5 +7,6 @@ final booksProvider = Provider<BooksRepository>((ref) {
 });
 
 abstract class BooksRepository {
-  Future<List<Book>> getBooks(String keyword);
+  Future<List<Book>> getBookList(String keyword);
+  Future<Book> getBook(String id);
 }

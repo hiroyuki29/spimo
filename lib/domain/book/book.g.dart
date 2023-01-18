@@ -10,7 +10,7 @@ _$_Book _$$_BookFromJson(Map<String, dynamic> json) => _$_Book(
       id: json['id'] as String,
       title: json['title'] as String,
       authors:
-          (json['authors'] as List<dynamic>).map((e) => e as String?).toList(),
+          (json['authors'] as List<dynamic>?)?.map((e) => e as String).toList(),
       imageLinks: json['imageLinks'] as String?,
       pageCount: json['pageCount'] as int?,
     );

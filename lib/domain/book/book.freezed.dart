@@ -22,7 +22,7 @@ Book _$BookFromJson(Map<String, dynamic> json) {
 mixin _$Book {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  List<String?> get authors => throw _privateConstructorUsedError;
+  List<String>? get authors => throw _privateConstructorUsedError;
   String? get imageLinks => throw _privateConstructorUsedError;
   int? get pageCount => throw _privateConstructorUsedError;
 
@@ -39,7 +39,7 @@ abstract class $BookCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      List<String?> authors,
+      List<String>? authors,
       String? imageLinks,
       int? pageCount});
 }
@@ -59,7 +59,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? authors = null,
+    Object? authors = freezed,
     Object? imageLinks = freezed,
     Object? pageCount = freezed,
   }) {
@@ -72,10 +72,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      authors: null == authors
+      authors: freezed == authors
           ? _value.authors
           : authors // ignore: cast_nullable_to_non_nullable
-              as List<String?>,
+              as List<String>?,
       imageLinks: freezed == imageLinks
           ? _value.imageLinks
           : imageLinks // ignore: cast_nullable_to_non_nullable
@@ -97,7 +97,7 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      List<String?> authors,
+      List<String>? authors,
       String? imageLinks,
       int? pageCount});
 }
@@ -113,7 +113,7 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? authors = null,
+    Object? authors = freezed,
     Object? imageLinks = freezed,
     Object? pageCount = freezed,
   }) {
@@ -126,10 +126,10 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      authors: null == authors
+      authors: freezed == authors
           ? _value._authors
           : authors // ignore: cast_nullable_to_non_nullable
-              as List<String?>,
+              as List<String>?,
       imageLinks: freezed == imageLinks
           ? _value.imageLinks
           : imageLinks // ignore: cast_nullable_to_non_nullable
@@ -148,7 +148,7 @@ class _$_Book implements _Book {
   const _$_Book(
       {required this.id,
       required this.title,
-      required final List<String?> authors,
+      final List<String>? authors,
       this.imageLinks,
       this.pageCount})
       : _authors = authors;
@@ -159,12 +159,14 @@ class _$_Book implements _Book {
   final String id;
   @override
   final String title;
-  final List<String?> _authors;
+  final List<String>? _authors;
   @override
-  List<String?> get authors {
+  List<String>? get authors {
+    final value = _authors;
+    if (value == null) return null;
     if (_authors is EqualUnmodifiableListView) return _authors;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_authors);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -214,7 +216,7 @@ abstract class _Book implements Book {
   const factory _Book(
       {required final String id,
       required final String title,
-      required final List<String?> authors,
+      final List<String>? authors,
       final String? imageLinks,
       final int? pageCount}) = _$_Book;
 
@@ -225,7 +227,7 @@ abstract class _Book implements Book {
   @override
   String get title;
   @override
-  List<String?> get authors;
+  List<String>? get authors;
   @override
   String? get imageLinks;
   @override

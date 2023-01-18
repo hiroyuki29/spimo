@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:spimo/data/google_books_apis/model/google_book.dart';
 import 'package:spimo/data/google_books_apis/model/google_books_api_response.dart';
 import 'package:spimo/domain/book/book.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +10,7 @@ class GoogleBooksRepository implements BooksRepository {
   GoogleBooksRepository();
 
   @override
-  Future<List<Book>> getBooks(String keyword) async {
+  Future<List<Book>> getBookList(String keyword) async {
     var url =
         Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': keyword});
 
@@ -19,6 +20,20 @@ class GoogleBooksRepository implements BooksRepository {
       final googleBooksList = result.items;
       final bookList = googleBooksList.map((e) => e.transferToBook()).toList();
       return bookList;
+    } else {
+      throw Exception('Failed to connect to webservice');
+    }
+  }
+
+  @override
+  Future<Book> getBook(String id) async {
+    var url = Uri.https('www.googleapis.com', '/books/v1/volumes/$id');
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final result = GoogleBook.fromJson(jsonDecode(response.body));
+      final book = result.transferToBook();
+      return book;
     } else {
       throw Exception('Failed to connect to webservice');
     }

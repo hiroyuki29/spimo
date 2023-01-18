@@ -21,7 +21,9 @@ VolumeInfo _$VolumeInfoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$VolumeInfo {
   String get title => throw _privateConstructorUsedError;
-  List<String?> get authors => throw _privateConstructorUsedError;
+  List<String>? get authors => throw _privateConstructorUsedError;
+  int? get pageCount => throw _privateConstructorUsedError;
+  ImageLinks? get imageLinks => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +37,13 @@ abstract class $VolumeInfoCopyWith<$Res> {
           VolumeInfo value, $Res Function(VolumeInfo) then) =
       _$VolumeInfoCopyWithImpl<$Res, VolumeInfo>;
   @useResult
-  $Res call({String title, List<String?> authors});
+  $Res call(
+      {String title,
+      List<String>? authors,
+      int? pageCount,
+      ImageLinks? imageLinks});
+
+  $ImageLinksCopyWith<$Res>? get imageLinks;
 }
 
 /// @nodoc
@@ -52,18 +60,40 @@ class _$VolumeInfoCopyWithImpl<$Res, $Val extends VolumeInfo>
   @override
   $Res call({
     Object? title = null,
-    Object? authors = null,
+    Object? authors = freezed,
+    Object? pageCount = freezed,
+    Object? imageLinks = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      authors: null == authors
+      authors: freezed == authors
           ? _value.authors
           : authors // ignore: cast_nullable_to_non_nullable
-              as List<String?>,
+              as List<String>?,
+      pageCount: freezed == pageCount
+          ? _value.pageCount
+          : pageCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      imageLinks: freezed == imageLinks
+          ? _value.imageLinks
+          : imageLinks // ignore: cast_nullable_to_non_nullable
+              as ImageLinks?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ImageLinksCopyWith<$Res>? get imageLinks {
+    if (_value.imageLinks == null) {
+      return null;
+    }
+
+    return $ImageLinksCopyWith<$Res>(_value.imageLinks!, (value) {
+      return _then(_value.copyWith(imageLinks: value) as $Val);
+    });
   }
 }
 
@@ -75,7 +105,14 @@ abstract class _$$_VolumeInfoCopyWith<$Res>
       __$$_VolumeInfoCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, List<String?> authors});
+  $Res call(
+      {String title,
+      List<String>? authors,
+      int? pageCount,
+      ImageLinks? imageLinks});
+
+  @override
+  $ImageLinksCopyWith<$Res>? get imageLinks;
 }
 
 /// @nodoc
@@ -90,17 +127,27 @@ class __$$_VolumeInfoCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? authors = null,
+    Object? authors = freezed,
+    Object? pageCount = freezed,
+    Object? imageLinks = freezed,
   }) {
     return _then(_$_VolumeInfo(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      authors: null == authors
+      authors: freezed == authors
           ? _value._authors
           : authors // ignore: cast_nullable_to_non_nullable
-              as List<String?>,
+              as List<String>?,
+      pageCount: freezed == pageCount
+          ? _value.pageCount
+          : pageCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      imageLinks: freezed == imageLinks
+          ? _value.imageLinks
+          : imageLinks // ignore: cast_nullable_to_non_nullable
+              as ImageLinks?,
     ));
   }
 }
@@ -109,7 +156,10 @@ class __$$_VolumeInfoCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_VolumeInfo implements _VolumeInfo {
   const _$_VolumeInfo(
-      {required this.title, required final List<String?> authors})
+      {required this.title,
+      final List<String>? authors,
+      this.pageCount,
+      this.imageLinks})
       : _authors = authors;
 
   factory _$_VolumeInfo.fromJson(Map<String, dynamic> json) =>
@@ -117,17 +167,24 @@ class _$_VolumeInfo implements _VolumeInfo {
 
   @override
   final String title;
-  final List<String?> _authors;
+  final List<String>? _authors;
   @override
-  List<String?> get authors {
+  List<String>? get authors {
+    final value = _authors;
+    if (value == null) return null;
     if (_authors is EqualUnmodifiableListView) return _authors;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_authors);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
+  final int? pageCount;
+  @override
+  final ImageLinks? imageLinks;
+
+  @override
   String toString() {
-    return 'VolumeInfo(title: $title, authors: $authors)';
+    return 'VolumeInfo(title: $title, authors: $authors, pageCount: $pageCount, imageLinks: $imageLinks)';
   }
 
   @override
@@ -136,13 +193,17 @@ class _$_VolumeInfo implements _VolumeInfo {
         (other.runtimeType == runtimeType &&
             other is _$_VolumeInfo &&
             (identical(other.title, title) || other.title == title) &&
-            const DeepCollectionEquality().equals(other._authors, _authors));
+            const DeepCollectionEquality().equals(other._authors, _authors) &&
+            (identical(other.pageCount, pageCount) ||
+                other.pageCount == pageCount) &&
+            (identical(other.imageLinks, imageLinks) ||
+                other.imageLinks == imageLinks));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, title, const DeepCollectionEquality().hash(_authors));
+  int get hashCode => Object.hash(runtimeType, title,
+      const DeepCollectionEquality().hash(_authors), pageCount, imageLinks);
 
   @JsonKey(ignore: true)
   @override
@@ -161,7 +222,9 @@ class _$_VolumeInfo implements _VolumeInfo {
 abstract class _VolumeInfo implements VolumeInfo {
   const factory _VolumeInfo(
       {required final String title,
-      required final List<String?> authors}) = _$_VolumeInfo;
+      final List<String>? authors,
+      final int? pageCount,
+      final ImageLinks? imageLinks}) = _$_VolumeInfo;
 
   factory _VolumeInfo.fromJson(Map<String, dynamic> json) =
       _$_VolumeInfo.fromJson;
@@ -169,7 +232,11 @@ abstract class _VolumeInfo implements VolumeInfo {
   @override
   String get title;
   @override
-  List<String?> get authors;
+  List<String>? get authors;
+  @override
+  int? get pageCount;
+  @override
+  ImageLinks? get imageLinks;
   @override
   @JsonKey(ignore: true)
   _$$_VolumeInfoCopyWith<_$_VolumeInfo> get copyWith =>

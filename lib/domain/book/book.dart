@@ -8,7 +8,7 @@ class Book with _$Book {
   const factory Book({
     required String id,
     required String title,
-    required List<String?> authors,
+    List<String>? authors,
     String? imageLinks,
     int? pageCount,
   }) = _Book;

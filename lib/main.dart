@@ -37,20 +37,30 @@ class MyHomePage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final books = useState<List<Book>>([]);
+    final book = useState<Book?>(null);
 
     useEffect(() {
       Future(() async {
         final searchedBookList =
-            await ref.read(booksProvider).getBooks('良いコード悪いコード');
+            await ref.read(booksProvider).getBookList('test');
         books.value = searchedBookList;
+        final id = books.value[5].id;
+        book.value = await ref.read(booksProvider).getBook(id);
       });
       return null;
     }, []);
     return Scaffold(
-        body: SafeArea(
-      child: books.value.isEmpty
-          ? const Text('データなし')
-          : Text(books.value[0].title),
-    ));
+      body: SafeArea(
+        child: books.value.isEmpty || book.value == null
+            ? const Text('データなし')
+            : Column(
+                children: [
+                  if (book.value!.imageLinks != '')
+                    Image.network(book.value!.imageLinks!),
+                  Text(book.value!.pageCount.toString()),
+                ],
+              ),
+      ),
+    );
   }
 }

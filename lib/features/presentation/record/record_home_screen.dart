@@ -1,56 +1,15 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:spimo/firebase_options.dart';
-import 'package:spimo/routing/app_router.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  runApp(const ProviderScope(child: MyApp()));
-}
-
-class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    const jaLocale = Locale("ja", "JA");
-
-    return MaterialApp.router(
-      routerConfig: router,
-      title: 'Flutter Demo',
-      locale: jaLocale,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        jaLocale,
-      ],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class RecordHomeScreen extends StatefulWidget {
+  const RecordHomeScreen({Key? key}) : super(key: key);
 
   @override
-  MyHomePageState createState() => MyHomePageState();
+  RecordHomeScreenState createState() => RecordHomeScreenState();
 }
 
-class MyHomePageState extends State<MyHomePage> {
+class RecordHomeScreenState extends State<RecordHomeScreen> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
@@ -94,7 +53,7 @@ class MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Speech Demo'),
+        title: const Text('spiMo'),
       ),
       body: Center(
         child: Column(
@@ -136,19 +95,3 @@ class MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-
-
-// return Scaffold(
-//   body: SafeArea(
-//     child: books.value.isEmpty || book.value == null
-//         ? const Text('データなし')
-//         : Column(
-//             children: [
-//               if (book.value!.imageLinks != '')
-//                 Image.network(book.value!.imageLinks!),
-//               Text(book.value!.pageCount.toString()),
-//             ],
-//           ),
-//   ),
-// );

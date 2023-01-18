@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:spimo/data/google_books_apis/model/image_links.dart';
+import 'package:spimo/features/data/google_books_apis/model/image_links.dart';
 
 part 'volume_info.freezed.dart';
 part 'volume_info.g.dart';

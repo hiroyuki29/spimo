@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:spimo/features/domain/model/book/book.dart';
-import 'package:spimo/features/domain/repository/books_repository.dart';
+import 'package:spimo/features/books/domain/model/book.dart';
+import 'package:spimo/features/books/domain/repository/books_repository.dart';
 
 class BooksHomeScreen extends HookConsumerWidget {
   const BooksHomeScreen({super.key});

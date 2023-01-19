@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spimo/features/presentation/account/account_home_screen.dart';
-import 'package:spimo/features/presentation/books/books_home_screen.dart';
-import 'package:spimo/features/presentation/home/home_screen.dart';
-import 'package:spimo/features/presentation/memos/memos_home_screen.dart';
-import 'package:spimo/features/presentation/record/record_home_screen.dart';
+import 'package:spimo/features/account/presentation/account_home_screen.dart';
+import 'package:spimo/features/books/presentation/books_home_screen.dart';
+import 'package:spimo/features/home/presentation/home_screen.dart';
+import 'package:spimo/features/memos/presentation/memos_home_screen.dart';
+import 'package:spimo/features/record/presentation/record_home_screen.dart';
 
 enum AppRoute {
   home,

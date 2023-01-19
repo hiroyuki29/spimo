@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:spimo/features/data/google_books_apis/model/google_book.dart';
-import 'package:spimo/features/data/google_books_apis/model/google_books_api_response.dart';
-import 'package:spimo/features/domain/model/book/book.dart';
-import 'package:spimo/features/domain/repository/books_repository.dart';
+import 'package:spimo/features/books/data/google_books_apis/model/google_book.dart';
+import 'package:spimo/features/books/data/google_books_apis/model/google_books_api_response.dart';
+import 'package:spimo/features/books/domain/model/book.dart';
+
+import 'package:spimo/features/books/domain/repository/books_repository.dart';
 
 class GoogleBooksRepository implements BooksRepository {
   GoogleBooksRepository();

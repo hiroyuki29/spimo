@@ -41,7 +41,11 @@ dependencies:
 
   # Firebase
   firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
   
+  #ルーティング
+  go_router: ^6.0.1
+
   # 状態管理
   flutter_riverpod: ^2.1.3
   hooks_riverpod: ^2.1.3
@@ -56,9 +60,12 @@ dependencies:
   
   # 通信
   http: ^0.13.5
+
+  # 音声録音
   speech_to_text: ^6.1.1
   intl: ^0.17.0
-  go_router: ^6.0.1
+
+  
   
 
 dev_dependencies:

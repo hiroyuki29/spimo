@@ -23,7 +23,7 @@ class MyApp extends ConsumerWidget {
     const jaLocale = Locale("ja", "JA");
 
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(goRouterProvider),
       title: 'Flutter Demo',
       locale: jaLocale,
       localizationsDelegates: const [

@@ -65,6 +65,10 @@ dependencies:
   speech_to_text: ^6.1.1
   intl: ^0.17.0
 
+  #UI/UX関連
+  email_validator: ^2.1.17
+  loading_overlay: ^0.3.0
+
   
   
 

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spimo/features/account/presentation/account_home_screen.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
+import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
+import 'package:spimo/features/account/presentation/screens/start_screen.dart';
+import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
 import 'package:spimo/features/books/presentation/books_home_screen.dart';
 import 'package:spimo/features/home/presentation/home_screen.dart';
 import 'package:spimo/features/memos/presentation/memos_home_screen.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
 
 enum AppRoute {
+  start,
+  signUp,
   home,
   memos,
   record,
@@ -17,49 +23,72 @@ enum AppRoute {
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-// final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
-// return
-final router = GoRouter(
-  initialLocation: '/home',
-  navigatorKey: _rootNavigatorKey,
-  debugLogDiagnostics: false,
-  routes: [
-    ShellRoute(
-      navigatorKey: _shellNavigatorKey,
-      builder: (context, state, child) {
-        return ScaffoldWithBottomNavBar(child: child);
-      },
-      routes: [
-        GoRoute(
-          path: '/home',
-          name: AppRoute.home.name,
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          path: '/memos',
-          name: AppRoute.memos.name,
-          builder: (context, state) => const MemosHomeScreen(),
-        ),
-        GoRoute(
-          path: '/record',
-          name: AppRoute.record.name,
-          builder: (context, state) => const RecordHomeScreen(),
-        ),
-        GoRoute(
-          path: '/books',
-          name: AppRoute.books.name,
-          builder: (context, state) => const BooksHomeScreen(),
-        ),
-        GoRoute(
-          path: '/account',
-          name: AppRoute.account.name,
-          builder: (context, state) => const AccountHomeScreen(),
-        ),
-      ],
-    )
-  ],
-);
-// });
+final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
+  final authRepository = ref.watch(firebaseAuthRepositoryProvider);
+
+  return GoRouter(
+    initialLocation: '/',
+    navigatorKey: _rootNavigatorKey,
+    debugLogDiagnostics: false,
+    redirect: (context, state) {
+      final currentUser = authRepository.auth.currentUser;
+      if (currentUser != null && state.subloc == '/') {
+        return '/home';
+      }
+      if (currentUser == null && state.subloc != '/') {
+        return '/';
+      }
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: '/',
+        name: AppRoute.start.name,
+        builder: (context, state) => const StartScreen(),
+        routes: [
+          GoRoute(
+            path: 'singUp',
+            name: AppRoute.signUp.name,
+            builder: (context, state) => const SignUpScreen(),
+          ),
+        ],
+      ),
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          return ScaffoldWithBottomNavBar(child: child);
+        },
+        routes: [
+          GoRoute(
+            path: '/home',
+            name: AppRoute.home.name,
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/memos',
+            name: AppRoute.memos.name,
+            builder: (context, state) => const MemosHomeScreen(),
+          ),
+          GoRoute(
+            path: '/record',
+            name: AppRoute.record.name,
+            builder: (context, state) => const RecordHomeScreen(),
+          ),
+          GoRoute(
+            path: '/books',
+            name: AppRoute.books.name,
+            builder: (context, state) => const BooksHomeScreen(),
+          ),
+          GoRoute(
+            path: '/account',
+            name: AppRoute.account.name,
+            builder: (context, state) => const AccountHomeScreen(),
+          ),
+        ],
+      )
+    ],
+  );
+});
 
 class ScaffoldWithBottomNavBar extends StatefulWidget {
   const ScaffoldWithBottomNavBar({Key? key, required this.child})

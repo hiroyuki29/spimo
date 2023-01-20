@@ -68,6 +68,7 @@ dependencies:
   #UI/UX関連
   email_validator: ^2.1.17
   loading_overlay: ^0.3.0
+  cloud_firestore: ^4.3.1
 
   
   

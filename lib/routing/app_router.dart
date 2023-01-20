@@ -5,7 +5,8 @@ import 'package:spimo/features/account/data/firebase_auth/firebase_auth_reposito
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
-import 'package:spimo/features/books/presentation/books_home_screen.dart';
+import 'package:spimo/features/books/presentation/screens/books_home_screen.dart';
+import 'package:spimo/features/books/presentation/screens/search_books_screen.dart';
 import 'package:spimo/features/home/presentation/home_screen.dart';
 import 'package:spimo/features/memos/presentation/memos_home_screen.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
@@ -17,6 +18,7 @@ enum AppRoute {
   memos,
   record,
   books,
+  searchBooks,
   account,
 }
 
@@ -78,6 +80,13 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
             path: '/books',
             name: AppRoute.books.name,
             builder: (context, state) => const BooksHomeScreen(),
+            routes: [
+              GoRoute(
+                path: 'search',
+                name: AppRoute.searchBooks.name,
+                builder: (context, state) => const SearchBooksScreen(),
+              )
+            ],
           ),
           GoRoute(
             path: '/account',

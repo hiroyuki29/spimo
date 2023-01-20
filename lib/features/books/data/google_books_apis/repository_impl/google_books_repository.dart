@@ -4,9 +4,9 @@ import 'package:spimo/features/books/data/google_books_apis/model/google_book.da
 import 'package:spimo/features/books/data/google_books_apis/model/google_books_api_response.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 
-import 'package:spimo/features/books/domain/repository/books_repository.dart';
+import 'package:spimo/features/books/domain/repository/search_books_repository.dart';
 
-class GoogleBooksRepository implements BooksRepository {
+class GoogleBooksRepository implements SearchBooksRepository {
   GoogleBooksRepository();
 
   @override

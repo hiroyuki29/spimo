@@ -32,6 +32,7 @@ class FirestoreBooksRepository implements BookStorageRepository {
         'authors': book.authors,
         'imageLinks': book.imageLinks,
         'pageCount': book.pageCount,
+        'createdAt': FieldValue.serverTimestamp(),
       },
     );
   }

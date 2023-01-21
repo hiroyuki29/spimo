@@ -3,13 +3,20 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/routing/app_router.dart';
 
-class BooksHomeScreen extends HookConsumerWidget {
+class BooksHomeScreen extends StatefulHookConsumerWidget {
   const BooksHomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _BooksHomeScreenState();
+}
+
+class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
+  @override
+  Widget build(BuildContext context) {
     final books = ref.watch(booksControllerProvider);
 
     return Scaffold(
@@ -24,53 +31,49 @@ class BooksHomeScreen extends HookConsumerWidget {
           value: books,
           data: (value) => Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView.builder(
+            child: ListView.separated(
               shrinkWrap: true,
               itemCount: value.length,
               itemBuilder: (context, index) {
                 final book = value[index];
-                return Column(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.withOpacity(0.1)),
-                      onPressed: () {
-                        ref
-                            .read(booksControllerProvider.notifier)
-                            .removeBook(book);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Row(
-                          children: [
-                            if (book.imageLinks != null)
-                              SizedBox(
-                                height: 100,
-                                child: Image.network(book.imageLinks!),
-                              ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    book.title.toString(),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    book.authors.toString(),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                return Dismissible(
+                  // key: ValueKey<Book>(book),
+                  key: UniqueKey(),
+                  background: Container(
+                    color: Colors.red,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        SizedBox(width: 20),
+                        Icon(Icons.delete, color: Colors.white),
+                      ],
                     ),
-                    const SizedBox(height: 15),
-                  ],
+                  ),
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Icon(Icons.delete, color: Colors.white),
+                        SizedBox(width: 20),
+                      ],
+                    ),
+                  ),
+                  onDismissed: (DismissDirection direction) {
+                    ref.read(booksControllerProvider.notifier).removeBook(book);
+                  },
+                  child: BookListTile(
+                    book: book,
+                    onTap: () {
+                      //TODO:本の詳細ページへの遷移追加
+                    },
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider(
+                  height: 1,
+                  color: Colors.black,
                 );
               },
             ),

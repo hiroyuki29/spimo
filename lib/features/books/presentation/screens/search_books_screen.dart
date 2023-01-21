@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/search_books_repository.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 
 class SearchBooksScreen extends HookConsumerWidget {
   const SearchBooksScreen({super.key});
@@ -40,53 +42,25 @@ class SearchBooksScreen extends HookConsumerWidget {
                 : Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ListView.builder(
+                      child: ListView.separated(
                         shrinkWrap: true,
                         itemCount: books.value.length,
                         itemBuilder: (context, index) {
                           final book = books.value[index];
-                          return Column(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  ref
-                                      .read(booksControllerProvider.notifier)
-                                      .addBook(book);
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      if (book.imageLinks != null)
-                                        SizedBox(
-                                          height: 100,
-                                          child:
-                                              Image.network(book.imageLinks!),
-                                        ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              book.title.toString(),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              book.authors.toString(),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 15),
-                            ],
+                          return BookListTile(
+                            book: book,
+                            onTap: () {
+                              ref
+                                  .read(booksControllerProvider.notifier)
+                                  .addBook(book);
+                              context.pop();
+                            },
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            height: 1,
+                            color: Colors.black,
                           );
                         },
                       ),

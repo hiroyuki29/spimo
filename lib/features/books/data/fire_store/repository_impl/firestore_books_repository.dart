@@ -25,7 +25,7 @@ class FirestoreBooksRepository implements BookStorageRepository {
   Future<void> addBook(Book book) async {
     final usersBooks = db.collection('users').doc(userId).collection('books');
     final newDocId = usersBooks.doc().id;
-    usersBooks.doc(newDocId).set(
+    await usersBooks.doc(newDocId).set(
       {
         'id': newDocId,
         'title': book.title,
@@ -40,6 +40,6 @@ class FirestoreBooksRepository implements BookStorageRepository {
   @override
   Future<void> removeBook(Book book) async {
     final usersBooks = db.collection('users').doc(userId).collection('books');
-    usersBooks.doc(book.id).delete();
+    await usersBooks.doc(book.id).delete();
   }
 }

@@ -20,12 +20,12 @@ class BooksController extends StateNotifier<AsyncValue<List<Book>>> {
   }
 
   Future<void> addBook(Book book) async {
-    bookStorageRepository.addBook(book);
+    await bookStorageRepository.addBook(book);
     state = AsyncData(await bookStorageRepository.fetchBooks());
   }
 
   Future<void> removeBook(Book book) async {
-    bookStorageRepository.removeBook(book);
+    await bookStorageRepository.removeBook(book);
     state = AsyncData(await bookStorageRepository.fetchBooks());
   }
 }

@@ -24,6 +24,7 @@ class GoogleBook with _$GoogleBook {
       authors: volumeInfo.authors,
       pageCount: volumeInfo.pageCount ?? 0,
       imageLinks: volumeInfo.imageLinks?.thumbnail ?? '',
+      createdAt: DateTime.now(),
     );
   }
 }

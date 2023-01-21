@@ -25,6 +25,8 @@ mixin _$Book {
   List<String>? get authors => throw _privateConstructorUsedError;
   String? get imageLinks => throw _privateConstructorUsedError;
   int? get pageCount => throw _privateConstructorUsedError;
+  @TimestampToDatetimeConverter()
+  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +43,8 @@ abstract class $BookCopyWith<$Res> {
       String title,
       List<String>? authors,
       String? imageLinks,
-      int? pageCount});
+      int? pageCount,
+      @TimestampToDatetimeConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -62,6 +65,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? authors = freezed,
     Object? imageLinks = freezed,
     Object? pageCount = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -84,6 +88,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.pageCount
           : pageCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 }
@@ -99,7 +107,8 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
       String title,
       List<String>? authors,
       String? imageLinks,
-      int? pageCount});
+      int? pageCount,
+      @TimestampToDatetimeConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -116,6 +125,7 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
     Object? authors = freezed,
     Object? imageLinks = freezed,
     Object? pageCount = freezed,
+    Object? createdAt = null,
   }) {
     return _then(_$_Book(
       id: null == id
@@ -138,6 +148,10 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value.pageCount
           : pageCount // ignore: cast_nullable_to_non_nullable
               as int?,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -150,7 +164,8 @@ class _$_Book implements _Book {
       required this.title,
       final List<String>? authors,
       this.imageLinks,
-      this.pageCount})
+      this.pageCount,
+      @TimestampToDatetimeConverter() required this.createdAt})
       : _authors = authors;
 
   factory _$_Book.fromJson(Map<String, dynamic> json) => _$$_BookFromJson(json);
@@ -173,10 +188,13 @@ class _$_Book implements _Book {
   final String? imageLinks;
   @override
   final int? pageCount;
+  @override
+  @TimestampToDatetimeConverter()
+  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Book(id: $id, title: $title, authors: $authors, imageLinks: $imageLinks, pageCount: $pageCount)';
+    return 'Book(id: $id, title: $title, authors: $authors, imageLinks: $imageLinks, pageCount: $pageCount, createdAt: $createdAt)';
   }
 
   @override
@@ -190,13 +208,21 @@ class _$_Book implements _Book {
             (identical(other.imageLinks, imageLinks) ||
                 other.imageLinks == imageLinks) &&
             (identical(other.pageCount, pageCount) ||
-                other.pageCount == pageCount));
+                other.pageCount == pageCount) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title,
-      const DeepCollectionEquality().hash(_authors), imageLinks, pageCount);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      const DeepCollectionEquality().hash(_authors),
+      imageLinks,
+      pageCount,
+      createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -214,11 +240,13 @@ class _$_Book implements _Book {
 
 abstract class _Book implements Book {
   const factory _Book(
-      {required final String id,
-      required final String title,
-      final List<String>? authors,
-      final String? imageLinks,
-      final int? pageCount}) = _$_Book;
+          {required final String id,
+          required final String title,
+          final List<String>? authors,
+          final String? imageLinks,
+          final int? pageCount,
+          @TimestampToDatetimeConverter() required final DateTime createdAt}) =
+      _$_Book;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
@@ -232,6 +260,9 @@ abstract class _Book implements Book {
   String? get imageLinks;
   @override
   int? get pageCount;
+  @override
+  @TimestampToDatetimeConverter()
+  DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$_BookCopyWith<_$_Book> get copyWith => throw _privateConstructorUsedError;

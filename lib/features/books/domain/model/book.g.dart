@@ -13,6 +13,8 @@ _$_Book _$$_BookFromJson(Map<String, dynamic> json) => _$_Book(
           (json['authors'] as List<dynamic>?)?.map((e) => e as String).toList(),
       imageLinks: json['imageLinks'] as String?,
       pageCount: json['pageCount'] as int?,
+      createdAt: const TimestampToDatetimeConverter()
+          .fromJson(json['createdAt'] as Timestamp),
     );
 
 Map<String, dynamic> _$$_BookToJson(_$_Book instance) => <String, dynamic>{
@@ -21,4 +23,6 @@ Map<String, dynamic> _$$_BookToJson(_$_Book instance) => <String, dynamic>{
       'authors': instance.authors,
       'imageLinks': instance.imageLinks,
       'pageCount': instance.pageCount,
+      'createdAt':
+          const TimestampToDatetimeConverter().toJson(instance.createdAt),
     };

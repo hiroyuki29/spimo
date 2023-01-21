@@ -8,12 +8,14 @@ class FirestoreBooksRepository implements BookStorageRepository {
   FirebaseFirestore db = FirebaseFirestore.instance;
   final String userId;
 
+  CollectionReference<Map<String, dynamic>> get usersBooks =>
+      db.collection('users').doc(userId).collection('books');
+
   @override
   Future<List<Book>> fetchBooks() async {
-    final usersBooks = db.collection('users').doc(userId).collection('books');
     final bookList = usersBooks.get().then((docList) {
-      final dataList = docList.docs.map((doc) {
-        final data = doc.data();
+      List<Book> dataList = docList.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
         return Book.fromJson(data);
       }).toList();
       return dataList;
@@ -23,7 +25,6 @@ class FirestoreBooksRepository implements BookStorageRepository {
 
   @override
   Future<void> addBook(Book book) async {
-    final usersBooks = db.collection('users').doc(userId).collection('books');
     final newDocId = usersBooks.doc().id;
     await usersBooks.doc(newDocId).set(
       {
@@ -39,7 +40,6 @@ class FirestoreBooksRepository implements BookStorageRepository {
 
   @override
   Future<void> removeBook(Book book) async {
-    final usersBooks = db.collection('users').doc(userId).collection('books');
     await usersBooks.doc(book.id).delete();
   }
 }

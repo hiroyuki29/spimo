@@ -7,15 +7,21 @@ part of 'memo.dart';
 // **************************************************************************
 
 _$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
-      memos: (json['memos'] as List<dynamic>).map((e) => e as String).toList(),
-      startPage: json['startPage'] as int,
+      id: json['id'] as String,
+      texts: (json['texts'] as List<dynamic>).map((e) => e as String).toList(),
+      bookId: json['bookId'] as String,
+      startPage: json['startPage'] as int?,
       endPage: json['endPage'] as int?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampToDatetimeConverter()
+          .fromJson(json['createdAt'] as Timestamp),
     );
 
 Map<String, dynamic> _$$_MemoToJson(_$_Memo instance) => <String, dynamic>{
-      'memos': instance.memos,
+      'id': instance.id,
+      'texts': instance.texts,
+      'bookId': instance.bookId,
       'startPage': instance.startPage,
       'endPage': instance.endPage,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt':
+          const TimestampToDatetimeConverter().toJson(instance.createdAt),
     };

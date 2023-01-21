@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:spimo/util/converter/timestamp_to_datetime_converter.dart';
 
 part 'book.freezed.dart';
 part 'book.g.dart';
@@ -16,15 +17,4 @@ class Book with _$Book {
   }) = _Book;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
-}
-
-class TimestampToDatetimeConverter
-    implements JsonConverter<DateTime, Timestamp> {
-  const TimestampToDatetimeConverter();
-
-  @override
-  DateTime fromJson(Timestamp json) => json.toDate();
-
-  @override
-  Timestamp toJson(DateTime object) => Timestamp.fromDate(object);
 }

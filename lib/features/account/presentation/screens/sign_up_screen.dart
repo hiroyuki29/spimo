@@ -33,7 +33,7 @@ class SignUpScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: CommonAppBar(context),
+      appBar: CommonAppBar(context: context, title: '新規登録'),
       body: SafeArea(
           child: Form(
         key: formKey,

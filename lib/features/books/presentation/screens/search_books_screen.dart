@@ -24,7 +24,7 @@ class SearchBooksScreen extends HookConsumerWidget {
     }
 
     return Scaffold(
-      appBar: CommonAppBar(context),
+      appBar: CommonAppBar(context: context, title: 'search books'),
       body: SafeArea(
         child: Column(
           children: [

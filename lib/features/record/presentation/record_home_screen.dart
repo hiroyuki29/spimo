@@ -114,6 +114,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       );
                     },
                   ),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () async {
                       final memo = Memo(
@@ -123,7 +124,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                           createdAt: DateTime.now());
                       ref.read(memoStorageProvider).addMemo(memo);
                     },
-                    child: const Text('ログアウト'),
+                    child: const Text('保存'),
                   ),
                 ],
               ),

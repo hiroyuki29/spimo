@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
@@ -27,6 +28,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
+      appBar: CommonAppBar(context: context, title: 'books'),
       body: SafeArea(
         child: AsyncValueWidget(
           value: books,

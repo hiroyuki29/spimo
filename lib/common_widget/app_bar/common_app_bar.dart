@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-AppBar CommonAppBar(BuildContext context) {
+AppBar CommonAppBar({
+  required BuildContext context,
+  required String title,
+}) {
   return AppBar(
-    title: const Text('新規登録'),
+    title: Text(title),
     leading: Container(
       child: IconButton(
         icon: const Icon(

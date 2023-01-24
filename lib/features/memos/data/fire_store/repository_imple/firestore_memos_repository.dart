@@ -35,10 +35,15 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   Future<void> addMemo(Memo memo) async {
     final usersBookMemos = usersBooks.doc(memo.bookId).collection('memos');
     final newDocId = usersBookMemos.doc().id;
+    final sendMemoTextList = memo.memoTexts.map(
+      (memoText) {
+        return memoText.toJson();
+      },
+    ).toList();
     await usersBookMemos.doc(newDocId).set(
       {
         'id': newDocId,
-        'texts': memo.texts,
+        'texts': sendMemoTextList,
         'bookId': memo.bookId,
         'startPage': memo.startPage,
         'endPage': memo.endPage,

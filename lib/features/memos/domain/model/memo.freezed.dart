@@ -21,7 +21,7 @@ Memo _$MemoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Memo {
   String get id => throw _privateConstructorUsedError;
-  List<String> get texts => throw _privateConstructorUsedError;
+  List<MemoText> get memoTexts => throw _privateConstructorUsedError;
   String get bookId => throw _privateConstructorUsedError;
   int? get startPage => throw _privateConstructorUsedError;
   int? get endPage => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $MemoCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      List<String> texts,
+      List<MemoText> memoTexts,
       String bookId,
       int? startPage,
       int? endPage,
@@ -61,7 +61,7 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
   @override
   $Res call({
     Object? id = null,
-    Object? texts = null,
+    Object? memoTexts = null,
     Object? bookId = null,
     Object? startPage = freezed,
     Object? endPage = freezed,
@@ -72,10 +72,10 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      texts: null == texts
-          ? _value.texts
-          : texts // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      memoTexts: null == memoTexts
+          ? _value.memoTexts
+          : memoTexts // ignore: cast_nullable_to_non_nullable
+              as List<MemoText>,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -104,7 +104,7 @@ abstract class _$$_MemoCopyWith<$Res> implements $MemoCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      List<String> texts,
+      List<MemoText> memoTexts,
       String bookId,
       int? startPage,
       int? endPage,
@@ -121,7 +121,7 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
   @override
   $Res call({
     Object? id = null,
-    Object? texts = null,
+    Object? memoTexts = null,
     Object? bookId = null,
     Object? startPage = freezed,
     Object? endPage = freezed,
@@ -132,10 +132,10 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      texts: null == texts
-          ? _value._texts
-          : texts // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      memoTexts: null == memoTexts
+          ? _value._memoTexts
+          : memoTexts // ignore: cast_nullable_to_non_nullable
+              as List<MemoText>,
       bookId: null == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
@@ -161,23 +161,23 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
 class _$_Memo implements _Memo {
   const _$_Memo(
       {required this.id,
-      required final List<String> texts,
+      required final List<MemoText> memoTexts,
       required this.bookId,
       this.startPage,
       this.endPage,
       @TimestampToDatetimeConverter() required this.createdAt})
-      : _texts = texts;
+      : _memoTexts = memoTexts;
 
   factory _$_Memo.fromJson(Map<String, dynamic> json) => _$$_MemoFromJson(json);
 
   @override
   final String id;
-  final List<String> _texts;
+  final List<MemoText> _memoTexts;
   @override
-  List<String> get texts {
-    if (_texts is EqualUnmodifiableListView) return _texts;
+  List<MemoText> get memoTexts {
+    if (_memoTexts is EqualUnmodifiableListView) return _memoTexts;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_texts);
+    return EqualUnmodifiableListView(_memoTexts);
   }
 
   @override
@@ -192,7 +192,7 @@ class _$_Memo implements _Memo {
 
   @override
   String toString() {
-    return 'Memo(id: $id, texts: $texts, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt)';
+    return 'Memo(id: $id, memoTexts: $memoTexts, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt)';
   }
 
   @override
@@ -201,7 +201,8 @@ class _$_Memo implements _Memo {
         (other.runtimeType == runtimeType &&
             other is _$_Memo &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._texts, _texts) &&
+            const DeepCollectionEquality()
+                .equals(other._memoTexts, _memoTexts) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.startPage, startPage) ||
                 other.startPage == startPage) &&
@@ -215,7 +216,7 @@ class _$_Memo implements _Memo {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      const DeepCollectionEquality().hash(_texts),
+      const DeepCollectionEquality().hash(_memoTexts),
       bookId,
       startPage,
       endPage,
@@ -238,7 +239,7 @@ class _$_Memo implements _Memo {
 abstract class _Memo implements Memo {
   const factory _Memo(
           {required final String id,
-          required final List<String> texts,
+          required final List<MemoText> memoTexts,
           required final String bookId,
           final int? startPage,
           final int? endPage,
@@ -250,7 +251,7 @@ abstract class _Memo implements Memo {
   @override
   String get id;
   @override
-  List<String> get texts;
+  List<MemoText> get memoTexts;
   @override
   String get bookId;
   @override

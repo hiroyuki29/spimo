@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:spimo/common_widget/async_value/async_value_widget.dart';
+import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 
-class RecordHomeScreen extends StatefulWidget {
+class RecordHomeScreen extends ConsumerStatefulWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
 
   @override
   RecordHomeScreenState createState() => RecordHomeScreenState();
 }
 
-class RecordHomeScreenState extends State<RecordHomeScreen> {
+class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
@@ -51,6 +55,7 @@ class RecordHomeScreenState extends State<RecordHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentBook = ref.watch(currentBookControllerProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('spiMo'),
@@ -59,6 +64,14 @@ class RecordHomeScreenState extends State<RecordHomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            AsyncValueWidget(
+                value: currentBook,
+                data: (book) {
+                  if (book != null) {
+                    return BookListTile(book: book);
+                  }
+                  return const SizedBox.shrink();
+                }),
             Container(
               padding: const EdgeInsets.all(16),
               child: const Text(

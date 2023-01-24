@@ -11,6 +11,7 @@ final bookStorageProvider = Provider<BookStorageRepository>((ref) {
 
 abstract class BookStorageRepository {
   Future<List<Book>> fetchBooks();
+  Future<Book> fetchBook(String bookId);
   Future<void> addBook(Book book);
   Future<void> removeBook(Book book);
 }

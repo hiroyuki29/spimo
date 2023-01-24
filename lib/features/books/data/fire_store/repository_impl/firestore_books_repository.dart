@@ -24,6 +24,15 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
+  Future<Book> fetchBook(String bookId) {
+    final book = usersBooks.doc(bookId).get().then((doc) {
+      final data = doc.data();
+      return Book.fromJson(data!);
+    });
+    return book;
+  }
+
+  @override
   Future<void> addBook(Book book) async {
     final newDocId = usersBooks.doc().id;
     await usersBooks.doc(newDocId).set(

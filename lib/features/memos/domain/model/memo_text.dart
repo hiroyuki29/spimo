@@ -6,8 +6,8 @@ part 'memo_text.g.dart';
 
 @freezed
 class MemoText with _$MemoText {
-  MemoText._();
-  const factory MemoText({
+  const MemoText._();
+  factory MemoText({
     required String text,
     @StringToColorConverter() required TextColor textColor,
   }) = _MemoText;

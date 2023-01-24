@@ -106,9 +106,10 @@ class __$$_MemoTextCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_MemoText implements _MemoText {
-  const _$_MemoText(
-      {required this.text, @StringToColorConverter() required this.textColor});
+class _$_MemoText extends _MemoText {
+  _$_MemoText(
+      {required this.text, @StringToColorConverter() required this.textColor})
+      : super._();
 
   factory _$_MemoText.fromJson(Map<String, dynamic> json) =>
       _$$_MemoTextFromJson(json);
@@ -152,11 +153,12 @@ class _$_MemoText implements _MemoText {
   }
 }
 
-abstract class _MemoText implements MemoText {
-  const factory _MemoText(
+abstract class _MemoText extends MemoText {
+  factory _MemoText(
           {required final String text,
           @StringToColorConverter() required final TextColor textColor}) =
       _$_MemoText;
+  _MemoText._() : super._();
 
   factory _MemoText.fromJson(Map<String, dynamic> json) = _$_MemoText.fromJson;
 

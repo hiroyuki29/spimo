@@ -8,9 +8,9 @@ part 'memo.g.dart';
 
 @freezed
 class Memo with _$Memo {
-  const factory Memo({
+  factory Memo({
     required String id,
-    required List<MemoText> memoTexts,
+    required List<MemoText> contents,
     required String bookId,
     int? startPage,
     int? endPage,

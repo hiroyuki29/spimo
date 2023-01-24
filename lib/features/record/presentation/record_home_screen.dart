@@ -118,7 +118,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                     onPressed: () async {
                       final memo = Memo(
                           id: 'id',
-                          memoTexts: wordList,
+                          contents: wordList,
                           bookId: book!.id,
                           createdAt: DateTime.now());
                       ref.read(memoStorageProvider).addMemo(memo);

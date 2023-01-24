@@ -8,7 +8,7 @@ part of 'memo.dart';
 
 _$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
       id: json['id'] as String,
-      memoTexts: (json['memoTexts'] as List<dynamic>)
+      contents: (json['contents'] as List<dynamic>)
           .map((e) => MemoText.fromJson(e as Map<String, dynamic>))
           .toList(),
       bookId: json['bookId'] as String,
@@ -20,7 +20,7 @@ _$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
 
 Map<String, dynamic> _$$_MemoToJson(_$_Memo instance) => <String, dynamic>{
       'id': instance.id,
-      'memoTexts': instance.memoTexts,
+      'contents': instance.contents,
       'bookId': instance.bookId,
       'startPage': instance.startPage,
       'endPage': instance.endPage,

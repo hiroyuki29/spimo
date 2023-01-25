@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
@@ -19,8 +18,8 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<List<Memo>> fetchBookMemos(Book book) async {
-    final usersBookMemos = usersBooks.doc(book.id).collection('memos');
+  Future<List<Memo>> fetchBookMemos(String bookId) async {
+    final usersBookMemos = usersBooks.doc(bookId).collection('memos');
     final memoList = usersBookMemos.get().then((docList) {
       List<Memo> dataList = docList.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
@@ -53,8 +52,7 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<void> removeMemo(Memo memo) {
-    // TODO: implement removeMemo
-    throw UnimplementedError();
+  Future<void> removeMemo(Memo memo) async {
+    await usersBooks.doc(memo.bookId).collection('memos').doc(memo.id).delete();
   }
 }

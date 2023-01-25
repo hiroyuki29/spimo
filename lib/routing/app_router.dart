@@ -114,27 +114,27 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
     const ScaffoldWithNavBarTabItem(
       initialLocation: '/home',
       icon: Icon(Icons.home),
-      label: 'Section A',
+      label: 'home',
     ),
     const ScaffoldWithNavBarTabItem(
       initialLocation: '/memos',
-      icon: Icon(Icons.settings),
-      label: 'Section B',
+      icon: Icon(Icons.pages),
+      label: 'memo',
     ),
     const ScaffoldWithNavBarTabItem(
       initialLocation: '/record',
-      icon: Icon(Icons.settings),
-      label: 'Section C',
+      icon: Icon(Icons.create),
+      label: 'record',
     ),
     const ScaffoldWithNavBarTabItem(
       initialLocation: '/books',
-      icon: Icon(Icons.settings),
-      label: 'Section D',
+      icon: Icon(Icons.add_box),
+      label: 'book',
     ),
     const ScaffoldWithNavBarTabItem(
       initialLocation: '/account',
-      icon: Icon(Icons.settings),
-      label: 'Section E',
+      icon: Icon(Icons.person),
+      label: 'account',
     ),
   ];
 

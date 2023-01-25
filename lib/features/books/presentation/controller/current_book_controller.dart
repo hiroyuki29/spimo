@@ -4,36 +4,35 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
 final currentBookControllerProvider =
-    StateNotifierProvider<CurrentBookController, AsyncValue<Book?>>((ref) {
+    StateNotifierProvider<CurrentBookController, Book?>((ref) {
   return CurrentBookController(
     pref: ref.watch(bookPreferenceProvider),
     bookStorageRepository: ref.watch(bookStorageProvider),
   );
 });
 
-class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
+class CurrentBookController extends StateNotifier<Book?> {
   CurrentBookController({
     required this.pref,
     required this.bookStorageRepository,
-  }) : super(const AsyncData(null)) {
+  }) : super(null) {
     fetchCurrentBook();
   }
   final BookPreference pref;
   final BookStorageRepository bookStorageRepository;
 
   Future<void> setCurrentBookId(String bookId) async {
-    await BookPreference().setCurrentBookId(bookId);
+    await pref.setCurrentBookId(bookId);
     fetchCurrentBook();
   }
 
   Future<void> fetchCurrentBook() async {
-    state = const AsyncLoading();
     final currentBookId = await pref.getCurrentBookId();
     if (currentBookId != null) {
       final currentBook = await bookStorageRepository.fetchBook(currentBookId);
-      state = AsyncData(currentBook);
+      state = currentBook;
     } else {
-      state = const AsyncData(null);
+      state = null;
     }
   }
 }

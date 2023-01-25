@@ -7,7 +7,7 @@ import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
 import 'package:spimo/features/books/presentation/screens/books_home_screen.dart';
 import 'package:spimo/features/books/presentation/screens/search_books_screen.dart';
-import 'package:spimo/features/home/presentation/home_screen.dart';
+import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/features/memos/presentation/screens/memos_home_screen.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
 

@@ -30,11 +30,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    // ref
+    //     .read(homeMemoSumWordsControllerProvider.notifier)
+    //     .getAllMemoWordLength();
+    // ref.read(homeMemoChartControllerProvider.notifier).getChartPoints();
   }
 
   @override
   Widget build(BuildContext context) {
     final sumAllMemoWors = ref.watch(homeMemoSumWordsControllerProvider);
+    final chartPoints = ref.watch(homeMemoChartControllerProvider);
     return Scaffold(
       appBar: CommonAppBar(context: context, title: 'home'),
       body: Stack(
@@ -74,10 +79,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(
                 height: 37,
               ),
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16, left: 6),
-                  child: _MemoDistributionChart(),
+                  padding: const EdgeInsets.only(right: 16, left: 6),
+                  child: AsyncValueWidget(
+                      value: chartPoints,
+                      data: (data) => _MemoDistributionChart(
+                            chartPoints: data,
+                          )),
                 ),
               ),
               const SizedBox(
@@ -92,7 +101,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _MemoDistributionChart extends StatelessWidget {
-  const _MemoDistributionChart();
+  const _MemoDistributionChart({required this.chartPoints});
+
+  final List<FlSpot> chartPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +120,8 @@ class _MemoDistributionChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 14,
-        maxY: 4,
+        maxX: 5,
+        maxY: 50,
         minY: 0,
       );
 
@@ -150,20 +161,20 @@ class _MemoDistributionChart extends StatelessWidget {
     );
     String text;
     switch (value.toInt()) {
-      case 1:
-        text = '1m';
+      case 0:
+        text = '0';
         break;
-      case 2:
-        text = '2m';
+      case 10:
+        text = '10';
         break;
-      case 3:
-        text = '3m';
+      case 20:
+        text = '20';
         break;
-      case 4:
-        text = '4m';
+      case 30:
+        text = '30';
         break;
-      case 5:
-        text = '5m';
+      case 40:
+        text = '40';
         break;
       default:
         return Container();
@@ -228,21 +239,22 @@ class _MemoDistributionChart extends StatelessWidget {
       );
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
-        isCurved: true,
-        color: const Color(0xff4af699),
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 1.5),
-          FlSpot(5, 1.4),
-          FlSpot(7, 3.4),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
-        ],
+      isCurved: true,
+      color: const Color(0xff4af699),
+      barWidth: 8,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: false),
+      belowBarData: BarAreaData(show: false),
+      spots: chartPoints
+      // const [
+      //   FlSpot(1, 1),
+      //   FlSpot(3, 1.5),
+      //   FlSpot(5, 1.4),
+      //   FlSpot(7, 3.4),
+      //   FlSpot(10, 2),
+      //   FlSpot(12, 2.2),
+      //   FlSpot(13, 1.8),
+      // ],
       );
 
   // LineChartBarData get lineChartBarData1_2 => LineChartBarData(

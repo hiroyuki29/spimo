@@ -15,12 +15,16 @@ final homeMemoChartControllerProvider =
 class HomeMemoChartController extends StateNotifier<AsyncValue<List<FlSpot>>> {
   HomeMemoChartController(
       {required this.homeUseCase, required this.currentBook})
-      : super(const AsyncData([]));
+      : super(const AsyncData([])) {
+    if (currentBook != null) {
+      getChartPoints();
+    }
+  }
 
   final HomeUseCase homeUseCase;
   Book? currentBook;
 
-  Future<void> fetchBookMemos() async {
+  Future<void> getChartPoints() async {
     state = const AsyncLoading();
     if (currentBook != null) {
       state =

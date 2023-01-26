@@ -16,23 +16,32 @@ class HomeUseCase {
 
   Future<List<FlSpot>> createMemoChartPoints(String bookId) async {
     final memos = await memoStorageRepository.fetchBookMemos(bookId);
-    int memoWordsLength = 0;
-    memos.map((memo) {
-      memo.contents.map((content) {
-        memoWordsLength += content.text.length;
-      });
-    });
-    return [];
+    List<Memo> memosWithoutNullOfStartPage =
+        memos.where((memo) => memo.startPage != null).toList();
+    memosWithoutNullOfStartPage
+        .sort(((a, b) => a.startPage!.compareTo(b.startPage!)));
+    Map<int, dynamic> wordAndPageMap = {};
+    double wordLengthEachMemo = 0;
+    for (Memo memo in memosWithoutNullOfStartPage) {
+      if (memo.startPage == null) {
+        continue;
+      }
+      wordLengthEachMemo = 0;
+      for (MemoText memoText in memo.contents) {
+        wordLengthEachMemo += memoText.text.length;
+      }
+      wordAndPageMap[memo.startPage!] = wordLengthEachMemo;
+    }
+    List<FlSpot> chartPoints = [];
+    for (final entry in wordAndPageMap.entries) {
+      chartPoints.add(FlSpot(entry.key.toDouble(), entry.value));
+    }
+    return chartPoints;
   }
 
   Future<int> sumMemoWordLength(String bookId) async {
     final memos = await memoStorageRepository.fetchBookMemos(bookId);
     int memoWordsLength = 0;
-    // memos.map((memo) {
-    //   memo.contents.map((content) {
-    //     memoWordsLength += content.text.length;
-    //   });
-    // });
     for (Memo memo in memos) {
       for (MemoText memoText in memo.contents) {
         memoWordsLength += memoText.text.length;

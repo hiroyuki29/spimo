@@ -120,7 +120,7 @@ class _MemoDistributionChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 5,
+        maxX: 10,
         maxY: 50,
         minY: 0,
       );

@@ -73,101 +73,105 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
           ? const Text('no data')
           : GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    BookListTile(book: currentBook),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 100,
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: '開始ページ',
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      BookListTile(book: currentBook),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  labelText: '開始ページ',
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _startPage = int.tryParse(value);
+                                  });
+                                },
                               ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-                                  _startPage = int.tryParse(value);
-                                });
-                              },
                             ),
-                          ),
-                          const SizedBox(width: 30),
-                          SizedBox(
-                            width: 100,
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: '終了ページ',
+                            const SizedBox(width: 30),
+                            SizedBox(
+                              width: 100,
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  labelText: '終了ページ',
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _endPage = int.tryParse(value);
+                                  });
+                                },
                               ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                setState(() {
-                                  _endPage = int.tryParse(value);
-                                });
-                              },
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: const Text(
-                        'Recognized words:',
-                        style: TextStyle(fontSize: 20.0),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: const Text(
+                          'Recognized words:',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        _speechToText.isListening
-                            ? _lastWords
-                            : _speechEnabled
-                                ? 'Tap the microphone to start listening...'
-                                : 'Speech not available',
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          _speechToText.isListening
+                              ? _lastWords
+                              : _speechEnabled
+                                  ? 'Tap the microphone to start listening...'
+                                  : 'Speech not available',
+                        ),
                       ),
-                    ),
-                    CupertinoSwitch(
-                        value: _isAccent,
-                        onChanged: (value) {
-                          setState(() {
-                            _isAccent = value;
-                          });
-                        }),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: wordList.length,
-                      itemBuilder: (context, index) {
-                        final text = wordList[index].text;
-                        final color = wordList[index].textColor.color;
-                        return Text(
-                          text,
-                          style: TextStyle(color: color),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final memo = Memo(
-                            id: 'id',
-                            contents: wordList,
-                            startPage: _startPage,
-                            endPage: _endPage,
-                            bookId: currentBook.id,
-                            createdAt: DateTime.now());
-                        ref
-                            .read(memosControllerProvider.notifier)
-                            .addMemo(memo: memo);
-                      },
-                      child: const Text('保存'),
-                    ),
-                  ],
+                      CupertinoSwitch(
+                          value: _isAccent,
+                          onChanged: (value) {
+                            setState(() {
+                              _isAccent = value;
+                            });
+                          }),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: wordList.length,
+                        itemBuilder: (context, index) {
+                          final text = wordList[index].text;
+                          final color = wordList[index].textColor.color;
+                          return Text(
+                            text,
+                            style: TextStyle(color: color),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final memo = Memo(
+                              id: 'id',
+                              contents: wordList,
+                              startPage: _startPage,
+                              endPage: _endPage,
+                              bookId: currentBook.id,
+                              createdAt: DateTime.now());
+                          ref
+                              .read(memosControllerProvider.notifier)
+                              .addMemo(memo: memo);
+                          _lastWords = '';
+                          wordList = [];
+                        },
+                        child: const Text('保存'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

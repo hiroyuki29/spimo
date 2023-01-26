@@ -30,54 +30,59 @@ class MemosHomeScreen extends HookConsumerWidget {
           : Column(
               children: [
                 BookListTile(book: currentBook),
-                AsyncValueWidget(
-                    value: memos,
-                    data: (memos) {
-                      return SafeArea(
-                        child: memos.isEmpty
-                            ? const Text('no data')
-                            : ListView.separated(
-                                shrinkWrap: true,
-                                itemCount: memos.length,
-                                itemBuilder: (context, index) {
-                                  final memo = memos[index];
-                                  return ListTile(
-                                    title: Row(
-                                      children: [
-                                        Text(
-                                            'p.${memo.startPage?.toString() ?? ''} ~ p.${memo.endPage?.toString() ?? ''}'),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Column(
-                                            children: memo.contents.map((text) {
-                                              return Text(
-                                                text.text,
-                                                style: TextStyle(
-                                                  color: text.textColor.color,
-                                                ),
-                                              );
-                                            }).toList(),
+                Expanded(
+                  child: AsyncValueWidget(
+                      value: memos,
+                      data: (memos) {
+                        return SafeArea(
+                          child: memos.isEmpty
+                              ? const Text('no data')
+                              : ListView.separated(
+                                  itemCount: memos.length,
+                                  itemBuilder: (context, index) {
+                                    final memo = memos[index];
+                                    return ListTile(
+                                      title: Row(
+                                        children: [
+                                          Text(
+                                              'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}'),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children:
+                                                  memo.contents.map((text) {
+                                                return Text(
+                                                  text.text,
+                                                  style: TextStyle(
+                                                    color: text.textColor.color,
+                                                    fontSize: 14,
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    onTap: () {
-                                      ref
-                                          .read(
-                                              memosControllerProvider.notifier)
-                                          .removeMemo(memo: memo);
-                                    },
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const Divider(
-                                    height: 1,
-                                    color: Colors.black,
-                                  );
-                                },
-                              ),
-                      );
-                    }),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        ref
+                                            .read(memosControllerProvider
+                                                .notifier)
+                                            .removeMemo(memo: memo);
+                                      },
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const Divider(
+                                      height: 1,
+                                      color: Colors.black,
+                                    );
+                                  },
+                                ),
+                        );
+                      }),
+                ),
               ],
             ),
     );

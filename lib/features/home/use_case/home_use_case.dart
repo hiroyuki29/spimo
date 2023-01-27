@@ -20,7 +20,7 @@ class HomeUseCase {
   final MemoStorageRepository memoStorageRepository;
   final BookStorageRepository bookStorageRepository;
 
-  Future<List<FlSpot>> createMemoChartPoints({
+  Future<List<List<FlSpot>>> createMemoChartPoints({
     required String bookId,
     required int averageRange,
   }) async {
@@ -35,28 +35,67 @@ class HomeUseCase {
     Map<int, dynamic> wordAndPageMap = {};
     double wordLengthEachMemo = 0;
 
+    Map<int, dynamic> wordAndPageMapOnlyRed = {};
+    double wordLengthEachMemoOnlyRed = 0;
+
     for (int i = 0; i * averageRange < book.pageCount!; i++) {
       wordAndPageMap[i] = 0.0;
+      wordAndPageMapOnlyRed[i] = 0.0;
     }
     for (Memo memo in memosWithoutNullOfStartPage) {
       if (memo.startPage == null) {
         continue;
       }
       wordLengthEachMemo = 0;
+      wordLengthEachMemoOnlyRed = 0;
       for (MemoText memoText in memo.contents) {
         wordLengthEachMemo += memoText.text.length;
+        if (memoText.textColor == TextColor.red) {
+          wordLengthEachMemoOnlyRed += memoText.text.length;
+        }
       }
 
       wordAndPageMap[(memo.startPage! / averageRange).floor()] +=
           wordLengthEachMemo;
+
+      wordAndPageMapOnlyRed[(memo.startPage! / averageRange).floor()] +=
+          wordLengthEachMemoOnlyRed;
     }
-    List<FlSpot> chartPoints = [];
+    List<FlSpot> chartPointsAll = [];
     for (final entry in wordAndPageMap.entries) {
-      chartPoints.add(FlSpot(
+      chartPointsAll.add(FlSpot(
           (entry.key * averageRange + averageRange / 2).toDouble(),
           entry.value));
     }
-    return chartPoints;
+
+    List<FlSpot> chartPointsOnlyRed = [];
+    for (final entry in wordAndPageMapOnlyRed.entries) {
+      chartPointsOnlyRed.add(FlSpot(
+          (entry.key * averageRange + averageRange / 2).toDouble(),
+          entry.value));
+    }
+
+    chartPointsAll.insert(0, FlSpot(0, chartPointsAll.first.y));
+    chartPointsOnlyRed.insert(0, FlSpot(0, chartPointsOnlyRed.first.y));
+    chartPointsAll
+        .add(FlSpot(book.pageCount!.toDouble(), chartPointsAll.last.y));
+    chartPointsOnlyRed
+        .add(FlSpot(book.pageCount!.toDouble(), chartPointsOnlyRed.last.y));
+
+    return [
+      chartPointsAll,
+      chartPointsOnlyRed,
+    ];
+  }
+
+  double getMaxWordLength(List<FlSpot> chartPoints) {
+    double maxWordLength = 0;
+    for (FlSpot chartPoint in chartPoints) {
+      if (maxWordLength < chartPoint.y) {
+        maxWordLength = chartPoint.y;
+      }
+    }
+    return maxWordLength;
   }
 
   Future<int> sumMemoWordLength(String bookId) async {

@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PageChartViewModel {
-  List<FlSpot> get chartPoints => throw _privateConstructorUsedError;
+  List<FlSpot> get chartPointsAll => throw _privateConstructorUsedError;
+  List<FlSpot> get chartPointsOnlyRed => throw _privateConstructorUsedError;
   int get pageCount => throw _privateConstructorUsedError;
   double get maxWordLength => throw _privateConstructorUsedError;
 
@@ -31,7 +32,11 @@ abstract class $PageChartViewModelCopyWith<$Res> {
           PageChartViewModel value, $Res Function(PageChartViewModel) then) =
       _$PageChartViewModelCopyWithImpl<$Res, PageChartViewModel>;
   @useResult
-  $Res call({List<FlSpot> chartPoints, int pageCount, double maxWordLength});
+  $Res call(
+      {List<FlSpot> chartPointsAll,
+      List<FlSpot> chartPointsOnlyRed,
+      int pageCount,
+      double maxWordLength});
 }
 
 /// @nodoc
@@ -47,14 +52,19 @@ class _$PageChartViewModelCopyWithImpl<$Res, $Val extends PageChartViewModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chartPoints = null,
+    Object? chartPointsAll = null,
+    Object? chartPointsOnlyRed = null,
     Object? pageCount = null,
     Object? maxWordLength = null,
   }) {
     return _then(_value.copyWith(
-      chartPoints: null == chartPoints
-          ? _value.chartPoints
-          : chartPoints // ignore: cast_nullable_to_non_nullable
+      chartPointsAll: null == chartPointsAll
+          ? _value.chartPointsAll
+          : chartPointsAll // ignore: cast_nullable_to_non_nullable
+              as List<FlSpot>,
+      chartPointsOnlyRed: null == chartPointsOnlyRed
+          ? _value.chartPointsOnlyRed
+          : chartPointsOnlyRed // ignore: cast_nullable_to_non_nullable
               as List<FlSpot>,
       pageCount: null == pageCount
           ? _value.pageCount
@@ -76,7 +86,11 @@ abstract class _$$_PageChartViewModelCopyWith<$Res>
       __$$_PageChartViewModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<FlSpot> chartPoints, int pageCount, double maxWordLength});
+  $Res call(
+      {List<FlSpot> chartPointsAll,
+      List<FlSpot> chartPointsOnlyRed,
+      int pageCount,
+      double maxWordLength});
 }
 
 /// @nodoc
@@ -90,14 +104,19 @@ class __$$_PageChartViewModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? chartPoints = null,
+    Object? chartPointsAll = null,
+    Object? chartPointsOnlyRed = null,
     Object? pageCount = null,
     Object? maxWordLength = null,
   }) {
     return _then(_$_PageChartViewModel(
-      chartPoints: null == chartPoints
-          ? _value._chartPoints
-          : chartPoints // ignore: cast_nullable_to_non_nullable
+      chartPointsAll: null == chartPointsAll
+          ? _value._chartPointsAll
+          : chartPointsAll // ignore: cast_nullable_to_non_nullable
+              as List<FlSpot>,
+      chartPointsOnlyRed: null == chartPointsOnlyRed
+          ? _value._chartPointsOnlyRed
+          : chartPointsOnlyRed // ignore: cast_nullable_to_non_nullable
               as List<FlSpot>,
       pageCount: null == pageCount
           ? _value.pageCount
@@ -115,17 +134,28 @@ class __$$_PageChartViewModelCopyWithImpl<$Res>
 
 class _$_PageChartViewModel implements _PageChartViewModel {
   const _$_PageChartViewModel(
-      {required final List<FlSpot> chartPoints,
+      {required final List<FlSpot> chartPointsAll,
+      required final List<FlSpot> chartPointsOnlyRed,
       required this.pageCount,
       required this.maxWordLength})
-      : _chartPoints = chartPoints;
+      : _chartPointsAll = chartPointsAll,
+        _chartPointsOnlyRed = chartPointsOnlyRed;
 
-  final List<FlSpot> _chartPoints;
+  final List<FlSpot> _chartPointsAll;
   @override
-  List<FlSpot> get chartPoints {
-    if (_chartPoints is EqualUnmodifiableListView) return _chartPoints;
+  List<FlSpot> get chartPointsAll {
+    if (_chartPointsAll is EqualUnmodifiableListView) return _chartPointsAll;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_chartPoints);
+    return EqualUnmodifiableListView(_chartPointsAll);
+  }
+
+  final List<FlSpot> _chartPointsOnlyRed;
+  @override
+  List<FlSpot> get chartPointsOnlyRed {
+    if (_chartPointsOnlyRed is EqualUnmodifiableListView)
+      return _chartPointsOnlyRed;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chartPointsOnlyRed);
   }
 
   @override
@@ -135,7 +165,7 @@ class _$_PageChartViewModel implements _PageChartViewModel {
 
   @override
   String toString() {
-    return 'PageChartViewModel(chartPoints: $chartPoints, pageCount: $pageCount, maxWordLength: $maxWordLength)';
+    return 'PageChartViewModel(chartPointsAll: $chartPointsAll, chartPointsOnlyRed: $chartPointsOnlyRed, pageCount: $pageCount, maxWordLength: $maxWordLength)';
   }
 
   @override
@@ -144,7 +174,9 @@ class _$_PageChartViewModel implements _PageChartViewModel {
         (other.runtimeType == runtimeType &&
             other is _$_PageChartViewModel &&
             const DeepCollectionEquality()
-                .equals(other._chartPoints, _chartPoints) &&
+                .equals(other._chartPointsAll, _chartPointsAll) &&
+            const DeepCollectionEquality()
+                .equals(other._chartPointsOnlyRed, _chartPointsOnlyRed) &&
             (identical(other.pageCount, pageCount) ||
                 other.pageCount == pageCount) &&
             (identical(other.maxWordLength, maxWordLength) ||
@@ -154,7 +186,8 @@ class _$_PageChartViewModel implements _PageChartViewModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_chartPoints),
+      const DeepCollectionEquality().hash(_chartPointsAll),
+      const DeepCollectionEquality().hash(_chartPointsOnlyRed),
       pageCount,
       maxWordLength);
 
@@ -168,12 +201,15 @@ class _$_PageChartViewModel implements _PageChartViewModel {
 
 abstract class _PageChartViewModel implements PageChartViewModel {
   const factory _PageChartViewModel(
-      {required final List<FlSpot> chartPoints,
+      {required final List<FlSpot> chartPointsAll,
+      required final List<FlSpot> chartPointsOnlyRed,
       required final int pageCount,
       required final double maxWordLength}) = _$_PageChartViewModel;
 
   @override
-  List<FlSpot> get chartPoints;
+  List<FlSpot> get chartPointsAll;
+  @override
+  List<FlSpot> get chartPointsOnlyRed;
   @override
   int get pageCount;
   @override

@@ -121,7 +121,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: AsyncValueWidget(
                           value: chartPoints,
                           data: (data) => _MemoDistributionChart(
-                                chartPoints: data.chartPoints,
+                                chartPointsAll: data.chartPointsAll,
+                                chartPointsOnlyRed: data.chartPointsOnlyRed,
                                 pageCount: data.pageCount.toDouble(),
                                 maxWordLength: data.maxWordLength,
                               )),
@@ -142,12 +143,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class _MemoDistributionChart extends StatelessWidget {
   const _MemoDistributionChart({
-    required this.chartPoints,
+    required this.chartPointsAll,
+    required this.chartPointsOnlyRed,
     required this.pageCount,
     required this.maxWordLength,
   });
 
-  final List<FlSpot> chartPoints;
+  final List<FlSpot> chartPointsAll;
+  final List<FlSpot> chartPointsOnlyRed;
   final double pageCount;
   final double maxWordLength;
 
@@ -195,7 +198,7 @@ class _MemoDistributionChart extends StatelessWidget {
 
   List<LineChartBarData> get lineBarsData1 => [
         lineChartBarData1_1,
-        // lineChartBarData1_2,
+        lineChartBarData1_2,
         // lineChartBarData1_3,
       ];
 
@@ -209,7 +212,9 @@ class _MemoDistributionChart extends StatelessWidget {
 
     String text;
 
-    if (value.toInt() == base) {
+    if (value.toInt() == 0) {
+      text = '0';
+    } else if (value.toInt() == base) {
       text = '$base';
     } else if (value.toInt() == base * 2) {
       text = '${base * 2}';
@@ -244,7 +249,9 @@ class _MemoDistributionChart extends StatelessWidget {
 
     String text;
 
-    if (value.toInt() == base) {
+    if (value.toInt() == 0) {
+      text = '0';
+    } else if (value.toInt() == base) {
       text = '$base';
     } else if (value.toInt() == base * 2) {
       text = '${base * 2}';
@@ -280,7 +287,7 @@ class _MemoDistributionChart extends StatelessWidget {
   FlBorderData get borderData => FlBorderData(
         show: true,
         border: const Border(
-          bottom: BorderSide(color: Color(0xff4e4965), width: 4),
+          bottom: BorderSide(color: Color(0xff4e4965), width: 1),
           left: BorderSide(color: Colors.transparent),
           right: BorderSide(color: Colors.transparent),
           top: BorderSide(color: Colors.transparent),
@@ -289,42 +296,52 @@ class _MemoDistributionChart extends StatelessWidget {
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
       isCurved: false,
+      isStepLineChart: true,
       color: Colors.blueAccent,
-      barWidth: 2,
+      barWidth: 1,
       isStrokeCapRound: true,
-      dotData: FlDotData(show: true),
-      belowBarData: BarAreaData(show: false),
-      spots: chartPoints
-      // const [
-      //   FlSpot(1, 1),
-      //   FlSpot(3, 1.5),
-      //   FlSpot(5, 1.4),
-      //   FlSpot(7, 3.4),
-      //   FlSpot(10, 2),
-      //   FlSpot(12, 2.2),
-      //   FlSpot(13, 1.8),
-      // ],
-      );
+      dotData: FlDotData(show: false),
+      belowBarData: BarAreaData(
+        show: true,
+        gradient: LinearGradient(
+          begin: FractionalOffset.topCenter,
+          end: FractionalOffset.bottomCenter,
+          colors: [
+            Colors.blueAccent.withOpacity(0.3),
+            Colors.transparent,
+          ],
+          stops: const [
+            0.0,
+            1.0,
+          ],
+        ),
+      ),
+      spots: chartPointsAll);
 
-  // LineChartBarData get lineChartBarData1_2 => LineChartBarData(
-  //       isCurved: true,
-  //       color: const Color(0xffaa4cfc),
-  //       barWidth: 8,
-  //       isStrokeCapRound: true,
-  //       dotData: FlDotData(show: false),
-  //       belowBarData: BarAreaData(
-  //         show: false,
-  //         color: const Color(0x00aa4cfc),
-  //       ),
-  //       spots: const [
-  //         FlSpot(1, 1),
-  //         FlSpot(3, 2.8),
-  //         FlSpot(7, 1.2),
-  //         FlSpot(10, 2.8),
-  //         FlSpot(12, 2.6),
-  //         FlSpot(13, 3.9),
-  //       ],
-  //     );
+  LineChartBarData get lineChartBarData1_2 => LineChartBarData(
+        isCurved: false,
+        isStepLineChart: true,
+        color: Colors.red.withOpacity(0.2),
+        barWidth: 0,
+        isStrokeCapRound: true,
+        dotData: FlDotData(show: false),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter,
+            colors: [
+              Colors.red.withOpacity(0.8),
+              Colors.red.withOpacity(0.3),
+            ],
+            stops: const [
+              0.0,
+              1.0,
+            ],
+          ),
+        ),
+        spots: chartPointsOnlyRed,
+      );
 
   // LineChartBarData get lineChartBarData1_3 => LineChartBarData(
   //       isCurved: true,

@@ -28,17 +28,13 @@ class HomeMemoChartController
   Future<void> getChartPoints({required int averageRange}) async {
     state = const AsyncLoading();
     if (currentBook != null) {
-      List<FlSpot> chartPoints = await homeUseCase.createMemoChartPoints(
+      List<List<FlSpot>> chartPoints = await homeUseCase.createMemoChartPoints(
           bookId: currentBook!.id, averageRange: averageRange);
-      double maxWordLength = 0;
-      for (FlSpot chartPoint in chartPoints) {
-        if (maxWordLength < chartPoint.y) {
-          maxWordLength = chartPoint.y;
-        }
-      }
+      double maxWordLength = homeUseCase.getMaxWordLength(chartPoints[0]);
       state = AsyncData(
         PageChartViewModel(
-          chartPoints: chartPoints,
+          chartPointsAll: chartPoints[0],
+          chartPointsOnlyRed: chartPoints[1],
           pageCount: currentBook!.pageCount!,
           maxWordLength: maxWordLength,
         ),

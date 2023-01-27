@@ -2,33 +2,47 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
+import 'package:spimo/features/home/presentation/controller/view_model/page_chart_view_model.dart';
 import 'package:spimo/features/home/use_case/home_use_case.dart';
 
-final homeMemoChartControllerProvider =
-    StateNotifierProvider<HomeMemoChartController, AsyncValue<List<FlSpot>>>(
-        (ref) {
+final homeMemoChartControllerProvider = StateNotifierProvider<
+    HomeMemoChartController, AsyncValue<PageChartViewModel>>((ref) {
   return HomeMemoChartController(
       homeUseCase: ref.watch(homeUseCaseProvider),
       currentBook: ref.watch(currentBookControllerProvider));
 });
 
-class HomeMemoChartController extends StateNotifier<AsyncValue<List<FlSpot>>> {
+class HomeMemoChartController
+    extends StateNotifier<AsyncValue<PageChartViewModel>> {
   HomeMemoChartController(
       {required this.homeUseCase, required this.currentBook})
-      : super(const AsyncData([])) {
+      : super(const AsyncLoading()) {
     if (currentBook != null) {
-      getChartPoints();
+      getChartPoints(averageRange: 20);
     }
   }
 
   final HomeUseCase homeUseCase;
   Book? currentBook;
 
-  Future<void> getChartPoints() async {
+  Future<void> getChartPoints({required int averageRange}) async {
     state = const AsyncLoading();
     if (currentBook != null) {
-      state =
-          AsyncData(await homeUseCase.createMemoChartPoints(currentBook!.id));
+      List<FlSpot> chartPoints = await homeUseCase.createMemoChartPoints(
+          bookId: currentBook!.id, averageRange: averageRange);
+      double maxWordLength = 0;
+      for (FlSpot chartPoint in chartPoints) {
+        if (maxWordLength < chartPoint.y) {
+          maxWordLength = chartPoint.y;
+        }
+      }
+      state = AsyncData(
+        PageChartViewModel(
+          chartPoints: chartPoints,
+          pageCount: currentBook!.pageCount!,
+          maxWordLength: maxWordLength,
+        ),
+      );
     }
   }
 }

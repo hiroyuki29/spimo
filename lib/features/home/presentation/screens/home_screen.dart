@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
+import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
+import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/home/presentation/controller/home_controller.dart';
 
 // class HomeScreen extends StatelessWidget {
@@ -27,72 +30,109 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int avarageRange = 5;
+
   @override
   void initState() {
     super.initState();
-    // ref
-    //     .read(homeMemoSumWordsControllerProvider.notifier)
-    //     .getAllMemoWordLength();
-    // ref.read(homeMemoChartControllerProvider.notifier).getChartPoints();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(homeMemoSumWordsControllerProvider.notifier)
+          .getAllMemoWordLength();
+      ref
+          .read(homeMemoChartControllerProvider.notifier)
+          .getChartPoints(averageRange: avarageRange);
+    });
+    //
   }
 
   @override
   Widget build(BuildContext context) {
     final sumAllMemoWors = ref.watch(homeMemoSumWordsControllerProvider);
     final chartPoints = ref.watch(homeMemoChartControllerProvider);
+    final currentBook = ref.watch(currentBookControllerProvider);
     return Scaffold(
       appBar: CommonAppBar(context: context, title: 'home'),
       body: Stack(
         children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              AsyncValueWidget(
-                  value: sumAllMemoWors,
-                  data: (data) {
-                    return Text('合計のメモ文字数:$data');
-                  }),
-              const SizedBox(
-                height: 37,
+          GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  currentBook == null
+                      ? const LoadingCircleIndicator()
+                      : BookListTile(book: currentBook),
+                  AsyncValueWidget(
+                      value: sumAllMemoWors,
+                      data: (data) {
+                        return Text('合計のメモ文字数:$data');
+                      }),
+                  const SizedBox(
+                    height: 37,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 200,
+                        child: TextFormField(
+                          initialValue: avarageRange.toString(),
+                          decoration: const InputDecoration(
+                            labelText: '区間（ページ数）',
+                          ),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            setState(() {
+                              avarageRange = int.tryParse(value) ?? 1;
+                            });
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            ref
+                                .read(homeMemoChartControllerProvider.notifier)
+                                .getChartPoints(averageRange: avarageRange);
+                          },
+                          child: const Text('保存'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'メモ分布',
+                    style: TextStyle(
+                      color: Color(0xff827daa),
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16, left: 6),
+                      child: AsyncValueWidget(
+                          value: chartPoints,
+                          data: (data) => _MemoDistributionChart(
+                                chartPoints: data.chartPoints,
+                                pageCount: data.pageCount.toDouble(),
+                                maxWordLength: data.maxWordLength,
+                              )),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
-              const Text(
-                'メモ分布',
-                style: TextStyle(
-                  color: Color(0xff827daa),
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              const Text(
-                '（本のタイトル）',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 37,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16, left: 6),
-                  child: AsyncValueWidget(
-                      value: chartPoints,
-                      data: (data) => _MemoDistributionChart(
-                            chartPoints: data,
-                          )),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -101,9 +141,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class _MemoDistributionChart extends StatelessWidget {
-  const _MemoDistributionChart({required this.chartPoints});
+  const _MemoDistributionChart({
+    required this.chartPoints,
+    required this.pageCount,
+    required this.maxWordLength,
+  });
 
   final List<FlSpot> chartPoints;
+  final double pageCount;
+  final double maxWordLength;
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +166,9 @@ class _MemoDistributionChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 10,
-        maxY: 50,
+        maxX: pageCount,
         minY: 0,
+        maxY: maxWordLength,
       );
 
   LineTouchData get lineTouchData1 => LineTouchData(
@@ -159,25 +205,22 @@ class _MemoDistributionChart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
+    final int base = (maxWordLength / 5).floor();
+
     String text;
-    switch (value.toInt()) {
-      case 0:
-        text = '0';
-        break;
-      case 10:
-        text = '10';
-        break;
-      case 20:
-        text = '20';
-        break;
-      case 30:
-        text = '30';
-        break;
-      case 40:
-        text = '40';
-        break;
-      default:
-        return Container();
+
+    if (value.toInt() == base) {
+      text = '$base';
+    } else if (value.toInt() == base * 2) {
+      text = '${base * 2}';
+    } else if (value.toInt() == base * 3) {
+      text = '${base * 3}';
+    } else if (value.toInt() == base * 4) {
+      text = '${base * 4}';
+    } else if (value.toInt() == base * 5) {
+      text = '${base * 5}';
+    } else {
+      text = '';
     }
 
     return Text(text, style: style, textAlign: TextAlign.center);
@@ -196,26 +239,32 @@ class _MemoDistributionChart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 16,
     );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('SEPT', style: style);
-        break;
-      case 7:
-        text = const Text('OCT', style: style);
-        break;
-      case 12:
-        text = const Text('DEC', style: style);
-        break;
-      default:
-        text = const Text('');
-        break;
+
+    final int base = (pageCount / 5).floor();
+
+    String text;
+
+    if (value.toInt() == base) {
+      text = '$base';
+    } else if (value.toInt() == base * 2) {
+      text = '${base * 2}';
+    } else if (value.toInt() == base * 3) {
+      text = '${base * 3}';
+    } else if (value.toInt() == base * 4) {
+      text = '${base * 4}';
+    } else if (value.toInt() == base * 5) {
+      text = '${base * 5}';
+    } else {
+      text = '';
     }
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 10,
-      child: text,
+      child: Text(
+        text,
+        style: style,
+      ),
     );
   }
 
@@ -239,11 +288,11 @@ class _MemoDistributionChart extends StatelessWidget {
       );
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
-      isCurved: true,
-      color: const Color(0xff4af699),
-      barWidth: 8,
+      isCurved: false,
+      color: Colors.blueAccent,
+      barWidth: 2,
       isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
+      dotData: FlDotData(show: true),
       belowBarData: BarAreaData(show: false),
       spots: chartPoints
       // const [

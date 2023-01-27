@@ -33,6 +33,7 @@ class MemosController extends StateNotifier<AsyncValue<List<Memo>>> {
 
   Future<void> addMemo({required Memo memo}) async {
     await memoStorageRepository.addMemo(memo);
+    // await Future.delayed(const Duration(microseconds: 100));
     if (currentBook != null) {
       state = AsyncData(
           await memoStorageRepository.fetchBookMemos(currentBook!.id));

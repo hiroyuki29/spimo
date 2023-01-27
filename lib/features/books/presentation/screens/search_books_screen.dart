@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/search_books_repository.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
@@ -15,7 +16,6 @@ class SearchBooksScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchWord = useTextEditingController(text: '');
     final books = useState<List<Book>>([]);
-    final book = useState<Book?>(null);
 
     Future<void> fetchBooks() async {
       final searchedBookList =
@@ -28,8 +28,28 @@ class SearchBooksScreen extends HookConsumerWidget {
       body: SafeArea(
         child: Column(
           children: [
-            TextFormField(
-              controller: searchWord,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 20,
+              ),
+              child: TextFormField(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: primaryLight,
+                  isDense: true,
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: primaryDark,
+                  ),
+                  hintText: '本の名称',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                controller: searchWord,
+              ),
             ),
             TextButton(
               onPressed: () {

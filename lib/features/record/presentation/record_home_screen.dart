@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
@@ -77,7 +78,17 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      BookListTile(book: currentBook),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16.0,
+                          horizontal: 16.0,
+                        ),
+                        child: BookListTile(
+                          book: currentBook,
+                          color: primaryLight,
+                          radius: 10,
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
@@ -153,6 +164,9 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       ),
                       const SizedBox(height: 30),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary,
+                        ),
                         onPressed: () async {
                           final memo = Memo(
                               id: 'id',
@@ -175,6 +189,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: accent,
         onPressed:
             _speechToText.isNotListening ? _startListening : _stopListening,
         tooltip: 'Listen',

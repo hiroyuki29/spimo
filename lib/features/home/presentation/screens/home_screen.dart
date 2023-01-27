@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
@@ -63,11 +64,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: <Widget>[
                   currentBook == null
                       ? const LoadingCircleIndicator()
-                      : BookListTile(book: currentBook),
+                      : Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: BookListTile(
+                            book: currentBook,
+                            color: primaryLight,
+                            radius: 10,
+                          ),
+                        ),
                   AsyncValueWidget(
                       value: sumAllMemoWors,
                       data: (data) {
-                        return Text('合計のメモ文字数:$data');
+                        return Center(
+                            child: Text(
+                          '合計のメモ文字数:$data',
+                          style: const TextStyle(
+                            color: black,
+                            fontSize: 20,
+                          ),
+                        ));
                       }),
                   const SizedBox(
                     height: 37,
@@ -77,7 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       SizedBox(
                         height: 50,
-                        width: 200,
+                        width: 120,
                         child: TextFormField(
                           initialValue: avarageRange.toString(),
                           decoration: const InputDecoration(
@@ -91,10 +106,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           },
                         ),
                       ),
+                      const SizedBox(width: 50),
                       SizedBox(
                         height: 50,
                         width: 100,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primary,
+                          ),
                           onPressed: () async {
                             ref
                                 .read(homeMemoChartControllerProvider.notifier)

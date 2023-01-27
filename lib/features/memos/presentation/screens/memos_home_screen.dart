@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/presentation/controller/memos_controller.dart';
@@ -29,15 +30,24 @@ class MemosHomeScreen extends HookConsumerWidget {
           ? const Text('no data')
           : Column(
               children: [
-                BookListTile(book: currentBook),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: BookListTile(
+                    book: currentBook,
+                    radius: 10,
+                    color: primaryLight,
+                  ),
+                ),
                 Expanded(
                   child: AsyncValueWidget(
                       value: memos,
                       data: (memos) {
-                        return SafeArea(
-                          child: memos.isEmpty
-                              ? const Text('no data')
-                              : ListView.separated(
+                        return memos.isEmpty
+                            ? const Text('no data')
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: ListView.separated(
                                   itemCount: memos.length,
                                   itemBuilder: (context, index) {
                                     final memo = memos[index];
@@ -80,7 +90,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                                     );
                                   },
                                 ),
-                        );
+                              );
                       }),
                 ),
               ],

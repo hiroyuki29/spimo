@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
 import 'package:spimo/routing/app_router.dart';
@@ -35,6 +36,9 @@ class AccountHomeScreen extends HookConsumerWidget {
                   const Text('account'),
                   Expanded(child: Container()),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: primary,
+                    ),
                     onPressed: () async {
                       await logout();
                     },

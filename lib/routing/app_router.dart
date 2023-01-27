@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
@@ -159,7 +160,7 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: primary,
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
         items: tabs,

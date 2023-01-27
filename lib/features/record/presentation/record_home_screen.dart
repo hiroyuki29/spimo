@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
@@ -66,9 +67,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     final currentBook = ref.watch(currentBookControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('spiMo'),
-      ),
+      appBar: CommonAppBar(context: context, title: 'Record'),
       body: currentBook == null
           ? const Text('no data')
           : GestureDetector(

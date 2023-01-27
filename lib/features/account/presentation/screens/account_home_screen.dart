@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
 import 'package:spimo/routing/app_router.dart';
@@ -25,19 +26,23 @@ class AccountHomeScreen extends HookConsumerWidget {
 
     return isLoading.value
         ? const LoadingCircleIndicator()
-        : SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('account'),
-                ElevatedButton(
-                  onPressed: () async {
-                    await logout();
-                  },
-                  child: const Text('ログアウト'),
-                ),
-              ],
+        : Scaffold(
+            appBar: CommonAppBar(context: context, title: 'account'),
+            body: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('account'),
+                  Expanded(child: Container()),
+                  ElevatedButton(
+                    onPressed: () async {
+                      await logout();
+                    },
+                    child: const Text('ログアウト'),
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
           );
   }

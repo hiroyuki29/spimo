@@ -80,7 +80,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
               separatorBuilder: (context, index) {
                 return const Divider(
                   height: 1,
-                  color: Colors.black,
+                  color: Colors.blue,
                 );
               },
             ),

@@ -22,7 +22,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
-  List<MemoText> wordList = [];
+  List<MemoText> _wordList = [];
   String _currentLocaleId = '';
   bool _isAccent = false;
   int? _startPage;
@@ -53,7 +53,9 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     await _speechToText.stop();
     final TextColor textColor = _isAccent ? TextColor.red : TextColor.black;
     final MemoText addedText = MemoText(text: _lastWords, textColor: textColor);
-    wordList.add(addedText);
+    if (_lastWords != '') {
+      _wordList.add(addedText);
+    }
     setState(() {});
   }
 
@@ -68,123 +70,125 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     final currentBook = ref.watch(currentBookControllerProvider);
 
     return Scaffold(
+      backgroundColor: backgroundGray,
       appBar: CommonAppBar(context: context, title: 'Record'),
       body: currentBook == null
           ? const Text('no data')
           : GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0,
-                        ),
-                        child: BookListTile(
-                          book: currentBook,
-                          color: primaryLight,
-                          radius: 10,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                        horizontal: 16.0,
+                      ),
+                      child: BookListTile(
+                        book: currentBook,
+                        color: primaryLight,
+                        radius: 10,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        _speechToText.isListening
+                            ? _lastWords
+                            : _speechEnabled
+                                ? 'Tap the microphone to start listening...'
+                                : 'Speech not available',
+                      ),
+                    ),
+                    Expanded(
+                      child: ColoredBox(
+                        color: white,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _wordList.length,
+                          itemBuilder: (context, index) {
+                            final text = _wordList[index].text;
+                            final color = _wordList[index].textColor.color;
+                            return Text(
+                              text,
+                              style: TextStyle(color: color),
+                            );
+                          },
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 100,
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: '開始ページ',
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _startPage = int.tryParse(value);
-                                  });
-                                },
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary,
+                      ),
+                      onPressed: _speechToText.isListening || _wordList.isEmpty
+                          ? null
+                          : () async {
+                              final memo = Memo(
+                                  id: 'id',
+                                  contents: _wordList,
+                                  startPage: _startPage,
+                                  endPage: _endPage,
+                                  bookId: currentBook.id,
+                                  createdAt: DateTime.now());
+                              ref
+                                  .read(memosControllerProvider.notifier)
+                                  .addMemo(memo: memo);
+                              _lastWords = '';
+                              _wordList = [];
+                            },
+                      child: const Text('保存'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: '開始ページ',
                               ),
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  _startPage = int.tryParse(value);
+                                });
+                              },
                             ),
-                            const SizedBox(width: 30),
-                            SizedBox(
-                              width: 100,
-                              child: TextFormField(
-                                decoration: const InputDecoration(
-                                  labelText: '終了ページ',
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _endPage = int.tryParse(value);
-                                  });
-                                },
+                          ),
+                          const SizedBox(width: 30),
+                          SizedBox(
+                            width: 100,
+                            child: TextFormField(
+                              decoration: const InputDecoration(
+                                labelText: '終了ページ',
                               ),
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  _endPage = int.tryParse(value);
+                                });
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                          CupertinoSwitch(
+                            value: _isAccent,
+                            onChanged: (value) {
+                              setState(() {
+                                _isAccent = value;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 80),
+                        ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        child: const Text(
-                          'Recognized words:',
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          _speechToText.isListening
-                              ? _lastWords
-                              : _speechEnabled
-                                  ? 'Tap the microphone to start listening...'
-                                  : 'Speech not available',
-                        ),
-                      ),
-                      CupertinoSwitch(
-                          value: _isAccent,
-                          onChanged: (value) {
-                            setState(() {
-                              _isAccent = value;
-                            });
-                          }),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: wordList.length,
-                        itemBuilder: (context, index) {
-                          final text = wordList[index].text;
-                          final color = wordList[index].textColor.color;
-                          return Text(
-                            text,
-                            style: TextStyle(color: color),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 30),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primary,
-                        ),
-                        onPressed: () async {
-                          final memo = Memo(
-                              id: 'id',
-                              contents: wordList,
-                              startPage: _startPage,
-                              endPage: _endPage,
-                              bookId: currentBook.id,
-                              createdAt: DateTime.now());
-                          ref
-                              .read(memosControllerProvider.notifier)
-                              .addMemo(memo: memo);
-                          _lastWords = '';
-                          wordList = [];
-                        },
-                        child: const Text('保存'),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

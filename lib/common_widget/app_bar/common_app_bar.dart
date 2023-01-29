@@ -8,12 +8,9 @@ AppBar CommonAppBar({
 }) {
   return AppBar(
     backgroundColor: Colors.white,
-    title: Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: Text(
-        title,
-        style: const TextStyle(color: primaryDark),
-      ),
+    title: Text(
+      title,
+      style: const TextStyle(color: primaryDark),
     ),
     leading: Navigator.of(context).canPop()
         ? IconButton(

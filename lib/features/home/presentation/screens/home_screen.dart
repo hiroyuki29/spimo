@@ -66,115 +66,140 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onTap: () => FocusScope.of(context).unfocus(),
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  currentBook == null
-                      ? const LoadingCircleIndicator()
-                      : Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: BookListTile(
-                            book: currentBook,
-                          ),
-                        ),
-                  AsyncValueWidget(
-                      value: sumAllMemoWors,
-                      data: (data) {
-                        return Center(
-                            child: Text(
-                          '合計のメモ文字数:$data',
-                          style: const TextStyle(
-                            color: black,
-                            fontSize: 20,
-                          ),
-                        ));
-                      }),
-                  sizedBoxH24,
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          const Text(
-                            'メモ分布',
-                            style: TextStyle(
-                              color: Color(0xff827daa),
-                              fontSize: 16,
+                  HomeContent(
+                    title: '現在選択中の本',
+                    child: currentBook == null
+                        ? const LoadingCircleIndicator()
+                        : Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: BookListTile(
+                              book: currentBook,
+                              color: white,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ChartRageChip(
-                                title: '1',
-                                isActive:
-                                    chartAvarageRange == ChartAverageRange.one,
-                                onSelected: (_) {
-                                  setState(() {
-                                    chartAvarageRange = ChartAverageRange.one;
-                                  });
-                                  setChartAverageRage();
-                                },
+                  ),
+                  sizedBoxH24,
+                  HomeContent(
+                    title: '合計メモ文字数',
+                    child: currentBook == null
+                        ? const LoadingCircleIndicator()
+                        : Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: DecoratedBox(
+                              decoration: const BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
                               ),
-                              ChartRageChip(
-                                title: '5',
-                                isActive:
-                                    chartAvarageRange == ChartAverageRange.five,
-                                onSelected: (_) {
-                                  setState(() {
-                                    chartAvarageRange = ChartAverageRange.five;
-                                  });
-                                  setChartAverageRage();
-                                },
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: AsyncValueWidget(
+                                      value: sumAllMemoWors,
+                                      data: (data) {
+                                        return Center(
+                                            child: Text(
+                                          '$data字',
+                                          style: const TextStyle(
+                                            color: black,
+                                            fontSize: 20,
+                                          ),
+                                        ));
+                                      }),
+                                ),
                               ),
-                              ChartRageChip(
-                                title: '10',
-                                isActive:
-                                    chartAvarageRange == ChartAverageRange.ten,
-                                onSelected: (_) {
-                                  setState(() {
-                                    chartAvarageRange = ChartAverageRange.ten;
-                                  });
-                                  setChartAverageRage();
-                                },
-                              ),
-                              ChartRageChip(
-                                title: '20',
-                                isActive: chartAvarageRange ==
-                                    ChartAverageRange.twenty,
-                                onSelected: (_) {
-                                  setState(() {
-                                    chartAvarageRange =
-                                        ChartAverageRange.twenty;
-                                  });
-                                  setChartAverageRage();
-                                },
-                              ),
-                            ],
+                            )),
+                  ),
+                  sizedBoxH24,
+                  HomeContent(
+                    title: '各ページに対するメモ文字数',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
                           ),
-                          SizedBox(
-                            height: 250,
-                            child: AsyncValueWidget(
-                              value: chartPoints,
-                              data: (data) => Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: _MemoDistributionChart(
-                                  chartPointsAll: data.chartPointsAll,
-                                  chartPointsOnlyRed: data.chartPointsOnlyRed,
-                                  pageCount: data.pageCount.toDouble(),
-                                  maxWordLength: data.maxWordLength,
+                        ),
+                        child: Column(
+                          children: [
+                            sizedBoxH8,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ChartRageChip(
+                                  title: '1',
+                                  isActive: chartAvarageRange ==
+                                      ChartAverageRange.one,
+                                  onSelected: (_) {
+                                    setState(() {
+                                      chartAvarageRange = ChartAverageRange.one;
+                                    });
+                                    setChartAverageRage();
+                                  },
+                                ),
+                                ChartRageChip(
+                                  title: '5',
+                                  isActive: chartAvarageRange ==
+                                      ChartAverageRange.five,
+                                  onSelected: (_) {
+                                    setState(() {
+                                      chartAvarageRange =
+                                          ChartAverageRange.five;
+                                    });
+                                    setChartAverageRage();
+                                  },
+                                ),
+                                ChartRageChip(
+                                  title: '10',
+                                  isActive: chartAvarageRange ==
+                                      ChartAverageRange.ten,
+                                  onSelected: (_) {
+                                    setState(() {
+                                      chartAvarageRange = ChartAverageRange.ten;
+                                    });
+                                    setChartAverageRage();
+                                  },
+                                ),
+                                ChartRageChip(
+                                  title: '20',
+                                  isActive: chartAvarageRange ==
+                                      ChartAverageRange.twenty,
+                                  onSelected: (_) {
+                                    setState(() {
+                                      chartAvarageRange =
+                                          ChartAverageRange.twenty;
+                                    });
+                                    setChartAverageRage();
+                                  },
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 250,
+                              child: AsyncValueWidget(
+                                value: chartPoints,
+                                data: (data) => Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: _MemoDistributionChart(
+                                    chartPointsAll: data.chartPointsAll,
+                                    chartPointsOnlyRed: data.chartPointsOnlyRed,
+                                    pageCount: data.pageCount.toDouble(),
+                                    maxWordLength: data.maxWordLength,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -185,6 +210,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({
+    Key? key,
+    required this.title,
+    required this.child,
+  }) : super(key: key);
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Text(
+            title,
+            style: const TextStyle(
+              color: primaryDark,
+              fontSize: 16,
+              decoration: TextDecoration.underline,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        child,
+      ],
     );
   }
 }

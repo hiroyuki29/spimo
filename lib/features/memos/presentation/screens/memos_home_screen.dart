@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/presentation/controller/memos_controller.dart';
@@ -52,7 +53,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                                         children: [
                                           Text(
                                               'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}'),
-                                          const SizedBox(width: 10),
+                                          sizedBoxW16,
                                           Expanded(
                                             child: Column(
                                               crossAxisAlignment:
@@ -80,7 +81,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                                     );
                                   },
                                   separatorBuilder: (context, index) {
-                                    return const SizedBox(height: 8);
+                                    return sizedBoxH8;
                                   },
                                 ),
                               );

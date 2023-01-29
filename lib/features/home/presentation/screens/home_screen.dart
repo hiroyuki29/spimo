@@ -5,6 +5,7 @@ import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/home/presentation/controller/home_controller.dart';
@@ -87,47 +88,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         ));
                       }),
-                  const SizedBox(
-                    height: 37,
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     SizedBox(
-                  //       height: 50,
-                  //       width: 120,
-                  //       child: TextFormField(
-                  //         initialValue: avarageRange.toString(),
-                  //         decoration: const InputDecoration(
-                  //           labelText: '区間（ページ数）',
-                  //         ),
-                  //         keyboardType: TextInputType.number,
-                  //         onChanged: (value) {
-                  //           setState(() {
-                  //             avarageRange = int.tryParse(value) ?? 1;
-                  //           });
-                  //         },
-                  //       ),
-                  //     ),
-                  //     const SizedBox(width: 50),
-                  //     SizedBox(
-                  //       height: 50,
-                  //       width: 100,
-                  //       child: ElevatedButton(
-                  //         style: ElevatedButton.styleFrom(
-                  //           backgroundColor: primary,
-                  //         ),
-                  //         onPressed: () async {
-                  //           ref
-                  //               .read(homeMemoChartControllerProvider.notifier)
-                  //               .getChartPoints(averageRange: avarageRange);
-                  //         },
-                  //         child: const Text('保存'),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-
+                  sizedBoxH24,
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -217,9 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  sizedBoxH16,
                 ],
               ),
             ),

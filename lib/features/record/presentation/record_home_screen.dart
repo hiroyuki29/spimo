@@ -5,6 +5,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
@@ -116,7 +117,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 30),
+                    sizedBoxH32,
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primary,
@@ -141,7 +142,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -159,7 +160,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               },
                             ),
                           ),
-                          const SizedBox(width: 30),
+                          sizedBoxW32,
                           SizedBox(
                             width: 100,
                             child: TextFormField(

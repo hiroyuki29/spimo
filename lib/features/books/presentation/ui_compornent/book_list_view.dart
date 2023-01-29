@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 
@@ -28,7 +29,7 @@ class BookListView extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: const [
-                      SizedBox(width: 20),
+                      sizedBoxW24,
                       Icon(Icons.delete, color: Colors.white),
                     ],
                   ),
@@ -39,7 +40,7 @@ class BookListView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
                       Icon(Icons.delete, color: Colors.white),
-                      SizedBox(width: 20),
+                      sizedBoxW24,
                     ],
                   ),
                 ),
@@ -59,7 +60,7 @@ class BookListView extends StatelessWidget {
             : const SizedBox(height: 80);
       },
       separatorBuilder: (context, index) {
-        return const SizedBox(height: 8);
+        return sizedBoxH8;
       },
     );
   }

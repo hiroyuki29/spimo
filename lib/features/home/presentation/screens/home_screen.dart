@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
@@ -150,6 +151,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(
                     height: 10,
                   ),
+                  IconAsset.spimoLogo,
                 ],
               ),
             ),
@@ -316,7 +318,7 @@ class _MemoDistributionChart extends StatelessWidget {
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
       isCurved: false,
       isStepLineChart: true,
-      color: Colors.blueAccent,
+      color: primary,
       barWidth: 1,
       isStrokeCapRound: true,
       dotData: FlDotData(show: false),
@@ -326,7 +328,7 @@ class _MemoDistributionChart extends StatelessWidget {
           begin: FractionalOffset.topCenter,
           end: FractionalOffset.bottomCenter,
           colors: [
-            Colors.blueAccent.withOpacity(0.3),
+            primary.withOpacity(0.3),
             Colors.transparent,
           ],
           stops: const [

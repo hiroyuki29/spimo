@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
@@ -112,29 +113,34 @@ class ScaffoldWithBottomNavBar extends StatefulWidget {
 
 class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
   final tabs = [
-    const ScaffoldWithNavBarTabItem(
+    ScaffoldWithNavBarTabItem(
       initialLocation: '/home',
-      icon: Icon(Icons.home),
+      icon: SizedBox(width: 32, height: 32, child: IconAsset.home),
+      activeIcon: SizedBox(width: 32, child: IconAsset.homeActive),
       label: 'home',
     ),
-    const ScaffoldWithNavBarTabItem(
+    ScaffoldWithNavBarTabItem(
       initialLocation: '/memos',
-      icon: Icon(Icons.pages),
+      icon: SizedBox(width: 32, height: 32, child: IconAsset.memo),
+      activeIcon: SizedBox(width: 32, child: IconAsset.memoActive),
       label: 'memo',
     ),
-    const ScaffoldWithNavBarTabItem(
+    ScaffoldWithNavBarTabItem(
       initialLocation: '/record',
-      icon: Icon(Icons.create),
+      icon: SizedBox(width: 32, height: 32, child: IconAsset.speech),
+      activeIcon: SizedBox(width: 32, child: IconAsset.speechActive),
       label: 'record',
     ),
-    const ScaffoldWithNavBarTabItem(
+    ScaffoldWithNavBarTabItem(
       initialLocation: '/books',
-      icon: Icon(Icons.add_box),
+      icon: SizedBox(width: 32, height: 32, child: IconAsset.book),
+      activeIcon: SizedBox(width: 32, child: IconAsset.bookActive),
       label: 'book',
     ),
-    const ScaffoldWithNavBarTabItem(
+    ScaffoldWithNavBarTabItem(
       initialLocation: '/account',
-      icon: Icon(Icons.person),
+      icon: SizedBox(width: 32, height: 32, child: IconAsset.account),
+      activeIcon: SizedBox(width: 32, child: IconAsset.accountActive),
       label: 'account',
     ),
   ];
@@ -172,8 +178,11 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 
 class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
   const ScaffoldWithNavBarTabItem(
-      {required this.initialLocation, required Widget icon, String? label})
-      : super(icon: icon, label: label);
+      {required this.initialLocation,
+      required Widget icon,
+      required Widget activeIcon,
+      String? label})
+      : super(icon: icon, activeIcon: activeIcon, label: label);
 
   /// The initial location/path
   final String initialLocation;

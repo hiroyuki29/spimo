@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
-import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
@@ -54,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final chartPoints = ref.watch(homeMemoChartControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
     return Scaffold(
+      backgroundColor: backgroundGray,
       appBar: CommonAppBar(context: context, title: 'home'),
       body: Stack(
         children: <Widget>[
@@ -69,8 +69,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: BookListTile(
                             book: currentBook,
-                            color: primaryLight,
-                            radius: 10,
                           ),
                         ),
                   AsyncValueWidget(
@@ -135,23 +133,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 200,
+                    height: 250,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 16, left: 6),
-                      child: AsyncValueWidget(
-                          value: chartPoints,
-                          data: (data) => _MemoDistributionChart(
-                                chartPointsAll: data.chartPointsAll,
-                                chartPointsOnlyRed: data.chartPointsOnlyRed,
-                                pageCount: data.pageCount.toDouble(),
-                                maxWordLength: data.maxWordLength,
-                              )),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: AsyncValueWidget(
+                            value: chartPoints,
+                            data: (data) => Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: _MemoDistributionChart(
+                                    chartPointsAll: data.chartPointsAll,
+                                    chartPointsOnlyRed: data.chartPointsOnlyRed,
+                                    pageCount: data.pageCount.toDouble(),
+                                    maxWordLength: data.maxWordLength,
+                                  ),
+                                )),
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  IconAsset.spimoLogo,
                 ],
               ),
             ),
@@ -225,7 +234,7 @@ class _MemoDistributionChart extends StatelessWidget {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Color(0xff75729e),
+      color: primaryDark,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
@@ -261,9 +270,9 @@ class _MemoDistributionChart extends StatelessWidget {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Color(0xff72719b),
+      color: primaryDark,
       fontWeight: FontWeight.bold,
-      fontSize: 16,
+      fontSize: 14,
     );
 
     final int base = (pageCount / 5).floor();

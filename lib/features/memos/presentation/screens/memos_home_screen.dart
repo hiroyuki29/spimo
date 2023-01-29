@@ -15,29 +15,21 @@ class MemosHomeScreen extends HookConsumerWidget {
     final memos = ref.watch(memosControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
 
-    // useEffect(() {
-    //   Future(() async {
-    //     currentBook.whenData((value) async {
-    //       await ref.read(memosControllerProvider.notifier).fetchBookMemos();
-    //     });
-    //   });
-    //   return null;
-    // }, [currentBook]);
-
     return Scaffold(
+      backgroundColor: backgroundGray,
       appBar: CommonAppBar(context: context, title: 'memos'),
       body: currentBook == null
           ? const Text('no data')
           : Column(
               children: [
+                Container(height: 16, color: backgroundGray),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: BookListTile(
                     book: currentBook,
-                    radius: 10,
-                    color: primaryLight,
                   ),
                 ),
+                Container(height: 16, color: backgroundGray),
                 Expanded(
                   child: AsyncValueWidget(
                       value: memos,
@@ -52,6 +44,10 @@ class MemosHomeScreen extends HookConsumerWidget {
                                   itemBuilder: (context, index) {
                                     final memo = memos[index];
                                     return ListTile(
+                                      tileColor: white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                       title: Row(
                                         children: [
                                           Text(
@@ -84,10 +80,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                                     );
                                   },
                                   separatorBuilder: (context, index) {
-                                    return const Divider(
-                                      height: 1,
-                                      color: Colors.black,
-                                    );
+                                    return const SizedBox(height: 8);
                                   },
                                 ),
                               );

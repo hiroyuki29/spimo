@@ -69,14 +69,14 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   Widget build(BuildContext context) {
     final currentBook = ref.watch(currentBookControllerProvider);
 
-    return Scaffold(
-      backgroundColor: backgroundGray,
-      appBar: CommonAppBar(context: context, title: 'Record'),
-      body: currentBook == null
-          ? const Text('no data')
-          : GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Center(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: backgroundGray,
+        appBar: CommonAppBar(context: context, title: 'Record'),
+        body: currentBook == null
+            ? const Text('no data')
+            : Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -87,8 +87,6 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       ),
                       child: BookListTile(
                         book: currentBook,
-                        color: primaryLight,
-                        radius: 10,
                       ),
                     ),
                     Container(
@@ -191,13 +189,13 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   ],
                 ),
               ),
-            ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: accent,
-        onPressed:
-            _speechToText.isNotListening ? _startListening : _stopListening,
-        tooltip: 'Listen',
-        child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: accent,
+          onPressed:
+              _speechToText.isNotListening ? _startListening : _stopListening,
+          tooltip: 'Listen',
+          child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
+        ),
       ),
     );
   }

@@ -6,4 +6,4 @@ const Color primary = Color(0xff607D8B);
 const Color accent = Color(0xff795548);
 const Color black = Color(0xff212121);
 const Color white = Colors.white;
-const backgroundGray = Color(0xffF9F9F9);
+const backgroundGray = Color(0xffF3F3F3);

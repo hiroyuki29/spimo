@@ -7,7 +7,7 @@ class BookListTile extends StatelessWidget {
     Key? key,
     required this.book,
     this.color = white,
-    this.radius = 0,
+    this.radius = 8,
     this.onTap,
   }) : super(key: key);
 

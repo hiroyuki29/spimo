@@ -4,9 +4,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
-import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_view.dart';
 import 'package:spimo/routing/app_router.dart';
 
 class BooksHomeScreen extends StatefulHookConsumerWidget {
@@ -23,6 +24,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
     final books = ref.watch(booksControllerProvider);
 
     return Scaffold(
+      backgroundColor: backgroundGray,
       floatingActionButton: FloatingActionButton(
         backgroundColor: accent,
         onPressed: () {
@@ -35,54 +37,16 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
         value: books,
         data: (value) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: value.length,
-            itemBuilder: (context, index) {
-              final book = value[index];
-              return Dismissible(
-                // key: ValueKey<Book>(book),
-                key: UniqueKey(),
-                background: Container(
-                  color: Colors.red,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      SizedBox(width: 20),
-                      Icon(Icons.delete, color: Colors.white),
-                    ],
-                  ),
-                ),
-                secondaryBackground: Container(
-                  color: Colors.red,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Icon(Icons.delete, color: Colors.white),
-                      SizedBox(width: 20),
-                    ],
-                  ),
-                ),
-                onDismissed: (DismissDirection direction) {
-                  ref.read(booksControllerProvider.notifier).removeBook(book);
-                },
-                child: BookListTile(
-                  book: book,
-                  onTap: () {
-                    //TODO:本の詳細ページへの遷移追加(以下は暫定)
-                    ref
-                        .read(currentBookControllerProvider.notifier)
-                        .setCurrentBookId(book.id);
-                    context.goNamed(AppRoute.record.name);
-                  },
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const Divider(
-                height: 1,
-                color: black,
-              );
+          child: BookListView(
+            bookList: value,
+            slideCallback: ((Book book) {
+              ref.read(booksControllerProvider.notifier).removeBook(book);
+            }),
+            onTap: (Book book) {
+              ref
+                  .read(currentBookControllerProvider.notifier)
+                  .setCurrentBookId(book.id);
+              context.goNamed(AppRoute.record.name);
             },
           ),
         ),

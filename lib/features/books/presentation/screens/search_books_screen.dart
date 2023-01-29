@@ -7,7 +7,8 @@ import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/search_books_repository.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
-import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/book_list_view.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class SearchBooksScreen extends HookConsumerWidget {
   const SearchBooksScreen({super.key});
@@ -23,10 +24,12 @@ class SearchBooksScreen extends HookConsumerWidget {
       books.value = searchedBookList;
     }
 
-    return Scaffold(
-      appBar: CommonAppBar(context: context, title: 'search books'),
-      body: SafeArea(
-        child: Column(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: backgroundGray,
+        appBar: CommonAppBar(context: context, title: 'search books'),
+        body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -36,7 +39,7 @@ class SearchBooksScreen extends HookConsumerWidget {
               child: TextFormField(
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: primaryLight,
+                  fillColor: white,
                   isDense: true,
                   prefixIcon: const Icon(
                     Icons.search,
@@ -49,41 +52,25 @@ class SearchBooksScreen extends HookConsumerWidget {
                   ),
                 ),
                 controller: searchWord,
+                onEditingComplete: () {
+                  fetchBooks();
+                  FocusScope.of(context).unfocus();
+                },
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                fetchBooks();
-              },
-              child: const Text('click'),
             ),
             books.value.isEmpty
                 ? const Text('データなし')
                 : Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: books.value.length,
-                        itemBuilder: (context, index) {
-                          final book = books.value[index];
-                          return BookListTile(
-                            book: book,
-                            onTap: () {
-                              ref
-                                  .read(booksControllerProvider.notifier)
-                                  .addBook(book);
-                              context.pop();
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return const Divider(
-                            height: 1,
-                            color: Colors.black,
-                          );
-                        },
-                      ),
+                      child: BookListView(
+                          bookList: books.value,
+                          onTap: (Book book) {
+                            ref
+                                .read(booksControllerProvider.notifier)
+                                .addBook(book);
+                            context.goNamed(AppRoute.books.name);
+                          }),
                     ),
                   ),
           ],

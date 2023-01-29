@@ -8,20 +8,18 @@ import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/home/presentation/controller/home_controller.dart';
+import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 
-// class HomeScreen extends StatelessWidget {
-//   const HomeScreen({super.key});
+enum ChartAverageRange {
+  one(1),
+  five(5),
+  ten(10),
+  twenty(20);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: CommonAppBar(context: context, title: 'home'),
-//       body: const SafeArea(
-//         child: Text('home'),
-//       ),
-//     );
-//   }
-// }
+  const ChartAverageRange(this.number);
+
+  final int number;
+}
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +29,13 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int avarageRange = 5;
+  ChartAverageRange chartAvarageRange = ChartAverageRange.five;
+
+  Future<void> setChartAverageRage() async {
+    ref
+        .read(homeMemoChartControllerProvider.notifier)
+        .getChartPoints(averageRange: chartAvarageRange.number);
+  }
 
   @override
   void initState() {
@@ -42,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .getAllMemoWordLength();
       ref
           .read(homeMemoChartControllerProvider.notifier)
-          .getChartPoints(averageRange: avarageRange);
+          .getChartPoints(averageRange: ChartAverageRange.five.number);
     });
     //
   }
@@ -86,75 +90,130 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const SizedBox(
                     height: 37,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: 120,
-                        child: TextFormField(
-                          initialValue: avarageRange.toString(),
-                          decoration: const InputDecoration(
-                            labelText: '区間（ページ数）',
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            setState(() {
-                              avarageRange = int.tryParse(value) ?? 1;
-                            });
-                          },
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     SizedBox(
+                  //       height: 50,
+                  //       width: 120,
+                  //       child: TextFormField(
+                  //         initialValue: avarageRange.toString(),
+                  //         decoration: const InputDecoration(
+                  //           labelText: '区間（ページ数）',
+                  //         ),
+                  //         keyboardType: TextInputType.number,
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             avarageRange = int.tryParse(value) ?? 1;
+                  //           });
+                  //         },
+                  //       ),
+                  //     ),
+                  //     const SizedBox(width: 50),
+                  //     SizedBox(
+                  //       height: 50,
+                  //       width: 100,
+                  //       child: ElevatedButton(
+                  //         style: ElevatedButton.styleFrom(
+                  //           backgroundColor: primary,
+                  //         ),
+                  //         onPressed: () async {
+                  //           ref
+                  //               .read(homeMemoChartControllerProvider.notifier)
+                  //               .getChartPoints(averageRange: avarageRange);
+                  //         },
+                  //         child: const Text('保存'),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
                         ),
                       ),
-                      const SizedBox(width: 50),
-                      SizedBox(
-                        height: 50,
-                        width: 100,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primary,
+                      child: Column(
+                        children: [
+                          const Text(
+                            'メモ分布',
+                            style: TextStyle(
+                              color: Color(0xff827daa),
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          onPressed: () async {
-                            ref
-                                .read(homeMemoChartControllerProvider.notifier)
-                                .getChartPoints(averageRange: avarageRange);
-                          },
-                          child: const Text('保存'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'メモ分布',
-                    style: TextStyle(
-                      color: Color(0xff827daa),
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 250,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 6),
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ChartRageChip(
+                                title: '1',
+                                isActive:
+                                    chartAvarageRange == ChartAverageRange.one,
+                                onSelected: (_) {
+                                  setState(() {
+                                    chartAvarageRange = ChartAverageRange.one;
+                                  });
+                                  setChartAverageRage();
+                                },
+                              ),
+                              ChartRageChip(
+                                title: '5',
+                                isActive:
+                                    chartAvarageRange == ChartAverageRange.five,
+                                onSelected: (_) {
+                                  setState(() {
+                                    chartAvarageRange = ChartAverageRange.five;
+                                  });
+                                  setChartAverageRage();
+                                },
+                              ),
+                              ChartRageChip(
+                                title: '10',
+                                isActive:
+                                    chartAvarageRange == ChartAverageRange.ten,
+                                onSelected: (_) {
+                                  setState(() {
+                                    chartAvarageRange = ChartAverageRange.ten;
+                                  });
+                                  setChartAverageRage();
+                                },
+                              ),
+                              ChartRageChip(
+                                title: '20',
+                                isActive: chartAvarageRange ==
+                                    ChartAverageRange.twenty,
+                                onSelected: (_) {
+                                  setState(() {
+                                    chartAvarageRange =
+                                        ChartAverageRange.twenty;
+                                  });
+                                  setChartAverageRage();
+                                },
+                              ),
+                            ],
                           ),
-                        ),
-                        child: AsyncValueWidget(
-                            value: chartPoints,
-                            data: (data) => Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: _MemoDistributionChart(
-                                    chartPointsAll: data.chartPointsAll,
-                                    chartPointsOnlyRed: data.chartPointsOnlyRed,
-                                    pageCount: data.pageCount.toDouble(),
-                                    maxWordLength: data.maxWordLength,
-                                  ),
-                                )),
+                          SizedBox(
+                            height: 250,
+                            child: AsyncValueWidget(
+                              value: chartPoints,
+                              data: (data) => Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: _MemoDistributionChart(
+                                  chartPointsAll: data.chartPointsAll,
+                                  chartPointsOnlyRed: data.chartPointsOnlyRed,
+                                  pageCount: data.pageCount.toDouble(),
+                                  maxWordLength: data.maxWordLength,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -372,20 +431,4 @@ class _MemoDistributionChart extends StatelessWidget {
         ),
         spots: chartPointsOnlyRed,
       );
-
-  // LineChartBarData get lineChartBarData1_3 => LineChartBarData(
-  //       isCurved: true,
-  //       color: const Color(0xff27b6fc),
-  //       barWidth: 8,
-  //       isStrokeCapRound: true,
-  //       dotData: FlDotData(show: false),
-  //       belowBarData: BarAreaData(show: false),
-  //       spots: const [
-  //         FlSpot(1, 2.8),
-  //         FlSpot(3, 1.9),
-  //         FlSpot(6, 3),
-  //         FlSpot(10, 1.3),
-  //         FlSpot(13, 2.5),
-  //       ],
-  //     );
 }

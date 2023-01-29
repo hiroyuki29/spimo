@@ -8,7 +8,6 @@ AppBar CommonAppBar({
 }) {
   return AppBar(
     backgroundColor: Colors.white,
-    toolbarHeight: 40,
     title: Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Text(

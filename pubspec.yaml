@@ -73,7 +73,6 @@ dependencies:
   loading_overlay: ^0.3.0
   fl_chart: ^0.55.2
   flutter_svg: ^1.1.6
-  flutter_native_splash: ^2.2.17
   
   
 
@@ -87,6 +86,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  # flutter_native_splash: ^2.2.17
+  # flutter_launcher_icons: ^0.11.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -103,6 +104,7 @@ flutter:
   assets:
     - assets/image/
     - assets/image/splash/
+    - assets/image/app_icon/
     - assets/svg/book/
     - assets/svg/bottom_navigation/
 
@@ -113,5 +115,12 @@ flutter_native_splash:
   android_12:
     image: 'assets/image/splash/splash_android12.png'
     icon_background_color: '#ffffff'
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/image/app_icon/splash_base.png"
+  min_sdk_android: 21 
+  remove_alpha_ios: true
 
 

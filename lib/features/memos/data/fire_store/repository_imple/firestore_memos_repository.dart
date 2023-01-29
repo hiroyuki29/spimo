@@ -13,8 +13,14 @@ class FireStoreMemosRepository implements MemoStorageRepository {
 
   @override
   Future<List<Memo>> fetchAllMemos() {
-    // TODO: implement fetchAllMemos
-    throw UnimplementedError();
+    final allMemoList = db.collectionGroup('memos').get().then((docList) {
+      List<Memo> dataList = docList.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
+        return Memo.fromJson(data);
+      }).toList();
+      return dataList;
+    });
+    return allMemoList;
   }
 
   @override

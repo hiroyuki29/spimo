@@ -5,16 +5,16 @@ import 'package:spimo/features/books/presentation/controller/current_book_contro
 import 'package:spimo/features/home/presentation/controller/view_model/page_chart_view_model.dart';
 import 'package:spimo/features/home/use_case/home_use_case.dart';
 
-final homeMemoChartControllerProvider = StateNotifierProvider<
-    HomeMemoChartController, AsyncValue<PageChartViewModel>>((ref) {
-  return HomeMemoChartController(
+final homeCurrentBookChartControllerProvider = StateNotifierProvider<
+    HomeCurrentBookChartController, AsyncValue<PageChartViewModel>>((ref) {
+  return HomeCurrentBookChartController(
       homeUseCase: ref.watch(homeUseCaseProvider),
       currentBook: ref.watch(currentBookControllerProvider));
 });
 
-class HomeMemoChartController
+class HomeCurrentBookChartController
     extends StateNotifier<AsyncValue<PageChartViewModel>> {
-  HomeMemoChartController(
+  HomeCurrentBookChartController(
       {required this.homeUseCase, required this.currentBook})
       : super(const AsyncLoading()) {
     if (currentBook != null) {
@@ -28,8 +28,9 @@ class HomeMemoChartController
   Future<void> getChartPoints({required int averageRange}) async {
     state = const AsyncLoading();
     if (currentBook != null) {
-      List<List<FlSpot>> chartPoints = await homeUseCase.createMemoChartPoints(
-          bookId: currentBook!.id, averageRange: averageRange);
+      List<List<FlSpot>> chartPoints =
+          await homeUseCase.createCurrentBookMemoChartPoints(
+              bookId: currentBook!.id, averageRange: averageRange);
       double maxWordLength = homeUseCase.getMaxWordLength(chartPoints[0]);
       state = AsyncData(
         PageChartViewModel(

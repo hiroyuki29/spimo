@@ -8,7 +8,8 @@ import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
-import 'package:spimo/features/home/presentation/controller/home_controller.dart';
+import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_controller.dart';
+import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 
 enum ChartAverageRange {
@@ -34,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> setChartAverageRage() async {
     ref
-        .read(homeMemoChartControllerProvider.notifier)
+        .read(homeCurrentBookChartControllerProvider.notifier)
         .getChartPoints(averageRange: chartAvarageRange.number);
   }
 
@@ -46,8 +47,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .read(homeMemoSumWordsControllerProvider.notifier)
           .getAllMemoWordLength();
       ref
-          .read(homeMemoChartControllerProvider.notifier)
+          .read(homeCurrentBookChartControllerProvider.notifier)
           .getChartPoints(averageRange: ChartAverageRange.five.number);
+      ref.read(homeAllMemoChartControllerProvider.notifier).getChartPoints();
     });
     //
   }
@@ -55,8 +57,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final sumAllMemoWors = ref.watch(homeMemoSumWordsControllerProvider);
-    final chartPoints = ref.watch(homeMemoChartControllerProvider);
+    final currentBookChartPoints =
+        ref.watch(homeCurrentBookChartControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
+    final allMemoChartPoints = ref.watch(homeAllMemoChartControllerProvider);
+
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(context: context, title: 'home'),
@@ -186,14 +191,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             SizedBox(
                               height: 250,
                               child: AsyncValueWidget(
-                                value: chartPoints,
+                                value: currentBookChartPoints,
                                 data: (data) => Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: _MemoDistributionChart(
-                                    chartPointsAll: data.chartPointsAll,
-                                    chartPointsOnlyRed: data.chartPointsOnlyRed,
-                                    pageCount: data.pageCount.toDouble(),
-                                    maxWordLength: data.maxWordLength,
+                                    chartPoints: data.chartPointsAll,
+                                    secoundaryChartPoints:
+                                        data.chartPointsOnlyRed,
+                                    isStepLineChart: true,
+                                    maxX: data.pageCount.toDouble(),
+                                    maxY: data.maxWordLength,
                                   ),
                                 ),
                               ),
@@ -204,6 +211,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                   sizedBoxH16,
+                  HomeContent(
+                    title: 'すべてのメモ文字数の遷移',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            sizedBoxH8,
+                            SizedBox(
+                              height: 250,
+                              child: AsyncValueWidget(
+                                value: allMemoChartPoints,
+                                data: (data) => Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: _MemoDistributionChart(
+                                    chartPoints: data.chartPointsAll,
+                                    maxX: data.allDaysDuration.toDouble(),
+                                    maxY: data.maxWordLength,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -249,16 +290,18 @@ class HomeContent extends StatelessWidget {
 
 class _MemoDistributionChart extends StatelessWidget {
   const _MemoDistributionChart({
-    required this.chartPointsAll,
-    required this.chartPointsOnlyRed,
-    required this.pageCount,
-    required this.maxWordLength,
+    required this.chartPoints,
+    this.secoundaryChartPoints,
+    this.isStepLineChart = false,
+    required this.maxX,
+    required this.maxY,
   });
 
-  final List<FlSpot> chartPointsAll;
-  final List<FlSpot> chartPointsOnlyRed;
-  final double pageCount;
-  final double maxWordLength;
+  final List<FlSpot> chartPoints;
+  final List<FlSpot>? secoundaryChartPoints;
+  final bool isStepLineChart;
+  final double maxX;
+  final double maxY;
 
   @override
   Widget build(BuildContext context) {
@@ -275,9 +318,9 @@ class _MemoDistributionChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: pageCount,
+        maxX: maxX,
         minY: 0,
-        maxY: maxWordLength,
+        maxY: maxY,
       );
 
   LineTouchData get lineTouchData1 => LineTouchData(
@@ -304,8 +347,7 @@ class _MemoDistributionChart extends StatelessWidget {
 
   List<LineChartBarData> get lineBarsData1 => [
         lineChartBarData1_1,
-        lineChartBarData1_2,
-        // lineChartBarData1_3,
+        if (secoundaryChartPoints != null) lineChartBarData1_2,
       ];
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
@@ -314,7 +356,7 @@ class _MemoDistributionChart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    final int base = (maxWordLength / 5).floor();
+    final int base = (maxY / 5).floor();
 
     String text;
 
@@ -351,7 +393,7 @@ class _MemoDistributionChart extends StatelessWidget {
       fontSize: 14,
     );
 
-    final int base = (pageCount / 5).floor();
+    final int base = (maxX / 5).floor();
 
     String text;
 
@@ -402,7 +444,7 @@ class _MemoDistributionChart extends StatelessWidget {
 
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
       isCurved: false,
-      isStepLineChart: true,
+      isStepLineChart: isStepLineChart,
       color: primary,
       barWidth: 1,
       isStrokeCapRound: true,
@@ -422,11 +464,11 @@ class _MemoDistributionChart extends StatelessWidget {
           ],
         ),
       ),
-      spots: chartPointsAll);
+      spots: chartPoints);
 
   LineChartBarData get lineChartBarData1_2 => LineChartBarData(
         isCurved: false,
-        isStepLineChart: true,
+        isStepLineChart: isStepLineChart,
         color: Colors.red.withOpacity(0.2),
         barWidth: 0,
         isStrokeCapRound: true,
@@ -446,6 +488,6 @@ class _MemoDistributionChart extends StatelessWidget {
             ],
           ),
         ),
-        spots: chartPointsOnlyRed,
+        spots: secoundaryChartPoints,
       );
 }

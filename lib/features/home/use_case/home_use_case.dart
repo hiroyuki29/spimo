@@ -20,7 +20,7 @@ class HomeUseCase {
   final MemoStorageRepository memoStorageRepository;
   final BookStorageRepository bookStorageRepository;
 
-  Future<List<List<FlSpot>>> createMemoChartPoints({
+  Future<List<List<FlSpot>>> createCurrentBookMemoChartPoints({
     required String bookId,
     required int averageRange,
   }) async {
@@ -107,5 +107,49 @@ class HomeUseCase {
       }
     }
     return memoWordsLength;
+  }
+
+  Future<List<FlSpot>> createAllMemoChartPoints() async {
+    final memos = await memoStorageRepository.fetchAllMemos();
+
+    memos.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
+
+    final initialDay = memos.first.createdAt;
+    final allDuration = DateTime.now().difference(initialDay).inDays;
+
+    Map<int, dynamic> wordAndPageMap = {};
+    double wordLengthEachMemo = 0;
+    double sumWordLength = 0;
+    DateTime checkingDate = initialDay;
+    int checkingDuration = 0;
+
+    for (int i = 0; i <= allDuration; i++) {
+      wordAndPageMap[i] = 0.0;
+    }
+
+    for (Memo memo in memos) {
+      wordLengthEachMemo = 0;
+      for (MemoText memoText in memo.contents) {
+        wordLengthEachMemo += memoText.text.length;
+      }
+      sumWordLength += wordLengthEachMemo;
+
+      int durationDifference = memo.createdAt.difference(checkingDate).inDays;
+
+      if (durationDifference != 0) {
+        for (int i = 1; i <= durationDifference; i++) {
+          wordAndPageMap[checkingDuration] += sumWordLength;
+          checkingDate = checkingDate.add(const Duration(days: 1));
+          checkingDuration++;
+        }
+      }
+    }
+    //最後の日の加算が上記for文の中でされないため下記で行う
+    wordAndPageMap[checkingDuration] += sumWordLength;
+    List<FlSpot> chartPointsAll = [];
+    for (final entry in wordAndPageMap.entries) {
+      chartPointsAll.add(FlSpot(entry.key.toDouble(), entry.value));
+    }
+    return chartPointsAll;
   }
 }

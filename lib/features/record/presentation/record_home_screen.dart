@@ -96,8 +96,8 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                         _speechToText.isListening
                             ? _lastWords
                             : _speechEnabled
-                                ? 'Tap the microphone to start listening...'
-                                : 'Speech not available',
+                                ? '録音ボタンを押してメモを開始してください'
+                                : '音声認識ができない状態です',
                       ),
                     ),
                     Expanded(
@@ -122,7 +122,9 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primary,
                       ),
-                      onPressed: _speechToText.isListening || _wordList.isEmpty
+                      onPressed: _speechToText.isListening ||
+                              _wordList.isEmpty ||
+                              _startPage == null
                           ? null
                           : () async {
                               final memo = Memo(
@@ -135,8 +137,10 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               ref
                                   .read(memosControllerProvider.notifier)
                                   .addMemo(memo: memo);
-                              _lastWords = '';
-                              _wordList = [];
+                              setState(() {
+                                _lastWords = '';
+                                _wordList = [];
+                              });
                             },
                       child: const Text('保存'),
                     ),

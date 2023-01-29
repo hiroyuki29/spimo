@@ -33,18 +33,50 @@ class MemosHomeScreen extends HookConsumerWidget {
                 Container(height: 16, color: backgroundGray),
                 Expanded(
                   child: AsyncValueWidget(
-                      value: memos,
-                      data: (memos) {
-                        return memos.isEmpty
-                            ? const Text('no data')
-                            : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: ListView.separated(
-                                  itemCount: memos.length,
-                                  itemBuilder: (context, index) {
-                                    final memo = memos[index];
-                                    return ListTile(
+                    value: memos,
+                    data: (memos) {
+                      return memos.isEmpty
+                          ? const Text('no data')
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: ListView.separated(
+                                itemCount: memos.length,
+                                itemBuilder: (context, index) {
+                                  final memo = memos[index];
+                                  return Dismissible(
+                                    key: UniqueKey(),
+                                    background: Container(
+                                      color: Colors.red,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: const [
+                                          sizedBoxW24,
+                                          Icon(Icons.delete,
+                                              color: Colors.white),
+                                        ],
+                                      ),
+                                    ),
+                                    secondaryBackground: Container(
+                                      color: Colors.red,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: const [
+                                          Icon(Icons.delete,
+                                              color: Colors.white),
+                                          sizedBoxW24,
+                                        ],
+                                      ),
+                                    ),
+                                    onDismissed: (DismissDirection direction) {
+                                      ref
+                                          .read(
+                                              memosControllerProvider.notifier)
+                                          .removeMemo(memo: memo);
+                                    },
+                                    child: ListTile(
                                       tileColor: white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
@@ -72,20 +104,16 @@ class MemosHomeScreen extends HookConsumerWidget {
                                           ),
                                         ],
                                       ),
-                                      onTap: () {
-                                        ref
-                                            .read(memosControllerProvider
-                                                .notifier)
-                                            .removeMemo(memo: memo);
-                                      },
-                                    );
-                                  },
-                                  separatorBuilder: (context, index) {
-                                    return sizedBoxH8;
-                                  },
-                                ),
-                              );
-                      }),
+                                    ),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return sizedBoxH8;
+                                },
+                              ),
+                            );
+                    },
+                  ),
                 ),
               ],
             ),

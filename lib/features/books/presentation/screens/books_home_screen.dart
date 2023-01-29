@@ -38,6 +38,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
         data: (value) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: BookListView(
+            isDismissible: true,
             bookList: value,
             slideCallback: ((Book book) {
               ref.read(booksControllerProvider.notifier).removeBook(book);

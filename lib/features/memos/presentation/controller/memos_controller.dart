@@ -13,11 +13,7 @@ final memosControllerProvider =
 
 class MemosController extends StateNotifier<AsyncValue<List<Memo>>> {
   MemosController({required this.memosUseCase, required this.currentBook})
-      : super(const AsyncData([])) {
-    if (currentBook != null) {
-      fetchBookMemos();
-    }
-  }
+      : super(const AsyncData([]));
 
   final MemosUseCase memosUseCase;
   Book? currentBook;

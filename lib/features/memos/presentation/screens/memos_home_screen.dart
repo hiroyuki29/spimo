@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
@@ -15,6 +16,15 @@ class MemosHomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memos = ref.watch(memosControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
+
+    useEffect(() {
+      Future(
+        () async {
+          await ref.read(memosControllerProvider.notifier).fetchBookMemos();
+        },
+      );
+      return null;
+    }, []);
 
     return Scaffold(
       backgroundColor: backgroundGray,

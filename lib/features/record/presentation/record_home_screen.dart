@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -42,12 +41,14 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     setState(() {});
   }
 
-  void _startListening() async {
+  void _startListening({required bool isAccent}) async {
     await _speechToText.listen(
       onResult: _onSpeechResult,
       localeId: _currentLocaleId,
     );
-    setState(() {});
+    setState(() {
+      _isAccent = isAccent;
+    });
   }
 
   void _stopListening() async {
@@ -146,15 +147,18 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 16),
+                          horizontal: 16, vertical: 32),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            width: 100,
+                            width: 80,
                             child: TextFormField(
                               decoration: const InputDecoration(
                                 labelText: '開始ページ',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
                               keyboardType: TextInputType.number,
                               onChanged: (value) {
@@ -164,12 +168,15 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               },
                             ),
                           ),
-                          sizedBoxW32,
+                          sizedBoxW24,
                           SizedBox(
-                            width: 100,
+                            width: 80,
                             child: TextFormField(
                               decoration: const InputDecoration(
                                 labelText: '終了ページ',
+                                labelStyle: TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
                               keyboardType: TextInputType.number,
                               onChanged: (value) {
@@ -179,14 +186,14 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               },
                             ),
                           ),
-                          CupertinoSwitch(
-                            value: _isAccent,
-                            onChanged: (value) {
-                              setState(() {
-                                _isAccent = value;
-                              });
-                            },
-                          ),
+                          // CupertinoSwitch(
+                          //   value: _isAccent,
+                          //   onChanged: (value) {
+                          //     setState(() {
+                          //       _isAccent = value;
+                          //     });
+                          //   },
+                          // ),
                           const SizedBox(width: 80),
                         ],
                       ),
@@ -194,13 +201,37 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   ],
                 ),
               ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: accent,
-          onPressed:
-              _speechToText.isNotListening ? _startListening : _stopListening,
-          tooltip: 'Listen',
-          child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
-        ),
+        floatingActionButton: _speechToText.isListening
+            ? Padding(
+                padding: const EdgeInsets.only(right: 40, bottom: 10),
+                child: FloatingActionButton(
+                  backgroundColor: accent,
+                  onPressed: _stopListening,
+                  tooltip: 'Listen',
+                  child: const Icon(Icons.mic_off),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      onPressed: () => _startListening(isAccent: true),
+                      tooltip: 'Listen',
+                      child: const Icon(Icons.mic),
+                    ),
+                    sizedBoxW24,
+                    FloatingActionButton(
+                      backgroundColor: primaryDark,
+                      onPressed: () => _startListening(isAccent: false),
+                      tooltip: 'Listen',
+                      child: const Icon(Icons.mic),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }

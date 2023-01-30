@@ -114,7 +114,9 @@ class HomeUseCase {
 
     memos.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
 
-    final initialDay = memos.first.createdAt;
+    final firstDateTime = memos.first.createdAt;
+    final initialDay =
+        DateTime(firstDateTime.year, firstDateTime.month, firstDateTime.day);
     final allDuration = DateTime.now().difference(initialDay).inDays;
 
     Map<int, dynamic> wordAndPageMap = {};

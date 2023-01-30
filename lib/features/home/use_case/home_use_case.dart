@@ -144,8 +144,10 @@ class HomeUseCase {
         }
       }
     }
-    //最後の日の加算が上記for文の中でされないため下記で行う
-    wordAndPageMap[checkingDuration] += sumWordLength;
+    // 最後の日の加算が上記for文の中でされないため下記で行う
+    for (int j = checkingDuration; j <= allDuration; j++) {
+      wordAndPageMap[j] += sumWordLength;
+    }
     List<FlSpot> chartPointsAll = [];
     for (final entry in wordAndPageMap.entries) {
       chartPointsAll.add(FlSpot(entry.key.toDouble(), entry.value));

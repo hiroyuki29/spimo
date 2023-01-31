@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spimo/common_method/datetime_formatter.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
@@ -236,6 +237,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     chartPoints: data.chartPointsAll,
                                     maxX: data.allDaysDuration.toDouble(),
                                     maxY: data.maxWordLength,
+                                    isDateChart: true,
                                   ),
                                 ),
                               ),
@@ -295,6 +297,7 @@ class _MemoDistributionChart extends StatelessWidget {
     this.isStepLineChart = false,
     required this.maxX,
     required this.maxY,
+    this.isDateChart = false,
   });
 
   final List<FlSpot> chartPoints;
@@ -302,6 +305,7 @@ class _MemoDistributionChart extends StatelessWidget {
   final bool isStepLineChart;
   final double maxX;
   final double maxY;
+  final bool isDateChart;
 
   @override
   Widget build(BuildContext context) {
@@ -393,24 +397,40 @@ class _MemoDistributionChart extends StatelessWidget {
       fontSize: 14,
     );
 
-    final int base = (maxX / 5).floor();
-
     String text;
 
-    if (value.toInt() == 0) {
-      text = '0';
-    } else if (value.toInt() == base) {
-      text = '$base';
-    } else if (value.toInt() == base * 2) {
-      text = '${base * 2}';
-    } else if (value.toInt() == base * 3) {
-      text = '${base * 3}';
-    } else if (value.toInt() == base * 4) {
-      text = '${base * 4}';
-    } else if (value.toInt() == base * 5) {
-      text = '${base * 5}';
+    if (isDateChart) {
+      final now = DateTime.now();
+      final startDay = now.subtract(Duration(days: maxX.toInt()));
+      final middleDurationDays = (maxX / 2).ceil();
+      final middleDay = startDay.add(Duration(days: middleDurationDays));
+      if (value.toInt() == 0) {
+        text = formatDate(startDay);
+      } else if (value.toInt() == middleDurationDays) {
+        text = formatDate(middleDay);
+      } else if (value.toInt() == maxX) {
+        text = '現在';
+      } else {
+        text = '';
+      }
     } else {
-      text = '';
+      final int base = (maxX / 5).floor();
+
+      if (value.toInt() == 0) {
+        text = '0';
+      } else if (value.toInt() == base) {
+        text = '$base';
+      } else if (value.toInt() == base * 2) {
+        text = '${base * 2}';
+      } else if (value.toInt() == base * 3) {
+        text = '${base * 3}';
+      } else if (value.toInt() == base * 4) {
+        text = '${base * 4}';
+      } else if (value.toInt() == base * 5) {
+        text = '${base * 5}';
+      } else {
+        text = '';
+      }
     }
 
     return SideTitleWidget(

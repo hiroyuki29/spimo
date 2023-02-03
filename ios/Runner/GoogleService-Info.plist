@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.spimo</string>
+	<string>info.nasuhiro.spimo</string>
 	<key>PROJECT_ID</key>
 	<string>spimo-project</string>
 	<key>STORAGE_BUCKET</key>

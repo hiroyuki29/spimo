@@ -1,4 +1,4 @@
-package com.example.spimo
+package info.nasuhiro.spimo
 
 import io.flutter.embedding.android.FlutterActivity
 

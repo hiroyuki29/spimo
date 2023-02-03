@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,18 +49,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCX0TlO6mdeZEu7p5cz9MdmKJAk6UEjuvg',
-    appId: '1:539254845226:web:9c01af5ed1d8665b45f853',
-    messagingSenderId: '539254845226',
-    projectId: 'spimo-project',
-    authDomain: 'spimo-project.firebaseapp.com',
-    storageBucket: 'spimo-project.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAn0akHgKvAaXkU8WJzuEnHXuiayffuUDk',
-    appId: '1:539254845226:android:d5dd6095324e22f645f853',
+    appId: '1:539254845226:android:6cff7a07bba8ed1145f853',
     messagingSenderId: '539254845226',
     projectId: 'spimo-project',
     storageBucket: 'spimo-project.appspot.com',
@@ -65,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDoBIgJbzC-FM5hGIWzHboh3OQpnY6-KsQ',
-    appId: '1:539254845226:ios:eda592793e4048af45f853',
+    appId: '1:539254845226:ios:ef49d49c827bcdd045f853',
     messagingSenderId: '539254845226',
     projectId: 'spimo-project',
     storageBucket: 'spimo-project.appspot.com',
-    iosClientId: '539254845226-b761469v3mn2sd29glubc1jt5pl56atk.apps.googleusercontent.com',
-    iosBundleId: 'com.example.spimo',
+    iosClientId: '539254845226-j83jorc8ibio4ajr1iup71uq5r9gsqes.apps.googleusercontent.com',
+    iosBundleId: 'info.nasuhiro.spimo',
   );
 }

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:539254845226:android:d5dd6095324e22f645f853",
+        "mobilesdk_app_id": "1:539254845226:android:6cff7a07bba8ed1145f853",
         "android_client_info": {
-          "package_name": "com.example.spimo"
+          "package_name": "info.nasuhiro.spimo"
         }
       },
       "oauth_client": [

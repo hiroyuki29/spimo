@@ -24,10 +24,12 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
     final isLoading = useState<bool>(false);
     final isMounted = useIsMounted();
 
+    final Uri termsOfServiceUrl =
+        Uri.parse('https://spimo-project.firebaseapp.com/terms_of_service');
+
     final Uri privacyPolicyUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/privacy_policy');
-    final Uri termsOfServiceUrl =
-        Uri.parse('https://spimo-project.firebaseapp.com/privacy_policy');
+
     final Uri inquiryUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/inquiry');
 

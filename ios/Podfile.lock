@@ -68,6 +68,8 @@ PODS:
     - Flutter
     - Try
   - Try (2.1.1)
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -77,6 +79,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -106,6 +109,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/ios"
   speech_to_text:
     :path: ".symlinks/plugins/speech_to_text/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 CHECKOUT OPTIONS:
   FirebaseFirestore:
@@ -129,6 +134,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
   Try: 5ef669ae832617b3cee58cb2c6f99fb767a4ff96
+  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
 
 PODFILE CHECKSUM: 3cbc8856b2e0062e0d20a79c838d2d56a6e2bb09
 

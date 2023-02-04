@@ -35,26 +35,9 @@ class MyApp extends ConsumerWidget {
         jaLocale,
       ],
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
     );
   }
 }
-
-
-
-
-
-// return Scaffold(
-//   body: SafeArea(
-//     child: books.value.isEmpty || book.value == null
-//         ? const Text('データなし')
-//         : Column(
-//             children: [
-//               if (book.value!.imageLinks != '')
-//                 Image.network(book.value!.imageLinks!),
-//               Text(book.value!.pageCount.toString()),
-//             ],
-//           ),
-//   ),
-// );

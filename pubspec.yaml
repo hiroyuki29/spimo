@@ -73,6 +73,7 @@ dependencies:
   loading_overlay: ^0.3.0
   fl_chart: ^0.55.2
   flutter_svg: ^1.1.6
+  url_launcher: ^6.1.8
   
   
 

@@ -7,6 +7,7 @@ import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/presentation/controller/memos_controller.dart';
 
 class MemosHomeScreen extends HookConsumerWidget {
@@ -86,35 +87,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                                               memosControllerProvider.notifier)
                                           .removeMemo(memo: memo);
                                     },
-                                    child: ListTile(
-                                      tileColor: white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      title: Row(
-                                        children: [
-                                          Text(
-                                              'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}'),
-                                          sizedBoxW16,
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children:
-                                                  memo.contents.map((text) {
-                                                return Text(
-                                                  text.text,
-                                                  style: TextStyle(
-                                                    color: text.textColor.color,
-                                                    fontSize: 14,
-                                                  ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    child: MemoListTile(memo: memo),
                                   );
                                 },
                                 separatorBuilder: (context, index) {
@@ -127,6 +100,48 @@ class MemosHomeScreen extends HookConsumerWidget {
                 ),
               ],
             ),
+    );
+  }
+}
+
+class MemoListTile extends StatelessWidget {
+  const MemoListTile({
+    Key? key,
+    required this.memo,
+  }) : super(key: key);
+
+  final Memo memo;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      tileColor: white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Row(
+        children: [
+          Text(
+            'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}',
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+          sizedBoxW16,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: memo.contents.map((text) {
+                return Text(
+                  text.text,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2!
+                      .copyWith(color: text.textColor.color),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

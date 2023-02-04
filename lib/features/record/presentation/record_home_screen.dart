@@ -119,31 +119,35 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       ),
                     ),
                     sizedBoxH32,
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primary,
+                    SizedBox(
+                      width: 200,
+                      height: 60,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primary,
+                        ),
+                        onPressed: _speechToText.isListening ||
+                                _wordList.isEmpty ||
+                                _startPage == null
+                            ? null
+                            : () async {
+                                final memo = Memo(
+                                    id: 'id',
+                                    contents: _wordList,
+                                    startPage: _startPage,
+                                    endPage: _endPage,
+                                    bookId: currentBook.id,
+                                    createdAt: DateTime.now());
+                                ref
+                                    .read(memosControllerProvider.notifier)
+                                    .addMemo(memo: memo);
+                                setState(() {
+                                  _lastWords = '';
+                                  _wordList = [];
+                                });
+                              },
+                        child: const Text('保存'),
                       ),
-                      onPressed: _speechToText.isListening ||
-                              _wordList.isEmpty ||
-                              _startPage == null
-                          ? null
-                          : () async {
-                              final memo = Memo(
-                                  id: 'id',
-                                  contents: _wordList,
-                                  startPage: _startPage,
-                                  endPage: _endPage,
-                                  bookId: currentBook.id,
-                                  createdAt: DateTime.now());
-                              ref
-                                  .read(memosControllerProvider.notifier)
-                                  .addMemo(memo: memo);
-                              setState(() {
-                                _lastWords = '';
-                                _wordList = [];
-                              });
-                            },
-                      child: const Text('保存'),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -153,15 +157,9 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                         children: [
                           SizedBox(
                             width: 80,
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: '開始ページ',
-                                labelStyle: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
+                            child: PageSetForm(
+                              title: '開始ページ',
+                              onChange: (value) {
                                 setState(() {
                                   _startPage = int.tryParse(value);
                                 });
@@ -171,29 +169,15 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                           sizedBoxW24,
                           SizedBox(
                             width: 80,
-                            child: TextFormField(
-                              decoration: const InputDecoration(
-                                labelText: '終了ページ',
-                                labelStyle: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
+                            child: PageSetForm(
+                              title: '終了ページ',
+                              onChange: (value) {
                                 setState(() {
                                   _endPage = int.tryParse(value);
                                 });
                               },
                             ),
                           ),
-                          // CupertinoSwitch(
-                          //   value: _isAccent,
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       _isAccent = value;
-                          //     });
-                          //   },
-                          // ),
                           const SizedBox(width: 80),
                         ],
                       ),
@@ -203,16 +187,27 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
               ),
         floatingActionButton: _speechToText.isListening
             ? Padding(
-                padding: const EdgeInsets.only(right: 40, bottom: 10),
-                child: FloatingActionButton(
-                  backgroundColor: accent,
-                  onPressed: _stopListening,
-                  tooltip: 'Listen',
-                  child: const Icon(Icons.mic_off),
+                padding: const EdgeInsets.only(right: 5, bottom: 10),
+                child: SizedBox(
+                  height: 60,
+                  width: 150,
+                  child: ElevatedButton(
+                    onPressed: _stopListening,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: accent,
+                    ),
+                    child: Text(
+                      'Stop',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2!
+                          .copyWith(color: white),
+                    ),
+                  ),
                 ),
               )
             : Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(right: 10, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -233,6 +228,30 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                 ),
               ),
       ),
+    );
+  }
+}
+
+class PageSetForm extends StatelessWidget {
+  const PageSetForm({
+    Key? key,
+    required this.onChange,
+    required this.title,
+  }) : super(key: key);
+
+  final void Function(String) onChange;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: title,
+        labelStyle: Theme.of(context).textTheme.bodyText1,
+      ),
+      keyboardType: TextInputType.number,
+      onChanged: onChange,
+      style: Theme.of(context).textTheme.bodyText1,
     );
   }
 }

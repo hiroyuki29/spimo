@@ -13,17 +13,6 @@ import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 
-enum ChartAverageRange {
-  one(1),
-  five(5),
-  ten(10),
-  twenty(20);
-
-  const ChartAverageRange(this.number);
-
-  final int number;
-}
-
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -52,7 +41,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .getChartPoints(averageRange: ChartAverageRange.five.number);
       ref.read(homeAllMemoChartControllerProvider.notifier).getChartPoints();
     });
-    //
   }
 
   @override
@@ -276,11 +264,7 @@ class HomeContent extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: Text(
             title,
-            style: const TextStyle(
-              color: primaryDark,
-              fontSize: 16,
-              decoration: TextDecoration.underline,
-            ),
+            style: Theme.of(context).textTheme.subtitle2,
             textAlign: TextAlign.center,
           ),
         ),

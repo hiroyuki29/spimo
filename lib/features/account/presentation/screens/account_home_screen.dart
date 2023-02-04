@@ -31,6 +31,12 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
     final Uri inquiryUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/inquiry');
 
+    Future<void> doLaunchingUrl(Uri url) async {
+      if (!await launchUrl(url)) {
+        throw Exception('接続できませんでした');
+      }
+    }
+
     Future<void> logout() async {
       isLoading.value = true;
       await ref.read(firebaseAuthRepositoryProvider).signOut();
@@ -45,41 +51,44 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
         : Scaffold(
             backgroundColor: backgroundGray,
             appBar: CommonAppBar(context: context, title: 'account'),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      sizedBoxH32,
-                      AccountButton(
-                        title: 'ご利用規約',
-                        privacyPolicyUrl: termsOfServiceUrl,
-                      ),
-                      sizedBoxH16,
-                      AccountButton(
-                        title: 'プライバシーポリシー',
-                        privacyPolicyUrl: privacyPolicyUrl,
-                      ),
-                      sizedBoxH16,
-                      AccountButton(
-                        title: 'お問い合わせ',
-                        privacyPolicyUrl: inquiryUrl,
-                      ),
-                    ],
+            body: Center(
+              child: Column(
+                children: [
+                  sizedBoxH32,
+                  AccountButton(
+                    title: 'ご利用規約',
+                    privacyPolicyUrl: termsOfServiceUrl,
+                    onTap: () async {
+                      await doLaunchingUrl(termsOfServiceUrl);
+                    },
                   ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primary,
+                  sizedBoxH24,
+                  AccountButton(
+                    title: 'プライバシーポリシー',
+                    privacyPolicyUrl: privacyPolicyUrl,
+                    onTap: () async {
+                      await doLaunchingUrl(privacyPolicyUrl);
+                    },
                   ),
-                  onPressed: () async {
-                    await logout();
-                  },
-                  child: const Text('ログアウト'),
-                ),
-                const SizedBox(height: 30),
-              ],
+                  sizedBoxH24,
+                  AccountButton(
+                    title: 'お問い合わせ',
+                    privacyPolicyUrl: inquiryUrl,
+                    onTap: () async {
+                      await doLaunchingUrl(inquiryUrl);
+                    },
+                  ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: 'ログアウト',
+                    privacyPolicyUrl: inquiryUrl,
+                    onTap: () async {
+                      await logout();
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                ],
+              ),
             ),
           );
   }
@@ -90,25 +99,26 @@ class AccountButton extends StatelessWidget {
     Key? key,
     required this.privacyPolicyUrl,
     required this.title,
+    this.onTap,
   }) : super(key: key);
 
   final Uri privacyPolicyUrl;
   final String title;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    Future<void> doLaunchingUrl(Uri url) async {
-      if (!await launchUrl(url)) {
-        throw Exception('接続できませんでした');
-      }
-    }
-
-    return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          await doLaunchingUrl(privacyPolicyUrl);
-        },
-        child: Text(title),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24.0),
+            child: Text(title),
+          ),
+        ),
       ),
     );
   }

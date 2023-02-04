@@ -5,6 +5,17 @@ import 'package:spimo/features/books/presentation/controller/current_book_contro
 import 'package:spimo/features/home/presentation/controller/view_model/page_chart_view_model.dart';
 import 'package:spimo/features/home/use_case/home_use_case.dart';
 
+enum ChartAverageRange {
+  one(1),
+  five(5),
+  ten(10),
+  twenty(20);
+
+  const ChartAverageRange(this.number);
+
+  final int number;
+}
+
 final homeCurrentBookChartControllerProvider = StateNotifierProvider<
     HomeCurrentBookChartController, AsyncValue<PageChartViewModel>>((ref) {
   return HomeCurrentBookChartController(
@@ -18,7 +29,7 @@ class HomeCurrentBookChartController
       {required this.homeUseCase, required this.currentBook})
       : super(const AsyncLoading()) {
     if (currentBook != null) {
-      getChartPoints(averageRange: 20);
+      getChartPoints(averageRange: ChartAverageRange.five.number);
     }
   }
 

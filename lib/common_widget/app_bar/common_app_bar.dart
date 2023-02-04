@@ -10,7 +10,7 @@ AppBar CommonAppBar({
     backgroundColor: Colors.white,
     title: Text(
       title,
-      style: const TextStyle(color: primaryDark),
+      style: Theme.of(context).textTheme.headline1,
     ),
     leading: Navigator.of(context).canPop()
         ? IconButton(

@@ -46,6 +46,7 @@ class SearchBooksScreen extends HookConsumerWidget {
                     color: primaryDark,
                   ),
                   hintText: '本の名称',
+                  hintStyle: Theme.of(context).textTheme.bodyText1,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(50),
                     borderSide: BorderSide.none,
@@ -56,6 +57,7 @@ class SearchBooksScreen extends HookConsumerWidget {
                   fetchBooks();
                   FocusScope.of(context).unfocus();
                 },
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
             books.value.isEmpty

@@ -38,6 +38,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: BookListTile(
+                    isSelected: false,
                     book: currentBook,
                   ),
                 ),

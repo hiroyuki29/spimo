@@ -9,18 +9,20 @@ class BookListTile extends StatelessWidget {
     this.color = white,
     this.radius = 8,
     this.onTap,
+    required this.isSelected,
   }) : super(key: key);
 
   final Book book;
   final VoidCallback? onTap;
   final Color color;
   final double radius;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      tileColor: color,
+      tileColor: isSelected ? accent.withOpacity(0.3) : color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
@@ -33,6 +35,13 @@ class BookListTile extends StatelessWidget {
           );
         },
       ),
+      // trailing: isSelected
+      //     ? const Icon(
+      //         Icons.check,
+      //         color: accent,
+      //         size: 30,
+      //       )
+      //     : null,
       title: Column(
         children: [
           Text(

@@ -22,6 +22,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final books = ref.watch(booksControllerProvider);
+    final String? currentBookId = ref.watch(currentBookControllerProvider)?.id;
 
     return Scaffold(
       backgroundColor: backgroundGray,
@@ -36,10 +37,10 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
       body: AsyncValueWidget(
         value: books,
         data: (value) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: BookListView(
-            isDismissible: true,
             bookList: value,
+            currentBookId: currentBookId,
             slideCallback: ((Book book) {
               ref.read(booksControllerProvider.notifier).removeBook(book);
             }),
@@ -47,7 +48,6 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
               ref
                   .read(currentBookControllerProvider.notifier)
                   .setCurrentBookId(book.id);
-              context.goNamed(AppRoute.record.name);
             },
           ),
         ),

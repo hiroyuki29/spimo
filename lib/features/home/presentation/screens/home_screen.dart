@@ -70,6 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             child: BookListTile(
+                              isSelected: false,
                               book: currentBook,
                               color: white,
                             ),

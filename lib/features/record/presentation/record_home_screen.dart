@@ -88,6 +88,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                         horizontal: 16.0,
                       ),
                       child: BookListTile(
+                        isSelected: false,
                         book: currentBook,
                       ),
                     ),

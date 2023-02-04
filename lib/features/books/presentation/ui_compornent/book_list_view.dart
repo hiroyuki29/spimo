@@ -9,13 +9,13 @@ class BookListView extends StatelessWidget {
     required this.bookList,
     this.slideCallback,
     required this.onTap,
-    this.isDismissible = false,
+    this.currentBookId,
   }) : super(key: key);
 
   final List<Book> bookList;
   final Function? slideCallback;
   final Function onTap;
-  final bool isDismissible;
+  final String? currentBookId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,48 +24,42 @@ class BookListView extends StatelessWidget {
       itemCount: bookList.length + 1,
       itemBuilder: (context, index) {
         return index != bookList.length
-            ? isDismissible
-                ? Dismissible(
-                    key: UniqueKey(),
-                    background: Container(
-                      color: Colors.red,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          sizedBoxW24,
-                          Icon(Icons.delete, color: Colors.white),
-                        ],
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.red,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Icon(Icons.delete, color: Colors.white),
-                          sizedBoxW24,
-                        ],
-                      ),
-                    ),
-                    onDismissed: (DismissDirection direction) {
-                      if (slideCallback == null) {
-                        return;
-                      }
-                      slideCallback!(bookList[index]);
-                    },
-                    child: BookListTile(
-                      book: bookList[index],
-                      onTap: () {
-                        onTap(bookList[index]);
-                      },
-                    ),
-                  )
-                : BookListTile(
-                    book: bookList[index],
-                    onTap: () {
-                      onTap(bookList[index]);
-                    },
-                  )
+            ? Dismissible(
+                key: UniqueKey(),
+                background: Container(
+                  color: Colors.red,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      sizedBoxW24,
+                      Icon(Icons.delete, color: Colors.white),
+                    ],
+                  ),
+                ),
+                secondaryBackground: Container(
+                  color: Colors.red,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Icon(Icons.delete, color: Colors.white),
+                      sizedBoxW24,
+                    ],
+                  ),
+                ),
+                onDismissed: (DismissDirection direction) {
+                  if (slideCallback == null) {
+                    return;
+                  }
+                  slideCallback!(bookList[index]);
+                },
+                child: BookListTile(
+                  isSelected: bookList[index].id == currentBookId,
+                  book: bookList[index],
+                  onTap: () {
+                    onTap(bookList[index]);
+                  },
+                ),
+              )
             : const SizedBox(height: 80);
       },
       separatorBuilder: (context, index) {

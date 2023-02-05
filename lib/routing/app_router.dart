@@ -176,20 +176,20 @@ class _ScaffoldWithBottomNavBarState
   Widget build(BuildContext context) {
     final user = ref.watch(userControllerProvider);
 
-    return user == null
-        ? const Center(child: CircularProgressIndicator())
-        : Scaffold(
-            body: widget.child,
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.white,
-              selectedItemColor: primary,
-              unselectedItemColor: Colors.grey,
-              currentIndex: _currentIndex,
-              items: tabs,
-              onTap: (tabIndex) => _onItemTapped(context, tabIndex),
-            ),
-          );
+    return Scaffold(
+      body: user == null
+          ? const Center(child: CircularProgressIndicator())
+          : widget.child,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: primary,
+        unselectedItemColor: Colors.grey,
+        currentIndex: _currentIndex,
+        items: tabs,
+        onTap: (tabIndex) => _onItemTapped(context, tabIndex),
+      ),
+    );
   }
 }
 

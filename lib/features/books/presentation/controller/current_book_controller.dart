@@ -4,7 +4,7 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
 final currentBookControllerProvider =
-    StateNotifierProvider<CurrentBookController, Book?>((ref) {
+    StateNotifierProvider.autoDispose<CurrentBookController, Book?>((ref) {
   return CurrentBookController(
     pref: ref.watch(bookPreferenceProvider),
     bookStorageRepository: ref.watch(bookStorageProvider),

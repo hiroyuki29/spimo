@@ -57,6 +57,9 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
       isLoading.value = false;
     }
 
+    final email =
+        ref.watch(firebaseAuthRepositoryProvider).auth.currentUser?.email;
+
     return isLoading.value
         ? const LoadingCircleIndicator()
         : Scaffold(
@@ -65,6 +68,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
             body: Center(
               child: Column(
                 children: [
+                  Text(email ?? ''),
                   sizedBoxH32,
                   AccountButton(
                     title: 'ご利用規約',

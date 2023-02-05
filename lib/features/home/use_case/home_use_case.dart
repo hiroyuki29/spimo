@@ -5,7 +5,7 @@ import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
-final homeUseCaseProvider = Provider<HomeUseCase>((ref) {
+final homeUseCaseProvider = Provider.autoDispose<HomeUseCase>((ref) {
   return HomeUseCase(
     memoStorageRepository: ref.watch(memoStorageProvider),
     bookStorageRepository: ref.watch(bookStorageProvider),

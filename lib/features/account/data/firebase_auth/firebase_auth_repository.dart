@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final firebaseAuthRepositoryProvider = Provider<FirebaseAuthRepository>((ref) {
+final firebaseAuthRepositoryProvider =
+    Provider.autoDispose<FirebaseAuthRepository>((ref) {
   return FirebaseAuthRepository();
 });
 
@@ -13,12 +14,18 @@ class FirebaseAuthRepository {
   Future<UserCredential?> createUserWithEmailAndPassword({
     required String emailAddress,
     required String password,
+    required String nickName,
   }) async {
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+      await db.collection('users').doc(credential.user!.uid).set({
+        'email': emailAddress,
+        'nickName': nickName,
+        'currentBookId': '',
+      });
       return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {

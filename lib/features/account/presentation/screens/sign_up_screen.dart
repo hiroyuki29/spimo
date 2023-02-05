@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
@@ -15,6 +16,7 @@ class SignUpScreen extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final email = useState<String>('');
     final password = useState<String>('');
+    final nickName = useState<String>('');
     final isMounted = useIsMounted();
 
     Future<void> submit() async {
@@ -24,6 +26,7 @@ class SignUpScreen extends HookConsumerWidget {
             .createUserWithEmailAndPassword(
               emailAddress: email.value,
               password: password.value,
+              nickName: nickName.value,
             );
         print(credential);
         if (credential != null && isMounted()) {
@@ -44,6 +47,19 @@ class SignUpScreen extends HookConsumerWidget {
             children: [
               TextFormField(
                 decoration: const InputDecoration(
+                  labelText: '名前（ニックネーム）',
+                ),
+                validator: (value) {
+                  String? checkedValue = value == null ? '必須項目です' : null;
+                  return checkedValue;
+                },
+                onChanged: (value) {
+                  email.value = value;
+                },
+              ),
+              sizedBoxH32,
+              TextFormField(
+                decoration: const InputDecoration(
                   labelText: 'メールアドレス',
                 ),
                 validator: (value) {
@@ -54,7 +70,7 @@ class SignUpScreen extends HookConsumerWidget {
                   email.value = value;
                 },
               ),
-              const SizedBox(height: 30),
+              sizedBoxH32,
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'パスワード',

@@ -5,7 +5,7 @@ import 'package:spimo/features/books/presentation/controller/current_book_contro
 import 'package:spimo/features/home/presentation/controller/view_model/date_chart_viewmodel.dart';
 import 'package:spimo/features/home/use_case/home_use_case.dart';
 
-final homeAllMemoChartControllerProvider = StateNotifierProvider<
+final homeAllMemoChartControllerProvider = StateNotifierProvider.autoDispose<
     HomeAllMemoChartController, AsyncValue<DateChartViewModel>>((ref) {
   return HomeAllMemoChartController(
       homeUseCase: ref.watch(homeUseCaseProvider),

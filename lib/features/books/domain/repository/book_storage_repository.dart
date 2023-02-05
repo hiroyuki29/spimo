@@ -3,7 +3,7 @@ import 'package:spimo/features/account/data/firebase_auth/firebase_auth_reposito
 import 'package:spimo/features/books/data/fire_store/repository_impl/firestore_books_repository.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 
-final bookStorageProvider = Provider<BookStorageRepository>((ref) {
+final bookStorageProvider = Provider.autoDispose<BookStorageRepository>((ref) {
   return FirestoreBooksRepository(
     userId: ref.watch(firebaseAuthRepositoryProvider).auth.currentUser!.uid,
   );

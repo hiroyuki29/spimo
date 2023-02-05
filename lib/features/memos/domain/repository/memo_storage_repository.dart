@@ -3,7 +3,7 @@ import 'package:spimo/features/account/data/firebase_auth/firebase_auth_reposito
 import 'package:spimo/features/memos/data/fire_store/repository_imple/firestore_memos_repository.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 
-final memoStorageProvider = Provider<MemoStorageRepository>((ref) {
+final memoStorageProvider = Provider.autoDispose<MemoStorageRepository>((ref) {
   return FireStoreMemosRepository(
     userId: ref.watch(firebaseAuthRepositoryProvider).auth.currentUser!.uid,
   );

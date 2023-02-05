@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
-final memosUseCaseProvider = Provider<MemosUseCase>((ref) {
+final memosUseCaseProvider = Provider.autoDispose<MemosUseCase>((ref) {
   return MemosUseCase(memoStorageRepository: ref.watch(memoStorageProvider));
 });
 

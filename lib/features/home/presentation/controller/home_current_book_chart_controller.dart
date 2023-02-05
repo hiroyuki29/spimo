@@ -16,8 +16,9 @@ enum ChartAverageRange {
   final int number;
 }
 
-final homeCurrentBookChartControllerProvider = StateNotifierProvider<
-    HomeCurrentBookChartController, AsyncValue<PageChartViewModel>>((ref) {
+final homeCurrentBookChartControllerProvider =
+    StateNotifierProvider.autoDispose<HomeCurrentBookChartController,
+        AsyncValue<PageChartViewModel>>((ref) {
   return HomeCurrentBookChartController(
       homeUseCase: ref.watch(homeUseCaseProvider),
       currentBook: ref.watch(currentBookControllerProvider));
@@ -55,8 +56,8 @@ class HomeCurrentBookChartController
   }
 }
 
-final homeMemoSumWordsControllerProvider =
-    StateNotifierProvider<HomeMemoSumWordsController, AsyncValue<int?>>((ref) {
+final homeMemoSumWordsControllerProvider = StateNotifierProvider.autoDispose<
+    HomeMemoSumWordsController, AsyncValue<int?>>((ref) {
   return HomeMemoSumWordsController(
       homeUseCase: ref.watch(homeUseCaseProvider),
       currentBook: ref.watch(currentBookControllerProvider));

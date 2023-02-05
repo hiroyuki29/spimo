@@ -3,7 +3,8 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
 final booksControllerProvider =
-    StateNotifierProvider<BooksController, AsyncValue<List<Book>>>((ref) {
+    StateNotifierProvider.autoDispose<BooksController, AsyncValue<List<Book>>>(
+        (ref) {
   return BooksController(bookStorageRepository: ref.watch(bookStorageProvider));
 });
 

@@ -5,7 +5,8 @@ import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/use_case/memos_use_case.dart';
 
 final memosControllerProvider =
-    StateNotifierProvider<MemosController, AsyncValue<List<Memo>>>((ref) {
+    StateNotifierProvider.autoDispose<MemosController, AsyncValue<List<Memo>>>(
+        (ref) {
   return MemosController(
       memosUseCase: ref.watch(memosUseCaseProvider),
       currentBook: ref.watch(currentBookControllerProvider));

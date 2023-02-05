@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:spimo/features/account/domain/model/app_user.dart';
+import 'package:spimo/features/account/domain/respository/user_repository.dart';
 
-final firebaseAuthRepositoryProvider =
-    Provider.autoDispose<FirebaseAuthRepository>((ref) {
-  return FirebaseAuthRepository();
-});
-
-class FirebaseAuthRepository {
+class FirebaseAuthRepository implements UserRepository {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  Future<UserCredential?> createUserWithEmailAndPassword({
+  @override
+  Future<String?> createUserWithEmailAndPassword({
     required String emailAddress,
     required String password,
     required String nickName,
@@ -21,12 +18,14 @@ class FirebaseAuthRepository {
         email: emailAddress,
         password: password,
       );
-      await db.collection('users').doc(credential.user!.uid).set({
+      final userId = credential.user!.uid;
+      await db.collection('users').doc(userId).set({
+        'id': userId,
         'email': emailAddress,
         'nickName': nickName,
         'currentBookId': '',
       });
-      return credential;
+      return userId;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -39,14 +38,15 @@ class FirebaseAuthRepository {
     return null;
   }
 
-  Future<UserCredential?> signInWithEmailAndPassword({
+  @override
+  Future<String?> signInWithEmailAndPassword({
     required String emailAddress,
     required String password,
   }) async {
     try {
       final credential = await auth.signInWithEmailAndPassword(
           email: emailAddress, password: password);
-      return credential;
+      return credential.user!.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -57,10 +57,21 @@ class FirebaseAuthRepository {
     return null;
   }
 
+  @override
+  Future<AppUser> fetchUser(String userId) {
+    final user = db.collection('users').doc(userId).get().then((doc) {
+      final data = doc.data();
+      return AppUser.fromJson(data!);
+    });
+    return user;
+  }
+
+  @override
   Future<void> signOut() async {
     await auth.signOut();
   }
 
+  @override
   Future<void> deleteUser() async {
     try {
       final data = {

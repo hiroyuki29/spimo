@@ -3,13 +3,13 @@ import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
 class FireStoreMemosRepository implements MemoStorageRepository {
-  FireStoreMemosRepository({required this.userId});
+  FireStoreMemosRepository();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
-  final String userId;
 
-  CollectionReference<Map<String, dynamic>> get usersBooks =>
-      db.collection('users').doc(userId).collection('books');
+  CollectionReference<Map<String, dynamic>> usersBooks(String userId) {
+    return db.collection('users').doc(userId).collection('books');
+  }
 
   @override
   Future<List<Memo>> fetchAllMemos() {
@@ -24,8 +24,11 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<List<Memo>> fetchBookMemos(String bookId) async {
-    final usersBookMemos = usersBooks.doc(bookId).collection('memos');
+  Future<List<Memo>> fetchBookMemos({
+    required String userId,
+    required String bookId,
+  }) async {
+    final usersBookMemos = usersBooks(userId).doc(bookId).collection('memos');
     final memoList = usersBookMemos.get().then((docList) {
       List<Memo> dataList = docList.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
@@ -37,8 +40,12 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<void> addMemo(Memo memo) async {
-    final usersBookMemos = usersBooks.doc(memo.bookId).collection('memos');
+  Future<void> addMemo({
+    required String userId,
+    required Memo memo,
+  }) async {
+    final usersBookMemos =
+        usersBooks(userId).doc(memo.bookId).collection('memos');
     final newDocId = usersBookMemos.doc().id;
     final sendMemoTextList = memo.contents.map(
       (memoText) {
@@ -58,7 +65,11 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<void> removeMemo(Memo memo) async {
-    await usersBooks.doc(memo.bookId).collection('memos').doc(memo.id).delete();
+  Future<void> removeMemo({required String userId, required Memo memo}) async {
+    await usersBooks(userId)
+        .doc(memo.bookId)
+        .collection('memos')
+        .doc(memo.id)
+        .delete();
   }
 }

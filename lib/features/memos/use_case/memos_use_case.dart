@@ -13,17 +13,21 @@ class MemosUseCase {
 
   final MemoStorageRepository memoStorageRepository;
 
-  Future<List<Memo>> fetchBookMemos(String bookId) async {
-    List<Memo> memoList = await memoStorageRepository.fetchBookMemos(bookId);
+  Future<List<Memo>> fetchBookMemos({
+    required String userId,
+    required String bookId,
+  }) async {
+    List<Memo> memoList = await memoStorageRepository.fetchBookMemos(
+        userId: userId, bookId: bookId);
     memoList.sort(((a, b) => a.startPage!.compareTo(b.startPage!)));
     return memoList;
   }
 
-  Future<void> addMemo({required Memo memo}) async {
-    await memoStorageRepository.addMemo(memo);
+  Future<void> addMemo({required String userId, required Memo memo}) async {
+    await memoStorageRepository.addMemo(userId: userId, memo: memo);
   }
 
-  Future<void> removeMemo({required Memo memo}) async {
-    await memoStorageRepository.removeMemo(memo);
+  Future<void> removeMemo({required String userId, required Memo memo}) async {
+    await memoStorageRepository.removeMemo(userId: userId, memo: memo);
   }
 }

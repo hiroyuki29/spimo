@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
-import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
+import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
 
@@ -21,15 +21,15 @@ class SignUpScreen extends HookConsumerWidget {
 
     Future<void> submit() async {
       if (formKey.currentState!.validate()) {
-        final credential = await ref
-            .read(firebaseAuthRepositoryProvider)
+        final userId = await ref
+            .read(userRepositoryProvider)
             .createUserWithEmailAndPassword(
               emailAddress: email.value,
               password: password.value,
               nickName: nickName.value,
             );
-        print(credential);
-        if (credential != null && isMounted()) {
+        print(userId);
+        if (userId != null && isMounted()) {
           context.goNamed(AppRoute.home.name);
         }
       }
@@ -54,7 +54,7 @@ class SignUpScreen extends HookConsumerWidget {
                   return checkedValue;
                 },
                 onChanged: (value) {
-                  email.value = value;
+                  nickName.value = value;
                 },
               ),
               sizedBoxH32,

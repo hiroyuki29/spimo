@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
+import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
 
@@ -17,19 +17,17 @@ class StartScreen extends HookConsumerWidget {
     final password = useState<String>('');
     final isMounted = useIsMounted();
     final isLoading = useState<bool>(false);
-    final authRepository = ref.watch(firebaseAuthRepositoryProvider);
 
     Future<void> submit() async {
       isLoading.value = true;
       if (formKey.currentState!.validate()) {
-        final credential = await ref
-            .read(firebaseAuthRepositoryProvider)
-            .signInWithEmailAndPassword(
-              emailAddress: email.value,
-              password: password.value,
-            );
-        print(credential.toString());
-        if (credential != null && isMounted()) {
+        final userId =
+            await ref.read(userRepositoryProvider).signInWithEmailAndPassword(
+                  emailAddress: email.value,
+                  password: password.value,
+                );
+        print(userId.toString());
+        if (userId != null && isMounted()) {
           context.goNamed(AppRoute.home.name);
         }
       }

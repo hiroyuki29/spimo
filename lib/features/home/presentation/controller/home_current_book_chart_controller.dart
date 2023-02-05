@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/home/presentation/controller/view_model/page_chart_view_model.dart';
@@ -20,21 +21,26 @@ final homeCurrentBookChartControllerProvider =
     StateNotifierProvider.autoDispose<HomeCurrentBookChartController,
         AsyncValue<PageChartViewModel>>((ref) {
   return HomeCurrentBookChartController(
-      homeUseCase: ref.watch(homeUseCaseProvider),
-      currentBook: ref.watch(currentBookControllerProvider));
+    homeUseCase: ref.watch(homeUseCaseProvider),
+    currentBook: ref.watch(currentBookControllerProvider),
+    userId: ref.watch(userControllerProvider)!.id,
+  );
 });
 
 class HomeCurrentBookChartController
     extends StateNotifier<AsyncValue<PageChartViewModel>> {
-  HomeCurrentBookChartController(
-      {required this.homeUseCase, required this.currentBook})
-      : super(const AsyncLoading()) {
+  HomeCurrentBookChartController({
+    required this.homeUseCase,
+    required this.currentBook,
+    required this.userId,
+  }) : super(const AsyncLoading()) {
     if (currentBook != null) {
       getChartPoints(averageRange: ChartAverageRange.five.number);
     }
   }
 
   final HomeUseCase homeUseCase;
+  final String userId;
   Book? currentBook;
 
   Future<void> getChartPoints({required int averageRange}) async {
@@ -42,7 +48,10 @@ class HomeCurrentBookChartController
     if (currentBook != null) {
       List<List<FlSpot>> chartPoints =
           await homeUseCase.createCurrentBookMemoChartPoints(
-              bookId: currentBook!.id, averageRange: averageRange);
+        userId: userId,
+        bookId: currentBook!.id,
+        averageRange: averageRange,
+      );
       double maxWordLength = homeUseCase.getMaxWordLength(chartPoints[0]);
       state = AsyncData(
         PageChartViewModel(
@@ -59,14 +68,18 @@ class HomeCurrentBookChartController
 final homeMemoSumWordsControllerProvider = StateNotifierProvider.autoDispose<
     HomeMemoSumWordsController, AsyncValue<int?>>((ref) {
   return HomeMemoSumWordsController(
-      homeUseCase: ref.watch(homeUseCaseProvider),
-      currentBook: ref.watch(currentBookControllerProvider));
+    homeUseCase: ref.watch(homeUseCaseProvider),
+    currentBook: ref.watch(currentBookControllerProvider),
+    userId: ref.watch(userControllerProvider)!.id,
+  );
 });
 
 class HomeMemoSumWordsController extends StateNotifier<AsyncValue<int?>> {
-  HomeMemoSumWordsController(
-      {required this.homeUseCase, required this.currentBook})
-      : super(const AsyncData(null)) {
+  HomeMemoSumWordsController({
+    required this.homeUseCase,
+    required this.currentBook,
+    required this.userId,
+  }) : super(const AsyncData(null)) {
     if (currentBook != null) {
       getAllMemoWordLength();
     }
@@ -74,11 +87,13 @@ class HomeMemoSumWordsController extends StateNotifier<AsyncValue<int?>> {
 
   final HomeUseCase homeUseCase;
   Book? currentBook;
+  String userId;
 
   Future<void> getAllMemoWordLength() async {
     state = const AsyncLoading();
     if (currentBook != null) {
-      state = AsyncData(await homeUseCase.sumMemoWordLength(currentBook!.id));
+      state = AsyncData(await homeUseCase.sumMemoWordLength(
+          userId: userId, bookId: currentBook!.id));
     }
   }
 }

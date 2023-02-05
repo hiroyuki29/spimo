@@ -21,11 +21,14 @@ class HomeUseCase {
   final BookStorageRepository bookStorageRepository;
 
   Future<List<List<FlSpot>>> createCurrentBookMemoChartPoints({
+    required String userId,
     required String bookId,
     required int averageRange,
   }) async {
-    final book = await bookStorageRepository.fetchBook(bookId);
-    final memos = await memoStorageRepository.fetchBookMemos(bookId);
+    final book =
+        await bookStorageRepository.fetchBook(userId: userId, bookId: bookId);
+    final memos = await memoStorageRepository.fetchBookMemos(
+        userId: userId, bookId: bookId);
 
     List<Memo> memosWithoutNullOfStartPage =
         memos.where((memo) => memo.startPage != null).toList();
@@ -98,8 +101,14 @@ class HomeUseCase {
     return maxWordLength;
   }
 
-  Future<int> sumMemoWordLength(String bookId) async {
-    final memos = await memoStorageRepository.fetchBookMemos(bookId);
+  Future<int> sumMemoWordLength({
+    required String userId,
+    required String bookId,
+  }) async {
+    final memos = await memoStorageRepository.fetchBookMemos(
+      userId: userId,
+      bookId: bookId,
+    );
     int memoWordsLength = 0;
     for (Memo memo in memos) {
       for (MemoText memoText in memo.contents) {

@@ -6,7 +6,8 @@ import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
-import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
+import 'package:spimo/features/account/domain/respository/user_repository.dart';
+import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,7 +42,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
 
     Future<void> logout() async {
       isLoading.value = true;
-      await ref.read(firebaseAuthRepositoryProvider).signOut();
+      await ref.read(userRepositoryProvider).signOut();
       if (isMounted()) {
         context.goNamed(AppRoute.start.name);
       }
@@ -50,15 +51,14 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
 
     Future<void> deleteUser() async {
       isLoading.value = true;
-      await ref.read(firebaseAuthRepositoryProvider).deleteUser();
+      await ref.read(userRepositoryProvider).deleteUser();
       if (isMounted()) {
         context.goNamed(AppRoute.start.name);
       }
       isLoading.value = false;
     }
 
-    final email =
-        ref.watch(firebaseAuthRepositoryProvider).auth.currentUser?.email;
+    final email = ref.watch(userControllerProvider)?.email;
 
     return isLoading.value
         ? const LoadingCircleIndicator()

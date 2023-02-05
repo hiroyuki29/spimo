@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
-import 'package:spimo/features/account/data/firebase_auth/firebase_auth_repository.dart';
+import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
@@ -28,14 +29,12 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
-  final authRepository = ref.watch(firebaseAuthRepositoryProvider);
-
   return GoRouter(
     initialLocation: '/',
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: false,
     redirect: (context, state) {
-      final currentUser = authRepository.auth.currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null && state.subloc == '/') {
         return '/home';
       }
@@ -103,17 +102,29 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
   );
 });
 
-class ScaffoldWithBottomNavBar extends StatefulWidget {
+class ScaffoldWithBottomNavBar extends ConsumerStatefulWidget {
   const ScaffoldWithBottomNavBar({Key? key, required this.child})
       : super(key: key);
   final Widget child;
 
   @override
-  State<ScaffoldWithBottomNavBar> createState() =>
+  ConsumerState<ScaffoldWithBottomNavBar> createState() =>
       _ScaffoldWithBottomNavBarState();
 }
 
-class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
+class _ScaffoldWithBottomNavBarState
+    extends ConsumerState<ScaffoldWithBottomNavBar> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(userControllerProvider.notifier)
+          .fetchUser(FirebaseAuth.instance.currentUser!.uid);
+    });
+
+    super.initState();
+  }
+
   final tabs = [
     ScaffoldWithNavBarTabItem(
       initialLocation: '/home',
@@ -163,18 +174,22 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: primary,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _currentIndex,
-        items: tabs,
-        onTap: (tabIndex) => _onItemTapped(context, tabIndex),
-      ),
-    );
+    final user = ref.watch(userControllerProvider);
+
+    return user == null
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            body: widget.child,
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.white,
+              selectedItemColor: primary,
+              unselectedItemColor: Colors.grey,
+              currentIndex: _currentIndex,
+              items: tabs,
+              onTap: (tabIndex) => _onItemTapped(context, tabIndex),
+            ),
+          );
   }
 }
 

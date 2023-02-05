@@ -3,17 +3,17 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
 class FirestoreBooksRepository implements BookStorageRepository {
-  FirestoreBooksRepository({required this.userId});
+  FirestoreBooksRepository();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
-  final String userId;
 
-  CollectionReference<Map<String, dynamic>> get usersBooks =>
-      db.collection('users').doc(userId).collection('books');
+  CollectionReference<Map<String, dynamic>> usersBooks(String userId) {
+    return db.collection('users').doc(userId).collection('books');
+  }
 
   @override
-  Future<List<Book>> fetchBooks() async {
-    final bookList = usersBooks.get().then((docList) {
+  Future<List<Book>> fetchBooks(String userId) async {
+    final bookList = usersBooks(userId).get().then((docList) {
       List<Book> dataList = docList.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
         return Book.fromJson(data);
@@ -24,8 +24,8 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
-  Future<Book> fetchBook(String bookId) {
-    final book = usersBooks.doc(bookId).get().then((doc) {
+  Future<Book> fetchBook({required String userId, required String bookId}) {
+    final book = usersBooks(userId).doc(bookId).get().then((doc) {
       final data = doc.data();
       return Book.fromJson(data!);
     });
@@ -33,9 +33,15 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
-  Future<void> addBook(Book book) async {
-    final newDocId = usersBooks.doc().id;
-    await usersBooks.doc(newDocId).set(
+  Future<void> setCurrentBookId(
+      {required String userId, required String bookId}) async {
+    await db.collection('users').doc(userId).update({'currentBookId': bookId});
+  }
+
+  @override
+  Future<void> addBook({required String userId, required Book book}) async {
+    final newDocId = usersBooks(userId).doc().id;
+    await usersBooks(userId).doc(newDocId).set(
       {
         'id': newDocId,
         'title': book.title,
@@ -48,7 +54,7 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
-  Future<void> removeBook(Book book) async {
-    await usersBooks.doc(book.id).delete();
+  Future<void> removeBook({required String userId, required Book book}) async {
+    await usersBooks(userId).doc(book.id).delete();
   }
 }

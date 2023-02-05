@@ -29,6 +29,9 @@ class HomeAllMemoChartController
     state = const AsyncLoading();
     if (currentBook != null) {
       List<FlSpot> chartPoints = await homeUseCase.createAllMemoChartPoints();
+      if (chartPoints.isEmpty) {
+        return;
+      }
       double maxWordLength = chartPoints.last.y;
       double allDaysDuration = chartPoints.last.x;
       state = AsyncData(

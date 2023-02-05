@@ -70,6 +70,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentBook = ref.watch(currentBookControllerProvider);
+    final memoController = ref.watch(memosControllerProvider.notifier);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -139,9 +140,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                     endPage: _endPage,
                                     bookId: currentBook.id,
                                     createdAt: DateTime.now());
-                                ref
-                                    .read(memosControllerProvider.notifier)
-                                    .addMemo(memo: memo);
+                                memoController.addMemo(memo: memo);
                                 setState(() {
                                   _lastWords = '';
                                   _wordList = [];

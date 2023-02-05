@@ -123,6 +123,10 @@ class HomeUseCase {
 
     memos.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
 
+    if (memos.isEmpty) {
+      return [];
+    }
+
     final firstDateTime = memos.first.createdAt;
     final initialDay =
         DateTime(firstDateTime.year, firstDateTime.month, firstDateTime.day);

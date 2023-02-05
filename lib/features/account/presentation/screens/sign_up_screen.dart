@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
@@ -43,8 +44,14 @@ class SignUpScreen extends HookConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              sizedBoxH16,
+              SizedBox(
+                height: 160,
+                child: IconAsset.spimoLogo,
+              ),
+              sizedBoxH32,
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: '名前（ニックネーム）',

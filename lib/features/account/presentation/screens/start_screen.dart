@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
@@ -41,10 +42,14 @@ class StartScreen extends HookConsumerWidget {
             child: Form(
           key: formKey,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 260,
+                  child: IconAsset.spimoLogo,
+                ),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'メールアドレス',

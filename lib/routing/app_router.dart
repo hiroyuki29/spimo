@@ -39,7 +39,9 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
       if (currentUser != null && state.subloc == '/') {
         return '/home';
       }
-      if (currentUser == null && state.subloc != '/') {
+      if (currentUser == null &&
+          state.subloc != '/' &&
+          state.subloc != '/signUp') {
         return '/';
       }
       return null;
@@ -51,7 +53,7 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
         builder: (context, state) => const StartScreen(),
         routes: [
           GoRoute(
-            path: 'singUp',
+            path: 'signUp',
             name: AppRoute.signUp.name,
             builder: (context, state) => const SignUpScreen(),
           ),

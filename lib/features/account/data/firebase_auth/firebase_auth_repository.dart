@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,6 +8,7 @@ final firebaseAuthRepositoryProvider = Provider<FirebaseAuthRepository>((ref) {
 
 class FirebaseAuthRepository {
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<UserCredential?> createUserWithEmailAndPassword({
     required String emailAddress,
@@ -50,5 +52,18 @@ class FirebaseAuthRepository {
 
   Future<void> signOut() async {
     await auth.signOut();
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      final data = {
+        "userId": auth.currentUser!.uid,
+        "deletedAt": FieldValue.serverTimestamp(),
+      };
+      await db.collection('deletedUsers').add(data);
+      await signOut();
+    } catch (e) {
+      print(e);
+    }
   }
 }

@@ -48,6 +48,15 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
       isLoading.value = false;
     }
 
+    Future<void> deleteUser() async {
+      isLoading.value = true;
+      await ref.read(firebaseAuthRepositoryProvider).deleteUser();
+      if (isMounted()) {
+        context.goNamed(AppRoute.start.name);
+      }
+      isLoading.value = false;
+    }
+
     return isLoading.value
         ? const LoadingCircleIndicator()
         : Scaffold(
@@ -82,8 +91,15 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   ),
                   sizedBoxH24,
                   AccountButton(
-                    title: 'ログアウト',
+                    title: '退会',
                     privacyPolicyUrl: inquiryUrl,
+                    onTap: () async {
+                      await deleteUser();
+                    },
+                  ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: 'ログアウト',
                     onTap: () async {
                       await logout();
                     },
@@ -99,12 +115,12 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
 class AccountButton extends StatelessWidget {
   const AccountButton({
     Key? key,
-    required this.privacyPolicyUrl,
+    this.privacyPolicyUrl,
     required this.title,
     this.onTap,
   }) : super(key: key);
 
-  final Uri privacyPolicyUrl;
+  final Uri? privacyPolicyUrl;
   final String title;
   final VoidCallback? onTap;
 

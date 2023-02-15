@@ -6,7 +6,8 @@ const Color primary = Color(0xff607D8B);
 const Color accent = Color(0xff795548);
 const Color black = Color(0xff212121);
 const Color white = Colors.white;
-const backgroundGray = Color(0xffF3F3F3);
+const Color backgroundGray = Color(0xffF3F3F3);
+const Color alertColor = Colors.red;
 
 const MaterialColor primaryDarkSwatch = MaterialColor(
   0xFF1d2433,

@@ -10,9 +10,16 @@ class GoogleBooksRepository implements SearchBooksRepository {
   GoogleBooksRepository();
 
   @override
-  Future<List<Book>> getBookList(String keyword) async {
-    var url =
-        Uri.https('www.googleapis.com', '/books/v1/volumes', {'q': keyword});
+  Future<List<Book>> getBookList({
+    required String keyword,
+    int index = 0,
+  }) async {
+    const maxResults = 10;
+    var url = Uri.https('www.googleapis.com', '/books/v1/volumes', {
+      'q': keyword,
+      'maxResults': '$maxResults',
+      'startIndex': '${index * maxResults}',
+    });
 
     final response = await http.get(url);
     if (response.statusCode == 200) {

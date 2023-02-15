@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
@@ -52,29 +52,17 @@ class BookListView extends StatelessWidget {
                   return await showCupertinoDialog(
                     context: context,
                     builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: const Text('本の削除します。\nよろしいですか？'),
-                        content: const Text('本を削除すると、その本に対するメモのデータも削除されます'),
-                        actions: [
-                          CupertinoDialogAction(
-                            child: const Text(
-                              '削除',
-                              style: TextStyle(
-                                color: alertColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                          CupertinoDialogAction(
-                            child: const Text('キャンセル'),
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          ),
-                        ],
+                      return CustomAlertDialog(
+                        title: '本の削除します。\nよろしいですか？',
+                        content: '本を削除すると、その本に対するメモのデータも削除されます',
+                        leftText: '削除',
+                        rightText: 'キャンセル',
+                        onTapLeft: () {
+                          Navigator.of(context).pop(true);
+                        },
+                        onTapRight: () {
+                          Navigator.of(context).pop(false);
+                        },
                       );
                     },
                   );

@@ -8,6 +8,7 @@ import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignUpScreen extends HookConsumerWidget {
   const SignUpScreen({super.key});
@@ -19,6 +20,18 @@ class SignUpScreen extends HookConsumerWidget {
     final password = useState<String>('');
     final nickName = useState<String>('');
     final isMounted = useIsMounted();
+
+    final Uri termsOfServiceUrl =
+        Uri.parse('https://spimo-project.firebaseapp.com/terms_of_service');
+
+    final Uri privacyPolicyUrl =
+        Uri.parse('https://spimo-project.firebaseapp.com/privacy_policy');
+
+    Future<void> doLaunchingUrl(Uri url) async {
+      if (!await launchUrl(url)) {
+        throw Exception('接続できませんでした');
+      }
+    }
 
     Future<void> submit() async {
       if (formKey.currentState!.validate()) {
@@ -92,6 +105,32 @@ class SignUpScreen extends HookConsumerWidget {
                 },
               ),
               const SizedBox(height: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      MinimumTextButton(
+                        text: 'ご利用規約',
+                        onTap: () async {
+                          await doLaunchingUrl(termsOfServiceUrl);
+                        },
+                      ),
+                      const Text('と'),
+                      MinimumTextButton(
+                        text: 'プライバシポリシー',
+                        onTap: () async {
+                          await doLaunchingUrl(privacyPolicyUrl);
+                        },
+                      ),
+                      const Text('に同意して、'),
+                    ],
+                  ),
+                  const Text('アカウントを作成する'),
+                ],
+              ),
+              sizedBoxH16,
               ElevatedButton(
                 onPressed: email.value.isNotEmpty && password.value.isNotEmpty
                     ? submit
@@ -102,6 +141,34 @@ class SignUpScreen extends HookConsumerWidget {
           ),
         ),
       )),
+    );
+  }
+}
+
+class MinimumTextButton extends StatelessWidget {
+  const MinimumTextButton({
+    Key? key,
+    required this.text,
+    this.textStyle = const TextStyle(
+      decoration: TextDecoration.underline,
+    ),
+    required this.onTap,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle textStyle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onTap,
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
+        minimumSize: MaterialStateProperty.all(Size.zero),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(text, style: textStyle),
     );
   }
 }

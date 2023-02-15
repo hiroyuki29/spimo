@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
@@ -41,21 +43,52 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
     }
 
     Future<void> logout() async {
-      isLoading.value = true;
-      await ref.read(userRepositoryProvider).signOut();
-      if (isMounted()) {
-        context.goNamed(AppRoute.start.name);
-      }
-      isLoading.value = false;
+      await showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            title: 'ログアウトしますか？',
+            leftText: 'ログアウト',
+            rightText: 'キャンセル',
+            onTapLeft: () async {
+              isLoading.value = true;
+              await ref.read(userRepositoryProvider).signOut();
+              if (isMounted()) {
+                context.goNamed(AppRoute.start.name);
+              }
+              isLoading.value = false;
+            },
+            onTapRight: () {
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      );
     }
 
     Future<void> deleteUser() async {
-      isLoading.value = true;
-      await ref.read(userRepositoryProvider).deleteUser();
-      if (isMounted()) {
-        context.goNamed(AppRoute.start.name);
-      }
-      isLoading.value = false;
+      await showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            title: '退会すると全てのデータが削除されますが\nよろしいですか？',
+            content: '削除すると元に戻すことはできません。',
+            leftText: '退会する',
+            rightText: 'キャンセル',
+            onTapLeft: () async {
+              isLoading.value = true;
+              await ref.read(userRepositoryProvider).deleteUser();
+              if (isMounted()) {
+                context.goNamed(AppRoute.start.name);
+              }
+              isLoading.value = false;
+            },
+            onTapRight: () {
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      );
     }
 
     final email = ref.watch(userControllerProvider)?.email;

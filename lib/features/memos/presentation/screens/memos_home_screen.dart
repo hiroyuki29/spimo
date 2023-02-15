@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
@@ -82,6 +84,26 @@ class MemosHomeScreen extends HookConsumerWidget {
                                         ],
                                       ),
                                     ),
+                                    confirmDismiss:
+                                        (DismissDirection direction) async {
+                                      return await showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CustomAlertDialog(
+                                            title: 'メモの削除します。\nよろしいですか？',
+                                            content: '削除すると元に戻すことはできません。',
+                                            leftText: '削除',
+                                            rightText: 'キャンセル',
+                                            onTapLeft: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            onTapRight: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
                                     onDismissed: (DismissDirection direction) {
                                       ref
                                           .read(

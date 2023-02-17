@@ -130,7 +130,12 @@ class SearchBooksScreen extends HookConsumerWidget {
                     ),
                   ),
             isLoading.value
-                ? const LoadingCircleIndicator()
+                ? Column(
+                    children: const [
+                      LoadingCircleIndicator(),
+                      sizedBoxH24,
+                    ],
+                  )
                 : const SizedBox.shrink()
           ],
         ),

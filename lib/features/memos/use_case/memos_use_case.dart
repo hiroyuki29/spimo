@@ -25,6 +25,11 @@ class MemosUseCase {
 
   Future<void> addMemo({required String userId, required Memo memo}) async {
     await memoStorageRepository.addMemo(userId: userId, memo: memo);
+
+    await memoStorageRepository.stockMemoLength(
+        userId: userId,
+        addedMemoLength: memo.memoTextLength,
+        date: DateTime.now());
   }
 
   Future<void> removeMemo({required String userId, required Memo memo}) async {

@@ -390,9 +390,9 @@ class _MemoDistributionChart extends StatelessWidget {
       final middleDurationDays = (maxX / 2).ceil();
       final middleDay = startDay.add(Duration(days: middleDurationDays));
       if (value.toInt() == 0) {
-        text = formatDate(startDay);
+        text = formatDateToString(startDay);
       } else if (value.toInt() == middleDurationDays) {
-        text = formatDate(middleDay);
+        text = formatDateToString(middleDay);
       } else if (value.toInt() == maxX) {
         text = '現在';
       } else {

@@ -86,8 +86,8 @@ class HomeMemoSumWordsController extends StateNotifier<AsyncValue<int?>> {
   }
 
   final HomeUseCase homeUseCase;
-  Book? currentBook;
-  String userId;
+  final Book? currentBook;
+  final String userId;
 
   Future<void> getAllMemoWordLength() async {
     state = const AsyncLoading();

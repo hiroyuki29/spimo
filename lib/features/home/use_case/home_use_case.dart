@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
+import 'package:spimo/features/memos/domain/model/memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
@@ -30,64 +31,61 @@ class HomeUseCase {
     final memos = await memoStorageRepository.fetchBookMemos(
         userId: userId, bookId: bookId);
 
-    List<Memo> memosWithoutNullOfStartPage =
+    final memosWithStartPage =
         memos.where((memo) => memo.startPage != null).toList();
-    memosWithoutNullOfStartPage
-        .sort(((a, b) => a.startPage!.compareTo(b.startPage!)));
+    memosWithStartPage.sort((a, b) => a.startPage!.compareTo(b.startPage!));
 
-    Map<int, dynamic> wordAndPageMap = {};
-    double wordLengthEachMemo = 0;
+    final wordAndPageMap = Map<int, double>.fromIterable(
+      List.generate((book.pageCount! / averageRange).ceil(), (i) => i),
+      value: (_) => 0,
+    );
+    final wordAndPageMapOnlyRed = Map<int, double>.from(wordAndPageMap);
 
-    Map<int, dynamic> wordAndPageMapOnlyRed = {};
-    double wordLengthEachMemoOnlyRed = 0;
+    for (final memo in memosWithStartPage) {
+      double wordLength = 0;
+      double wordLengthOnlyRed = 0;
 
-    for (int i = 0; i * averageRange < book.pageCount!; i++) {
-      wordAndPageMap[i] = 0.0;
-      wordAndPageMapOnlyRed[i] = 0.0;
-    }
-    for (Memo memo in memosWithoutNullOfStartPage) {
-      if (memo.startPage == null) {
-        continue;
-      }
-      wordLengthEachMemo = 0;
-      wordLengthEachMemoOnlyRed = 0;
-      for (MemoText memoText in memo.contents) {
-        wordLengthEachMemo += memoText.text.length;
+      for (final memoText in memo.contents) {
+        wordLength += memoText.text.length;
         if (memoText.textColor == TextColor.red) {
-          wordLengthEachMemoOnlyRed += memoText.text.length;
+          wordLengthOnlyRed += memoText.text.length;
         }
       }
 
-      wordAndPageMap[(memo.startPage! / averageRange).floor()] +=
-          wordLengthEachMemo;
+      final page = memo.startPage!;
+      final key = (page / averageRange).floor();
+      wordAndPageMap.update(
+        key,
+        (value) => value + wordLength,
+        ifAbsent: () => wordLength,
+      );
 
-      wordAndPageMapOnlyRed[(memo.startPage! / averageRange).floor()] +=
-          wordLengthEachMemoOnlyRed;
-    }
-    List<FlSpot> chartPointsAll = [];
-    for (final entry in wordAndPageMap.entries) {
-      chartPointsAll.add(FlSpot(
-          (entry.key * averageRange + averageRange / 2).toDouble(),
-          entry.value));
-    }
-
-    List<FlSpot> chartPointsOnlyRed = [];
-    for (final entry in wordAndPageMapOnlyRed.entries) {
-      chartPointsOnlyRed.add(FlSpot(
-          (entry.key * averageRange + averageRange / 2).toDouble(),
-          entry.value));
+      wordAndPageMapOnlyRed.update(
+        key,
+        (value) => value + wordLengthOnlyRed,
+        ifAbsent: () => wordLengthOnlyRed,
+      );
     }
 
-    chartPointsAll.insert(0, FlSpot(0, chartPointsAll.first.y));
-    chartPointsOnlyRed.insert(0, FlSpot(0, chartPointsOnlyRed.first.y));
-    chartPointsAll
-        .add(FlSpot(book.pageCount!.toDouble(), chartPointsAll.last.y));
-    chartPointsOnlyRed
-        .add(FlSpot(book.pageCount!.toDouble(), chartPointsOnlyRed.last.y));
+    final chartPointsAll = wordAndPageMap.entries.map((entry) {
+      final page = entry.key * averageRange + averageRange / 2;
+      return FlSpot(page.toDouble(), entry.value);
+    }).toList();
+
+    final chartPointsOnlyRed = wordAndPageMapOnlyRed.entries.map((entry) {
+      final page = entry.key * averageRange + averageRange / 2;
+      return FlSpot(page.toDouble(), entry.value);
+    }).toList();
+
+    final firstAll = FlSpot(0, chartPointsAll.first.y);
+    final firstOnlyRed = FlSpot(0, chartPointsOnlyRed.first.y);
+    final lastAll = FlSpot(book.pageCount!.toDouble(), chartPointsAll.last.y);
+    final lastOnlyRed =
+        FlSpot(book.pageCount!.toDouble(), chartPointsOnlyRed.last.y);
 
     return [
-      chartPointsAll,
-      chartPointsOnlyRed,
+      [firstAll, ...chartPointsAll, lastAll],
+      [firstOnlyRed, ...chartPointsOnlyRed, lastOnlyRed],
     ];
   }
 
@@ -118,38 +116,29 @@ class HomeUseCase {
     return memoWordsLength;
   }
 
-  Future<List<FlSpot>> createAllMemoChartPoints() async {
-    final memos = await memoStorageRepository.fetchAllMemos();
+  Future<List<FlSpot>> createAllMemoChartPoints(String userId) async {
+    final memos = await memoStorageRepository.fetchAllMemos(userId);
 
-    memos.sort(((a, b) => a.createdAt.compareTo(b.createdAt)));
+    memos.sort((a, b) => a.date.compareTo(b.date));
 
     if (memos.isEmpty) {
       return [];
     }
 
-    final firstDateTime = memos.first.createdAt;
-    final initialDay =
-        DateTime(firstDateTime.year, firstDateTime.month, firstDateTime.day);
+    final initialDay = memos.first.date;
     final allDuration = DateTime.now().difference(initialDay).inDays;
 
-    Map<int, dynamic> wordAndPageMap = {};
-    double wordLengthEachMemo = 0;
+    final wordAndPageMap = List.filled(allDuration + 1, 0.0);
+    double memoLength = 0;
     double sumWordLength = 0;
     DateTime checkingDate = initialDay;
     int checkingDuration = 0;
 
-    for (int i = 0; i <= allDuration; i++) {
-      wordAndPageMap[i] = 0.0;
-    }
+    for (MemoLengthStock memo in memos) {
+      memoLength = memo.memoLength.toDouble();
+      sumWordLength += memoLength;
 
-    for (Memo memo in memos) {
-      wordLengthEachMemo = 0;
-      for (MemoText memoText in memo.contents) {
-        wordLengthEachMemo += memoText.text.length;
-      }
-      sumWordLength += wordLengthEachMemo;
-
-      int durationDifference = memo.createdAt.difference(checkingDate).inDays;
+      int durationDifference = memo.date.difference(checkingDate).inDays;
 
       if (durationDifference != 0) {
         for (int i = 1; i <= durationDifference; i++) {
@@ -164,8 +153,8 @@ class HomeUseCase {
       wordAndPageMap[j] += sumWordLength;
     }
     List<FlSpot> chartPointsAll = [];
-    for (final entry in wordAndPageMap.entries) {
-      chartPointsAll.add(FlSpot(entry.key.toDouble(), entry.value));
+    for (int i = 0; i < wordAndPageMap.length; i++) {
+      chartPointsAll.add(FlSpot(i.toDouble(), wordAndPageMap[i]));
     }
     return chartPointsAll;
   }

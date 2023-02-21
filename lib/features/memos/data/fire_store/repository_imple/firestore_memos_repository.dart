@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:spimo/common_method/datetime_formatter.dart';
+import 'package:spimo/features/memos/data/fire_store/model/firestore_memo.dart';
+import 'package:spimo/features/memos/data/fire_store/model/firestore_memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
+import 'package:spimo/features/memos/domain/model/memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
 class FireStoreMemosRepository implements MemoStorageRepository {
@@ -12,11 +16,14 @@ class FireStoreMemosRepository implements MemoStorageRepository {
   }
 
   @override
-  Future<List<Memo>> fetchAllMemos() {
-    final allMemoList = db.collectionGroup('memos').get().then((docList) {
-      List<Memo> dataList = docList.docs.map((doc) {
+  Future<List<MemoLengthStock>> fetchAllMemos(userId) {
+    final usersMemoLengthStock = db.collection('users/$userId/memoLengthStock');
+    final allMemoList = usersMemoLengthStock.get().then((docList) {
+      List<MemoLengthStock> dataList = docList.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
-        return Memo.fromJson(data);
+        final firestoreMemoLengthStock =
+            FirestoreMemoLengthStock.fromJson(data);
+        return firestoreMemoLengthStock.transferMemoLengthStock();
       }).toList();
       return dataList;
     });
@@ -32,7 +39,8 @@ class FireStoreMemosRepository implements MemoStorageRepository {
     final memoList = usersBookMemos.get().then((docList) {
       List<Memo> dataList = docList.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
-        return Memo.fromJson(data);
+        final firestoreMemo = FirestoreMemo.fromJson(data);
+        return firestoreMemo.transferToMemo();
       }).toList();
       return dataList;
     });
@@ -44,32 +52,49 @@ class FireStoreMemosRepository implements MemoStorageRepository {
     required String userId,
     required Memo memo,
   }) async {
-    final usersBookMemos =
-        usersBooks(userId).doc(memo.bookId).collection('memos');
-    final newDocId = usersBookMemos.doc().id;
-    final sendMemoTextList = memo.contents.map(
-      (memoText) {
-        return memoText.toJson();
-      },
-    ).toList();
-    await usersBookMemos.doc(newDocId).set(
-      {
-        'id': newDocId,
-        'contents': sendMemoTextList,
-        'bookId': memo.bookId,
-        'startPage': memo.startPage,
-        'endPage': memo.endPage,
-        'createdAt': FieldValue.serverTimestamp(),
-      },
-    );
+    final memoRef =
+        usersBooks(userId).doc(memo.bookId).collection('memos').doc();
+
+    final sendMemoTextList =
+        memo.contents.map((memoText) => memoText.toJson()).toList();
+
+    await memoRef.set({
+      'id': memoRef.id,
+      'contents': sendMemoTextList,
+      'bookId': memo.bookId,
+      'startPage': memo.startPage,
+      'endPage': memo.endPage,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
   }
 
   @override
   Future<void> removeMemo({required String userId, required Memo memo}) async {
-    await usersBooks(userId)
-        .doc(memo.bookId)
-        .collection('memos')
-        .doc(memo.id)
-        .delete();
+    final memoRef =
+        usersBooks(userId).doc(memo.bookId).collection('memos').doc(memo.id);
+
+    await memoRef.delete();
+  }
+
+  @override
+  Future<void> stockMemoLength({
+    required String userId,
+    required int addedMemoLength,
+    required DateTime date,
+  }) async {
+    final usersMemoLengthStock = db.collection('users/$userId/memoLengthStock');
+    final settingDateText = formatDateToStringWithHyphen(date);
+    final docRef = usersMemoLengthStock.doc(settingDateText);
+
+    final memoLengthDoc = await docRef.get();
+    final int stockedMemoLength = memoLengthDoc.data()?['memoLength'] ?? 0;
+
+    await docRef.set(
+      {
+        'date': formatDateToYMD(date),
+        'memoLength': stockedMemoLength + addedMemoLength,
+      },
+      SetOptions(merge: true),
+    );
   }
 }

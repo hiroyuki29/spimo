@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'memo.dart';
+part of 'firestore_memo.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
+_$_FirestoreMemo _$$_FirestoreMemoFromJson(Map<String, dynamic> json) =>
+    _$_FirestoreMemo(
       id: json['id'] as String,
       contents: (json['contents'] as List<dynamic>)
           .map((e) => MemoText.fromJson(e as Map<String, dynamic>))
@@ -14,14 +15,17 @@ _$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
       bookId: json['bookId'] as String,
       startPage: json['startPage'] as int?,
       endPage: json['endPage'] as int?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdAt: const TimestampToDatetimeConverter()
+          .fromJson(json['createdAt'] as Timestamp),
     );
 
-Map<String, dynamic> _$$_MemoToJson(_$_Memo instance) => <String, dynamic>{
+Map<String, dynamic> _$$_FirestoreMemoToJson(_$_FirestoreMemo instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'contents': instance.contents,
       'bookId': instance.bookId,
       'startPage': instance.startPage,
       'endPage': instance.endPage,
-      'createdAt': instance.createdAt.toIso8601String(),
+      'createdAt':
+          const TimestampToDatetimeConverter().toJson(instance.createdAt),
     };

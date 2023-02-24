@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
@@ -10,24 +9,13 @@ import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
-import 'package:spimo/features/memos/presentation/controller/memos_controller.dart';
 
 class MemosHomeScreen extends HookConsumerWidget {
   const MemosHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memos = ref.watch(memosControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
-
-    useEffect(() {
-      Future(
-        () async {
-          await ref.read(memosControllerProvider.notifier).fetchBookMemos();
-        },
-      );
-      return null;
-    }, []);
 
     return Scaffold(
       backgroundColor: backgroundGray,
@@ -39,25 +27,31 @@ class MemosHomeScreen extends HookConsumerWidget {
                 Container(height: 16, color: backgroundGray),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: BookListTile(
-                    isSelected: false,
-                    book: currentBook,
-                  ),
+                  child: AsyncValueWidget(
+                      value: currentBook,
+                      data: (book) {
+                        return book == null
+                            ? const Text('no data')
+                            : BookListTile(
+                                isSelected: false,
+                                book: book,
+                              );
+                      }),
                 ),
                 Container(height: 16, color: backgroundGray),
                 Expanded(
                   child: AsyncValueWidget(
-                    value: memos,
-                    data: (memos) {
-                      return memos.isEmpty
+                    value: currentBook,
+                    data: (book) {
+                      return book == null || book.memoList.isEmpty
                           ? const Text('no data')
                           : Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
                               child: ListView.separated(
-                                itemCount: memos.length,
+                                itemCount: book.memoList.length,
                                 itemBuilder: (context, index) {
-                                  final memo = memos[index];
+                                  final memo = book.memoList[index];
                                   return Dismissible(
                                     key: UniqueKey(),
                                     background: Container(
@@ -106,8 +100,8 @@ class MemosHomeScreen extends HookConsumerWidget {
                                     },
                                     onDismissed: (DismissDirection direction) {
                                       ref
-                                          .read(
-                                              memosControllerProvider.notifier)
+                                          .read(currentBookControllerProvider
+                                              .notifier)
                                           .removeMemo(memo: memo);
                                     },
                                     child: MemoListTile(memo: memo),

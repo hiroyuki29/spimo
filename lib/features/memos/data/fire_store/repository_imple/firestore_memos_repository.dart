@@ -58,7 +58,7 @@ class FireStoreMemosRepository implements MemoStorageRepository {
     final sendMemoTextList =
         memo.contents.map((memoText) => memoText.toJson()).toList();
 
-    memoRef.set({
+    await memoRef.set({
       'id': memoRef.id,
       'contents': sendMemoTextList,
       'bookId': memo.bookId,
@@ -70,7 +70,7 @@ class FireStoreMemosRepository implements MemoStorageRepository {
     final totalMemoCount = memo.contents.fold(
         0, (previousValue, element) => previousValue + element.text.length);
     final bookRef = usersBooks(userId).doc(memo.bookId);
-    bookRef.update({
+    await bookRef.update({
       'totalMemoCount': FieldValue.increment(totalMemoCount),
     });
   }

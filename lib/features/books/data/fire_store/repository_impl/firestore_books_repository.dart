@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
+import 'package:spimo/features/memos/data/fire_store/model/firestore_memo.dart';
+import 'package:spimo/features/memos/domain/model/memo.dart';
 
 class FirestoreBooksRepository implements BookStorageRepository {
   FirestoreBooksRepository();
@@ -24,10 +26,23 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
-  Future<Book> fetchBook({required String userId, required String bookId}) {
-    final book = usersBooks(userId).doc(bookId).get().then((doc) {
+  Future<Book> fetchBook(
+      {required String userId, required String bookId}) async {
+    final book = await usersBooks(userId).doc(bookId).get().then((doc) async {
       final data = doc.data();
-      return Book.fromJson(data!);
+      final book = Book.fromJson(data!);
+
+      final memoRef = doc.reference.collection('memos');
+      final memoList = await memoRef.get().then((docList) {
+        List<Memo> dataList = docList.docs.map((doc) {
+          Map<String, dynamic> data = doc.data();
+          final firestoreMemo = FirestoreMemo.fromJson(data);
+          return firestoreMemo.transferToMemo();
+        }).toList();
+        return dataList;
+      });
+      memoList.sort(((a, b) => a.startPage!.compareTo(b.startPage!)));
+      return book.copyWith(memoList: memoList);
     });
     return book;
   }

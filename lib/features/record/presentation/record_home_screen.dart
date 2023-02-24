@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
-import 'package:spimo/features/memos/presentation/controller/memos_controller.dart';
 
 class RecordHomeScreen extends ConsumerStatefulWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
@@ -70,121 +70,130 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentBook = ref.watch(currentBookControllerProvider);
-    final memoController = ref.watch(memosControllerProvider.notifier);
+    final currentBookController =
+        ref.watch(currentBookControllerProvider.notifier);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: backgroundGray,
         appBar: CommonAppBar(context: context, title: 'Record'),
-        body: currentBook == null
-            ? const Text('no data')
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                        horizontal: 16.0,
-                      ),
-                      child: BookListTile(
-                        isSelected: false,
-                        book: currentBook,
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        _speechToText.isListening
-                            ? _lastWords
-                            : _speechEnabled
-                                ? '録音ボタンを押してメモを開始してください'
-                                : '音声認識ができない状態です',
-                      ),
-                    ),
-                    Expanded(
-                      child: ColoredBox(
-                        color: white,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _wordList.length,
-                          itemBuilder: (context, index) {
-                            final text = _wordList[index].text;
-                            final color = _wordList[index].textColor.color;
-                            return Text(
-                              text,
-                              style: TextStyle(color: color),
-                            );
-                          },
+        body: AsyncValueWidget(
+          value: currentBook,
+          data: (book) {
+            return book == null
+                ? const Text('no data')
+                : Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 16.0,
+                          ),
+                          child: BookListTile(
+                            isSelected: false,
+                            book: book,
+                          ),
                         ),
-                      ),
-                    ),
-                    sizedBoxH32,
-                    SizedBox(
-                      width: 200,
-                      height: 60,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primary,
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            _speechToText.isListening
+                                ? _lastWords
+                                : _speechEnabled
+                                    ? '録音ボタンを押してメモを開始してください'
+                                    : '音声認識ができない状態です',
+                          ),
                         ),
-                        onPressed: _speechToText.isListening ||
-                                _wordList.isEmpty ||
-                                _startPage == null
-                            ? null
-                            : () async {
-                                final memo = Memo(
-                                    id: 'id',
-                                    contents: _wordList,
-                                    startPage: _startPage,
-                                    endPage: _endPage,
-                                    bookId: currentBook.id,
-                                    createdAt: DateTime.now());
-                                memoController.addMemo(memo: memo);
-                                setState(() {
-                                  _lastWords = '';
-                                  _wordList = [];
-                                });
-                              },
-                        child: const Text('保存'),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 32),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 80,
-                            child: PageSetForm(
-                              title: '開始ページ',
-                              onChange: (value) {
-                                setState(() {
-                                  _startPage = int.tryParse(value);
-                                });
+                        Expanded(
+                          child: ColoredBox(
+                            color: white,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _wordList.length,
+                              itemBuilder: (context, index) {
+                                final text = _wordList[index].text;
+                                final color = _wordList[index].textColor.color;
+                                return Text(
+                                  text,
+                                  style: TextStyle(color: color),
+                                );
                               },
                             ),
                           ),
-                          sizedBoxW24,
-                          SizedBox(
-                            width: 80,
-                            child: PageSetForm(
-                              title: '終了ページ',
-                              onChange: (value) {
-                                setState(() {
-                                  _endPage = int.tryParse(value);
-                                });
-                              },
+                        ),
+                        sizedBoxH32,
+                        SizedBox(
+                          width: 200,
+                          height: 60,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primary,
                             ),
+                            onPressed: _speechToText.isListening ||
+                                    _wordList.isEmpty ||
+                                    _startPage == null
+                                ? null
+                                : () async {
+                                    final memo = Memo(
+                                        id: 'id',
+                                        contents: _wordList,
+                                        startPage: _startPage,
+                                        endPage: _endPage,
+                                        bookId: book.id,
+                                        createdAt: DateTime.now());
+                                    currentBookController.addMemo(
+                                      bookId: book.id,
+                                      memo: memo,
+                                    );
+                                    setState(() {
+                                      _lastWords = '';
+                                      _wordList = [];
+                                    });
+                                  },
+                            child: const Text('保存'),
                           ),
-                          const SizedBox(width: 80),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 32),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 80,
+                                child: PageSetForm(
+                                  title: '開始ページ',
+                                  onChange: (value) {
+                                    setState(() {
+                                      _startPage = int.tryParse(value);
+                                    });
+                                  },
+                                ),
+                              ),
+                              sizedBoxW24,
+                              SizedBox(
+                                width: 80,
+                                child: PageSetForm(
+                                  title: '終了ページ',
+                                  onChange: (value) {
+                                    setState(() {
+                                      _endPage = int.tryParse(value);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 80),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  );
+          },
+        ),
         floatingActionButton: _speechToText.isListening
             ? Padding(
                 padding: const EdgeInsets.only(right: 5, bottom: 10),

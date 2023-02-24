@@ -49,98 +49,106 @@ class SignUpScreen extends HookConsumerWidget {
       }
     }
 
-    return Scaffold(
-      appBar: CommonAppBar(context: context, title: '新規登録'),
-      body: SafeArea(
-          child: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              sizedBoxH16,
-              SizedBox(
-                height: 160,
-                child: IconAsset.spimoLogo,
-              ),
-              sizedBoxH32,
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: '名前（ニックネーム）',
-                ),
-                validator: (value) {
-                  String? checkedValue = value == null ? '必須項目です' : null;
-                  return checkedValue;
-                },
-                onChanged: (value) {
-                  nickName.value = value;
-                },
-              ),
-              sizedBoxH32,
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'メールアドレス',
-                ),
-                validator: (value) {
-                  String? checkedValue = Validator.email(value?.trim() ?? '');
-                  return checkedValue;
-                },
-                onChanged: (value) {
-                  email.value = value;
-                },
-              ),
-              sizedBoxH32,
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'パスワード',
-                ),
-                validator: (value) {
-                  String? checkedValue =
-                      Validator.password(value?.trim() ?? '');
-                  return checkedValue;
-                },
-                onChanged: (value) {
-                  password.value = value;
-                },
-              ),
-              const SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CommonAppBar(context: context, title: '新規登録'),
+        body: SafeArea(
+            child: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  sizedBoxH16,
+                  SizedBox(
+                    height: 160,
+                    child: IconAsset.spimoLogo,
+                  ),
+                  sizedBoxH32,
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: '名前（ニックネーム）',
+                    ),
+                    validator: (value) {
+                      String? checkedValue = value == null ? '必須項目です' : null;
+                      return checkedValue;
+                    },
+                    onChanged: (value) {
+                      nickName.value = value;
+                    },
+                  ),
+                  sizedBoxH32,
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'メールアドレス',
+                    ),
+                    validator: (value) {
+                      String? checkedValue =
+                          Validator.email(value?.trim() ?? '');
+                      return checkedValue;
+                    },
+                    onChanged: (value) {
+                      email.value = value;
+                    },
+                  ),
+                  sizedBoxH32,
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'パスワード',
+                    ),
+                    validator: (value) {
+                      String? checkedValue =
+                          Validator.password(value?.trim() ?? '');
+                      return checkedValue;
+                    },
+                    onChanged: (value) {
+                      password.value = value;
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      MinimumTextButton(
-                        text: 'ご利用規約',
-                        onTap: () async {
-                          await doLaunchingUrl(termsOfServiceUrl);
-                        },
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MinimumTextButton(
+                            text: 'ご利用規約',
+                            onTap: () async {
+                              await doLaunchingUrl(termsOfServiceUrl);
+                            },
+                          ),
+                          const Text('と'),
+                          MinimumTextButton(
+                            text: 'プライバシポリシー',
+                            onTap: () async {
+                              await doLaunchingUrl(privacyPolicyUrl);
+                            },
+                          ),
+                          const Text('に同意して、'),
+                        ],
                       ),
-                      const Text('と'),
-                      MinimumTextButton(
-                        text: 'プライバシポリシー',
-                        onTap: () async {
-                          await doLaunchingUrl(privacyPolicyUrl);
-                        },
-                      ),
-                      const Text('に同意して、'),
+                      const Text('アカウントを作成する'),
                     ],
                   ),
-                  const Text('アカウントを作成する'),
+                  sizedBoxH16,
+                  ElevatedButton(
+                    onPressed:
+                        email.value.isNotEmpty && password.value.isNotEmpty
+                            ? submit
+                            : null,
+                    child: const Text('新規登録'),
+                  ),
                 ],
               ),
-              sizedBoxH16,
-              ElevatedButton(
-                onPressed: email.value.isNotEmpty && password.value.isNotEmpty
-                    ? submit
-                    : null,
-                child: const Text('新規登録'),
-              ),
-            ],
+            ),
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 }

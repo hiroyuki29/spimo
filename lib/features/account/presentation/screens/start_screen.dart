@@ -37,61 +37,68 @@ class StartScreen extends HookConsumerWidget {
 
     return LoadingOverlay(
       isLoading: isLoading.value,
-      child: Scaffold(
-        body: SafeArea(
-            child: Form(
-          key: formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 260,
-                  child: IconAsset.spimoLogo,
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'メールアドレス',
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+              child: Form(
+            key: formKey,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 260,
+                    child: IconAsset.spimoLogo,
                   ),
-                  validator: (value) {
-                    String? checkedValue = Validator.email(value?.trim() ?? '');
-                    return checkedValue;
-                  },
-                  onChanged: (value) {
-                    email.value = value;
-                  },
-                ),
-                const SizedBox(height: 30),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'パスワード',
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'メールアドレス',
+                    ),
+                    validator: (value) {
+                      String? checkedValue =
+                          Validator.email(value?.trim() ?? '');
+                      return checkedValue;
+                    },
+                    onChanged: (value) {
+                      email.value = value;
+                    },
                   ),
-                  validator: (value) {
-                    String? checkedValue =
-                        Validator.password(value?.trim() ?? '');
-                    return checkedValue;
-                  },
-                  onChanged: (value) {
-                    password.value = value;
-                  },
-                ),
-                const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: email.value.isNotEmpty && password.value.isNotEmpty
-                      ? submit
-                      : null,
-                  child: const Text('ログイン'),
-                ),
-                const SizedBox(height: 30),
-                TextButton(
-                  onPressed: () => context.goNamed(AppRoute.signUp.name),
-                  child: const Text('新規登録'),
-                ),
-              ],
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'パスワード',
+                    ),
+                    validator: (value) {
+                      String? checkedValue =
+                          Validator.password(value?.trim() ?? '');
+                      return checkedValue;
+                    },
+                    onChanged: (value) {
+                      password.value = value;
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed:
+                        email.value.isNotEmpty && password.value.isNotEmpty
+                            ? submit
+                            : null,
+                    child: const Text('ログイン'),
+                  ),
+                  const SizedBox(height: 30),
+                  TextButton(
+                    onPressed: () => context.goNamed(AppRoute.signUp.name),
+                    child: const Text('新規登録'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )),
+          )),
+        ),
       ),
     );
   }

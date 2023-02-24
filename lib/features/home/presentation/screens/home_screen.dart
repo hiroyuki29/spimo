@@ -34,9 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(homeMemoSumWordsControllerProvider.notifier)
-          .getAllMemoWordLength();
-      ref
           .read(homeCurrentBookChartControllerProvider.notifier)
           .getChartPoints(averageRange: ChartAverageRange.five.number);
       ref.read(homeAllMemoChartControllerProvider.notifier).getChartPoints();
@@ -45,7 +42,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final sumAllMemoWors = ref.watch(homeMemoSumWordsControllerProvider);
     final currentBookChartPoints =
         ref.watch(homeCurrentBookChartControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
@@ -95,18 +91,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 width: double.infinity,
                                 child: Padding(
                                   padding: const EdgeInsets.all(16.0),
-                                  child: AsyncValueWidget(
-                                      value: sumAllMemoWors,
-                                      data: (data) {
-                                        return Center(
-                                            child: Text(
-                                          '$data字',
-                                          style: const TextStyle(
-                                            color: black,
-                                            fontSize: 20,
-                                          ),
-                                        ));
-                                      }),
+                                  child: Center(
+                                      child: Text(
+                                    '${currentBook.totalMemoCount}字',
+                                    style: const TextStyle(
+                                      color: black,
+                                      fontSize: 20,
+                                    ),
+                                  )),
                                 ),
                               ),
                             )),

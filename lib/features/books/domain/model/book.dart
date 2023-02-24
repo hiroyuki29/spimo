@@ -14,6 +14,7 @@ class Book with _$Book {
     String? imageLinks,
     int? pageCount,
     @TimestampToDatetimeConverter() required DateTime createdAt,
+    @Default(0) int totalMemoCount,
   }) = _Book;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);

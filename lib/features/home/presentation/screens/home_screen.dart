@@ -75,43 +75,45 @@ class AllMemoHomeContents extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final allMemoChartPoints = ref.watch(homeAllMemoChartControllerProvider);
 
-    return Column(
-      children: [
-        HomeContent(
-          title: '全てのメモ文字数の推移',
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            child: DecoratedBox(
-              decoration: const BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          HomeContent(
+            title: '全てのメモ文字数の推移',
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              child: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
                 ),
-              ),
-              child: SizedBox(
-                height: 250,
-                child: AsyncValueWidget(
-                  value: allMemoChartPoints,
-                  data: (data) => Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: _MemoDistributionChart(
-                      chartPoints: data.chartPointsAll,
-                      maxX: data.allDaysDuration.toDouble(),
-                      maxY: data.maxWordLength,
-                      isDateChart: true,
+                child: SizedBox(
+                  height: 250,
+                  child: AsyncValueWidget(
+                    value: allMemoChartPoints,
+                    data: (data) => Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _MemoDistributionChart(
+                        chartPoints: data.chartPointsAll,
+                        maxX: data.allDaysDuration.toDouble(),
+                        maxY: data.maxWordLength,
+                        isDateChart: true,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        sizedBoxH16,
-        const HomeContent(
-          title: 'メモランキング',
-          child: MemoRanking(),
-        ),
-      ],
+          sizedBoxH16,
+          const HomeContent(
+            title: 'メモランキング',
+            child: MemoRanking(),
+          ),
+        ],
+      ),
     );
   }
 }

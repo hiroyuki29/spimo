@@ -76,9 +76,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(
-          context: context,
-          title: 'home',
-          bottom: TabBar(controller: tabController, tabs: tabs)),
+        context: context,
+        title: 'home',
+        bottom: TabBar(
+          controller: tabController,
+          indicatorColor: primaryDark,
+          indicatorWeight: 3,
+          tabs: tabs,
+        ),
+      ),
       body: Stack(
         children: <Widget>[
           GestureDetector(

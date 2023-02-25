@@ -26,6 +26,7 @@ class BooksController extends StateNotifier<AsyncValue<List<Book>>> {
   Future<void> fetchBooks() async {
     state = const AsyncLoading();
     state = AsyncData(await bookStorageRepository.fetchBooks(userId));
+    sortByDate();
   }
 
   Future<void> addBook(Book book) async {
@@ -36,5 +37,21 @@ class BooksController extends StateNotifier<AsyncValue<List<Book>>> {
   Future<void> removeBook(Book book) async {
     await bookStorageRepository.removeBook(userId: userId, book: book);
     state = AsyncData(await bookStorageRepository.fetchBooks(userId));
+  }
+
+  void sortByDate() {
+    if (state.hasValue) {
+      final sortedList = List<Book>.from(state.requireValue)
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      state = AsyncValue.data(sortedList);
+    }
+  }
+
+  void sortByMemoCounts() {
+    if (state.hasValue) {
+      final sortedList = List<Book>.from(state.requireValue)
+        ..sort((a, b) => b.totalMemoCount.compareTo(a.totalMemoCount));
+      state = AsyncValue.data(sortedList);
+    }
   }
 }

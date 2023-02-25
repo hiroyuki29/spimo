@@ -27,6 +27,13 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
     final currentBookNotifier =
         ref.watch(currentBookControllerProvider.notifier);
 
+    // useEffect(() {
+    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //     ref.read(booksControllerProvider.notifier).sortByDate();
+    //   });
+    //   return null;
+    // }, []);
+
     return Scaffold(
       backgroundColor: backgroundGray,
       floatingActionButton: FloatingActionButton(
@@ -39,11 +46,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
       appBar: CommonAppBar(context: context, title: 'books'),
       body: AsyncValueWidget(
         value: books,
-        data: (value) =>
-            // user == null
-            //     ? const LoadingCircleIndicator()
-            //     :
-            Padding(
+        data: (value) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           child: BookListView(
             bookList: value,

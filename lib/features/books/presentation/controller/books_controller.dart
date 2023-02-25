@@ -4,6 +4,7 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
 enum BookSortType {
+  title,
   dateTime,
   ranking,
 }
@@ -20,6 +21,10 @@ final sortedBookListProvider =
   }
   List<Book> sortedList = [];
   switch (sortType) {
+    case BookSortType.title:
+      sortedList = List<Book>.from(bookList.requireValue)
+        ..sort((a, b) => a.title.compareTo(b.title));
+      return AsyncValue.data(sortedList);
     case BookSortType.dateTime:
       sortedList = List<Book>.from(bookList.requireValue)
         ..sort((a, b) => b.createdAt.compareTo(a.createdAt));

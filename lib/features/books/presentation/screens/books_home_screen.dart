@@ -25,6 +25,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
   Widget build(BuildContext context) {
     final books = ref.watch(sortedBookListProvider);
     final user = ref.watch(userControllerProvider);
+    final sortType = ref.watch(bookSortTypeProvider);
     final currentBookNotifier =
         ref.watch(currentBookControllerProvider.notifier);
 
@@ -44,7 +45,41 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      appBar: CommonAppBar(context: context, title: 'books'),
+      appBar: CommonAppBar(
+        context: context,
+        title: 'books',
+        // action: IconButton(
+        //   onPressed: () {},
+        //   icon: const Icon(Icons.sort),
+        // ),
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+                decoration: BoxDecoration(color: primaryLight),
+                child: Text("ソート項目")),
+            SortDrawerTile(
+              title: "タイトル順",
+              isSelected: sortType == BookSortType.title,
+              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                  BookSortType.title,
+            ),
+            SortDrawerTile(
+              title: "登録順",
+              isSelected: sortType == BookSortType.dateTime,
+              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                  BookSortType.dateTime,
+            ),
+            SortDrawerTile(
+              title: "メモ合計文字数順",
+              isSelected: sortType == BookSortType.ranking,
+              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                  BookSortType.ranking,
+            ),
+          ],
+        ),
+      ),
       body: AsyncValueWidget(
         value: books,
         data: (value) => Padding(
@@ -64,6 +99,48 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SortDrawerTile extends StatelessWidget {
+  const SortDrawerTile({
+    Key? key,
+    required this.title,
+    this.color = white,
+    this.radius = 8,
+    this.onTap,
+    required this.isSelected,
+  }) : super(key: key);
+
+  final String title;
+  final VoidCallback? onTap;
+  final Color color;
+  final double radius;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      // tileColor: isSelected ? accent.withOpacity(0.3) : color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      leading: isSelected
+          ? const Icon(
+              Icons.check,
+              color: accent,
+              size: 30,
+            )
+          : null,
+      title: Text(
+        title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.subtitle2,
       ),
     );
   }

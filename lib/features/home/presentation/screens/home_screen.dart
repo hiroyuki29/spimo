@@ -108,30 +108,23 @@ class AllMemoHomeContents extends ConsumerWidget {
   }
 }
 
-class CurrentBookHomeContents extends StatefulHookConsumerWidget {
+class CurrentBookHomeContents extends HookConsumerWidget {
   const CurrentBookHomeContents({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _CurrentBookHomeContentsState();
-}
-
-class _CurrentBookHomeContentsState
-    extends ConsumerState<CurrentBookHomeContents> {
-  ChartAverageRange chartAvarageRange = ChartAverageRange.five;
-
-  Future<void> setChartAverageRage(Book currentBook) async {
-    ref.read(homeCurrentBookChartControllerProvider.notifier).getChartPoints(
-          averageRange: chartAvarageRange.number,
-          currentBook: currentBook,
-        );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final currentBookChartPoints =
         ref.watch(homeCurrentBookChartControllerProvider);
     final currentBook = ref.watch(currentBookControllerProvider);
+    final chartAvarageRange =
+        useState<ChartAverageRange>(ChartAverageRange.five);
+
+    Future<void> setChartAverageRage(Book currentBook) async {
+      ref.read(homeCurrentBookChartControllerProvider.notifier).getChartPoints(
+            averageRange: chartAvarageRange.value.number,
+            currentBook: currentBook,
+          );
+    }
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -214,47 +207,43 @@ class _CurrentBookHomeContentsState
                               children: [
                                 ChartRageChip(
                                   title: '1',
-                                  isActive: chartAvarageRange ==
+                                  isActive: chartAvarageRange.value ==
                                       ChartAverageRange.one,
                                   onSelected: (_) {
-                                    setState(() {
-                                      chartAvarageRange = ChartAverageRange.one;
-                                    });
+                                    chartAvarageRange.value =
+                                        ChartAverageRange.one;
                                     setChartAverageRage(book);
                                   },
                                 ),
                                 ChartRageChip(
                                   title: '5',
-                                  isActive: chartAvarageRange ==
+                                  isActive: chartAvarageRange.value ==
                                       ChartAverageRange.five,
                                   onSelected: (_) {
-                                    setState(() {
-                                      chartAvarageRange =
-                                          ChartAverageRange.five;
-                                    });
+                                    chartAvarageRange.value =
+                                        ChartAverageRange.five;
+
                                     setChartAverageRage(book);
                                   },
                                 ),
                                 ChartRageChip(
                                   title: '10',
-                                  isActive: chartAvarageRange ==
+                                  isActive: chartAvarageRange.value ==
                                       ChartAverageRange.ten,
                                   onSelected: (_) {
-                                    setState(() {
-                                      chartAvarageRange = ChartAverageRange.ten;
-                                    });
+                                    chartAvarageRange.value =
+                                        ChartAverageRange.ten;
+
                                     setChartAverageRage(book);
                                   },
                                 ),
                                 ChartRageChip(
                                   title: '20',
-                                  isActive: chartAvarageRange ==
+                                  isActive: chartAvarageRange.value ==
                                       ChartAverageRange.twenty,
                                   onSelected: (_) {
-                                    setState(() {
-                                      chartAvarageRange =
-                                          ChartAverageRange.twenty;
-                                    });
+                                    chartAvarageRange.value =
+                                        ChartAverageRange.twenty;
                                     setChartAverageRage(book);
                                   },
                                 ),

@@ -8,6 +8,7 @@ import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
+import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_controller.dart';
@@ -101,8 +102,88 @@ class AllMemoHomeContents extends ConsumerWidget {
                 ),
               ),
             ),
+            sizedBoxH16,
+            const MemoRanking(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class MemoRanking extends HookConsumerWidget {
+  const MemoRanking({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final books = ref.watch(sortedBookListProvider);
+    final pageController = usePageController(viewportFraction: 0.7);
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(bookSortTypeProvider.notifier).state = BookSortType.ranking;
+      });
+      return null;
+    }, []);
+
+    return AsyncValueWidget(
+      value: books,
+      data: (books) => SizedBox(
+        height: 100,
+        child: PageView.builder(
+            padEnds: false,
+            controller: pageController,
+            itemCount: books.length,
+            itemBuilder: ((context, index) {
+              final book = books[index];
+              return Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: Container(
+                  color: primary,
+                  child: Row(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.network(
+                        book.imageLinks ?? '',
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(
+                            Icons.image_not_supported_outlined,
+                          );
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 150,
+                        child: Column(
+                          children: [
+                            Text(
+                              book.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            Text(
+                              book.authors.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                            Text(
+                              '${book.pageCount.toString()}ページ',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ]),
+                ),
+              );
+            })),
       ),
     );
   }

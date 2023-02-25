@@ -5,6 +5,7 @@ import 'package:spimo/common_widget/color/color.dart';
 AppBar CommonAppBar({
   required BuildContext context,
   required String title,
+  Widget? action,
   PreferredSizeWidget? bottom,
 }) {
   return AppBar(
@@ -26,6 +27,7 @@ AppBar CommonAppBar({
       bottom: BorderSide(width: 1, color: primaryDark),
     ),
     elevation: 0,
+    actions: action == null ? null : [action],
     bottom: bottom,
   );
 }

@@ -3,6 +3,34 @@ import 'package:spimo/features/account/presentation/controller/user_controller.d
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 
+enum BookSortType {
+  dateTime,
+  ranking,
+}
+
+final bookSortTypeProvider =
+    StateProvider<BookSortType>((ref) => BookSortType.dateTime);
+
+final sortedBookListProvider =
+    Provider.autoDispose<AsyncValue<List<Book>>>((ref) {
+  final sortType = ref.watch(bookSortTypeProvider);
+  final bookList = ref.watch(booksControllerProvider);
+  if (!bookList.hasValue) {
+    return const AsyncData([]);
+  }
+  List<Book> sortedList = [];
+  switch (sortType) {
+    case BookSortType.dateTime:
+      sortedList = List<Book>.from(bookList.requireValue)
+        ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return AsyncValue.data(sortedList);
+    case BookSortType.ranking:
+      sortedList = List<Book>.from(bookList.requireValue)
+        ..sort((a, b) => b.totalMemoCount.compareTo(a.totalMemoCount));
+      return AsyncValue.data(sortedList);
+  }
+});
+
 final booksControllerProvider =
     StateNotifierProvider.autoDispose<BooksController, AsyncValue<List<Book>>>(
         (ref) {
@@ -26,7 +54,6 @@ class BooksController extends StateNotifier<AsyncValue<List<Book>>> {
   Future<void> fetchBooks() async {
     state = const AsyncLoading();
     state = AsyncData(await bookStorageRepository.fetchBooks(userId));
-    sortByDate();
   }
 
   Future<void> addBook(Book book) async {

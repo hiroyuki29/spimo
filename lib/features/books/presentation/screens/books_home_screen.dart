@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
@@ -22,17 +23,17 @@ class BooksHomeScreen extends StatefulHookConsumerWidget {
 class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final books = ref.watch(booksControllerProvider);
+    final books = ref.watch(sortedBookListProvider);
     final user = ref.watch(userControllerProvider);
     final currentBookNotifier =
         ref.watch(currentBookControllerProvider.notifier);
 
-    // useEffect(() {
-    //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //     ref.read(booksControllerProvider.notifier).sortByDate();
-    //   });
-    //   return null;
-    // }, []);
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        ref.read(bookSortTypeProvider.notifier).state = BookSortType.dateTime;
+      });
+      return null;
+    }, []);
 
     return Scaffold(
       backgroundColor: backgroundGray,

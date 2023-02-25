@@ -112,6 +112,7 @@ class AllMemoHomeContents extends ConsumerWidget {
             title: 'メモランキング',
             child: MemoRanking(),
           ),
+          sizedBoxH16,
         ],
       ),
     );

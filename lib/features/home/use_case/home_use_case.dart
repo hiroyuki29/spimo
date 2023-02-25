@@ -28,6 +28,9 @@ class HomeUseCase {
   }) async {
     final book =
         await bookStorageRepository.fetchBook(userId: userId, bookId: bookId);
+    if (book == null) {
+      return [];
+    }
     final memos = await memoStorageRepository.fetchBookMemos(
         userId: userId, bookId: bookId);
 
@@ -131,14 +134,13 @@ class HomeUseCase {
     final wordAndPageMap = List.filled(allDuration + 1, 0.0);
     double memoLength = 0;
     double sumWordLength = 0;
-    DateTime checkingDate = initialDay;
+    DateTime checkingDate = initialDay.subtract(const Duration(days: 1));
     int checkingDuration = 0;
 
     for (MemoLengthStock memo in memos) {
+      int durationDifference = memo.date.difference(checkingDate).inDays;
       memoLength = memo.memoLength.toDouble();
       sumWordLength += memoLength;
-
-      int durationDifference = memo.date.difference(checkingDate).inDays;
 
       if (durationDifference != 0) {
         for (int i = 1; i <= durationDifference; i++) {

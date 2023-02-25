@@ -20,103 +20,99 @@ class MemosHomeScreen extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(context: context, title: 'memos'),
-      body: currentBook == null
-          ? const Text('no data')
-          : Column(
-              children: [
-                Container(height: 16, color: backgroundGray),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: AsyncValueWidget(
-                      value: currentBook,
-                      data: (book) {
-                        return book == null
-                            ? const Text('no data')
-                            : BookListTile(
-                                isSelected: false,
-                                book: book,
-                              );
-                      }),
-                ),
-                Container(height: 16, color: backgroundGray),
-                Expanded(
-                  child: AsyncValueWidget(
-                    value: currentBook,
-                    data: (book) {
-                      return book == null || book.memoList.isEmpty
-                          ? const Text('no data')
-                          : Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: ListView.separated(
-                                itemCount: book.memoList.length,
-                                itemBuilder: (context, index) {
-                                  final memo = book.memoList[index];
-                                  return Dismissible(
-                                    key: UniqueKey(),
-                                    background: Container(
-                                      color: Colors.red,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: const [
-                                          sizedBoxW24,
-                                          Icon(Icons.delete,
-                                              color: Colors.white),
-                                        ],
-                                      ),
-                                    ),
-                                    secondaryBackground: Container(
-                                      color: Colors.red,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: const [
-                                          Icon(Icons.delete,
-                                              color: Colors.white),
-                                          sizedBoxW24,
-                                        ],
-                                      ),
-                                    ),
-                                    confirmDismiss:
-                                        (DismissDirection direction) async {
-                                      return await showCupertinoDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return CustomAlertDialog(
-                                            title: 'メモの削除します。\nよろしいですか？',
-                                            content: '削除すると元に戻すことはできません。',
-                                            leftText: '削除',
-                                            rightText: 'キャンセル',
-                                            onTapLeft: () {
-                                              Navigator.of(context).pop(true);
-                                            },
-                                            onTapRight: () {
-                                              Navigator.of(context).pop(false);
-                                            },
-                                          );
+      body: AsyncValueWidget(
+        value: currentBook,
+        data: (data) => Column(
+          children: [
+            Container(height: 16, color: backgroundGray),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: AsyncValueWidget(
+                  value: currentBook,
+                  data: (book) {
+                    return book == null
+                        ? const Text('no data')
+                        : BookListTile(
+                            isSelected: false,
+                            book: book,
+                          );
+                  }),
+            ),
+            Container(height: 16, color: backgroundGray),
+            Expanded(
+              child: AsyncValueWidget(
+                value: currentBook,
+                data: (book) {
+                  return book == null || book.memoList.isEmpty
+                      ? const Text('no data')
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ListView.separated(
+                            itemCount: book.memoList.length,
+                            itemBuilder: (context, index) {
+                              final memo = book.memoList[index];
+                              return Dismissible(
+                                key: UniqueKey(),
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: const [
+                                      sizedBoxW24,
+                                      Icon(Icons.delete, color: Colors.white),
+                                    ],
+                                  ),
+                                ),
+                                secondaryBackground: Container(
+                                  color: Colors.red,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: const [
+                                      Icon(Icons.delete, color: Colors.white),
+                                      sizedBoxW24,
+                                    ],
+                                  ),
+                                ),
+                                confirmDismiss:
+                                    (DismissDirection direction) async {
+                                  return await showCupertinoDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return CustomAlertDialog(
+                                        title: 'メモの削除します。\nよろしいですか？',
+                                        content: '削除すると元に戻すことはできません。',
+                                        leftText: '削除',
+                                        rightText: 'キャンセル',
+                                        onTapLeft: () {
+                                          Navigator.of(context).pop(true);
+                                        },
+                                        onTapRight: () {
+                                          Navigator.of(context).pop(false);
                                         },
                                       );
                                     },
-                                    onDismissed: (DismissDirection direction) {
-                                      ref
-                                          .read(currentBookControllerProvider
-                                              .notifier)
-                                          .removeMemo(memo: memo);
-                                    },
-                                    child: MemoListTile(memo: memo),
                                   );
                                 },
-                                separatorBuilder: (context, index) {
-                                  return sizedBoxH8;
+                                onDismissed: (DismissDirection direction) {
+                                  ref
+                                      .read(currentBookControllerProvider
+                                          .notifier)
+                                      .removeMemo(memo: memo);
                                 },
-                              ),
-                            );
-                    },
-                  ),
-                ),
-              ],
+                                child: MemoListTile(memo: memo),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return sizedBoxH8;
+                            },
+                          ),
+                        );
+                },
+              ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

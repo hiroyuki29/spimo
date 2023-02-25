@@ -30,4 +30,11 @@ class UserController extends StateNotifier<AppUser?> {
     }
     state = state!.copyWith(currentBookId: bookId);
   }
+
+  Future<void> resetCurrentBookId() async {
+    if (state == null) {
+      return;
+    }
+    state = state!.copyWith(currentBookId: '');
+  }
 }

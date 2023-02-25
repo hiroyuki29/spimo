@@ -26,11 +26,14 @@ class FirestoreBooksRepository implements BookStorageRepository {
   }
 
   @override
-  Future<Book> fetchBook(
+  Future<Book?> fetchBook(
       {required String userId, required String bookId}) async {
     final book = await usersBooks(userId).doc(bookId).get().then((doc) async {
       final data = doc.data();
-      final book = Book.fromJson(data!);
+      if (data == null) {
+        return null;
+      }
+      final book = Book.fromJson(data);
 
       final memoRef = doc.reference.collection('memos');
       final memoList = await memoRef.get().then((docList) {
@@ -51,6 +54,11 @@ class FirestoreBooksRepository implements BookStorageRepository {
   Future<void> setCurrentBookId(
       {required String userId, required String bookId}) async {
     await db.collection('users').doc(userId).update({'currentBookId': bookId});
+  }
+
+  @override
+  Future<void> resetCurrentBookId({required String userId}) async {
+    await db.collection('users').doc(userId).update({'currentBookId': ''});
   }
 
   @override

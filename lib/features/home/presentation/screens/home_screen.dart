@@ -53,8 +53,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 .getChartPoints(
                     averageRange: ChartAverageRange.five.number,
                     currentBook: book));
-
-        ref.read(homeAllMemoChartControllerProvider.notifier).getChartPoints();
       });
       return null;
     }, [currentBook]);
@@ -70,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: AsyncValueWidget(
                 value: currentBook,
                 data: (book) => book == null
-                    ? const LoadingCircleIndicator()
+                    ? const Text('no data')
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

@@ -8,9 +8,10 @@ final bookStorageProvider = Provider.autoDispose<BookStorageRepository>((ref) {
 
 abstract class BookStorageRepository {
   Future<List<Book>> fetchBooks(String userId);
-  Future<Book> fetchBook({required String userId, required String bookId});
+  Future<Book?> fetchBook({required String userId, required String bookId});
   Future<void> setCurrentBookId(
       {required String userId, required String bookId});
+  Future<void> resetCurrentBookId({required String userId});
   Future<void> addBook({required String userId, required Book book});
   Future<void> removeBook({required String userId, required Book book});
 }

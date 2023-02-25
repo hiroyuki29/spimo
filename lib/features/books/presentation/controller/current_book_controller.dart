@@ -40,6 +40,14 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
     await fetchCurrentBook();
   }
 
+  Future<void> resetCurrentBookId(String bookId) async {
+    await bookStorageRepository.resetCurrentBookId(
+      userId: userController.state!.id,
+    );
+    await userController.resetCurrentBookId();
+    await fetchCurrentBook();
+  }
+
   Future<void> fetchCurrentBook() async {
     state = const AsyncLoading();
     if (userController.state!.currentBookId != '') {
@@ -48,6 +56,10 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
         bookId: userController.state!.currentBookId,
       ));
     }
+  }
+
+  Future<void> reset() async {
+    state = const AsyncData(null);
   }
 
   // Future<void> fetchBookMemos() async {

@@ -19,11 +19,11 @@ class BooksUseCase {
   final BookStorageRepository bookStorageRepository;
   final MemoStorageRepository memoStorageRepository;
 
-  Future<Book> fetchBook({
+  Future<Book?> fetchBook({
     required String userId,
     required String bookId,
   }) async {
-    Book book = await bookStorageRepository.fetchBook(
+    Book? book = await bookStorageRepository.fetchBook(
       userId: userId,
       bookId: bookId,
     );

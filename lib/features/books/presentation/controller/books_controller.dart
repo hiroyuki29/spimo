@@ -17,7 +17,7 @@ final sortedBookListProvider =
   final sortType = ref.watch(bookSortTypeProvider);
   final bookList = ref.watch(booksControllerProvider);
   if (!bookList.hasValue) {
-    return const AsyncData([]);
+    return const AsyncLoading();
   }
   List<Book> sortedList = [];
   switch (sortType) {

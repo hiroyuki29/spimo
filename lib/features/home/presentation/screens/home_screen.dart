@@ -6,7 +6,6 @@ import 'package:spimo/common_method/datetime_formatter.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
-import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
@@ -44,6 +43,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final currentBook = ref.watch(currentBookControllerProvider);
     final allMemoChartPoints = ref.watch(homeAllMemoChartControllerProvider);
 
+    final tabController = useTabController(initialLength: 2);
+
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         currentBook.whenData((book) => book == null
@@ -57,193 +58,221 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return null;
     }, [currentBook]);
 
+    List<Widget> tabs = [
+      const Tab(
+        child: Text(
+          'currentBook',
+          style: TextStyle(color: primaryDark),
+        ),
+      ),
+      const Tab(
+        child: Text(
+          'all',
+          style: TextStyle(color: primaryDark),
+        ),
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: backgroundGray,
-      appBar: CommonAppBar(context: context, title: 'home'),
+      appBar: CommonAppBar(
+          context: context,
+          title: 'home',
+          bottom: TabBar(controller: tabController, tabs: tabs)),
       body: Stack(
         children: <Widget>[
           GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: SingleChildScrollView(
-              child: AsyncValueWidget(
-                value: currentBook,
-                data: (book) => book == null
-                    ? const Text('no data')
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          HomeContent(
-                            title: '現在選択中の本',
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: BookListTile(
-                                isSelected: false,
-                                book: book,
-                                color: white,
-                              ),
-                            ),
-                          ),
-                          sizedBoxH24,
-                          HomeContent(
-                            title: '合計メモ文字数',
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: DecoratedBox(
-                                  decoration: const BoxDecoration(
+            child: TabBarView(
+              controller: tabController,
+              children: [
+                SingleChildScrollView(
+                  child: AsyncValueWidget(
+                    value: currentBook,
+                    data: (book) => book == null
+                        ? const Text('no data')
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              HomeContent(
+                                title: '現在選択中の本',
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: BookListTile(
+                                    isSelected: false,
+                                    book: book,
                                     color: white,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                  ),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
-                                      child: Center(
-                                          child: Text(
-                                        '${book.totalMemoCount}字',
-                                        style: const TextStyle(
-                                          color: black,
-                                          fontSize: 20,
-                                        ),
-                                      )),
-                                    ),
-                                  ),
-                                )),
-                          ),
-                          sizedBoxH24,
-                          HomeContent(
-                            title: '各ページに対するメモ文字数',
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 6),
-                              child: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
                                   ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    sizedBoxH8,
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                              ),
+                              sizedBoxH24,
+                              HomeContent(
+                                title: '合計メモ文字数',
+                                child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    child: DecoratedBox(
+                                      decoration: const BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(8),
+                                        ),
+                                      ),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child: Center(
+                                              child: Text(
+                                            '${book.totalMemoCount}字',
+                                            style: const TextStyle(
+                                              color: black,
+                                              fontSize: 20,
+                                            ),
+                                          )),
+                                        ),
+                                      ),
+                                    )),
+                              ),
+                              sizedBoxH24,
+                              HomeContent(
+                                title: '各ページに対するメモ文字数',
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: DecoratedBox(
+                                    decoration: const BoxDecoration(
+                                      color: white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                    child: Column(
                                       children: [
-                                        ChartRageChip(
-                                          title: '1',
-                                          isActive: chartAvarageRange ==
-                                              ChartAverageRange.one,
-                                          onSelected: (_) {
-                                            setState(() {
-                                              chartAvarageRange =
-                                                  ChartAverageRange.one;
-                                            });
-                                            setChartAverageRage(book);
-                                          },
+                                        sizedBoxH8,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ChartRageChip(
+                                              title: '1',
+                                              isActive: chartAvarageRange ==
+                                                  ChartAverageRange.one,
+                                              onSelected: (_) {
+                                                setState(() {
+                                                  chartAvarageRange =
+                                                      ChartAverageRange.one;
+                                                });
+                                                setChartAverageRage(book);
+                                              },
+                                            ),
+                                            ChartRageChip(
+                                              title: '5',
+                                              isActive: chartAvarageRange ==
+                                                  ChartAverageRange.five,
+                                              onSelected: (_) {
+                                                setState(() {
+                                                  chartAvarageRange =
+                                                      ChartAverageRange.five;
+                                                });
+                                                setChartAverageRage(book);
+                                              },
+                                            ),
+                                            ChartRageChip(
+                                              title: '10',
+                                              isActive: chartAvarageRange ==
+                                                  ChartAverageRange.ten,
+                                              onSelected: (_) {
+                                                setState(() {
+                                                  chartAvarageRange =
+                                                      ChartAverageRange.ten;
+                                                });
+                                                setChartAverageRage(book);
+                                              },
+                                            ),
+                                            ChartRageChip(
+                                              title: '20',
+                                              isActive: chartAvarageRange ==
+                                                  ChartAverageRange.twenty,
+                                              onSelected: (_) {
+                                                setState(() {
+                                                  chartAvarageRange =
+                                                      ChartAverageRange.twenty;
+                                                });
+                                                setChartAverageRage(book);
+                                              },
+                                            ),
+                                          ],
                                         ),
-                                        ChartRageChip(
-                                          title: '5',
-                                          isActive: chartAvarageRange ==
-                                              ChartAverageRange.five,
-                                          onSelected: (_) {
-                                            setState(() {
-                                              chartAvarageRange =
-                                                  ChartAverageRange.five;
-                                            });
-                                            setChartAverageRage(book);
-                                          },
-                                        ),
-                                        ChartRageChip(
-                                          title: '10',
-                                          isActive: chartAvarageRange ==
-                                              ChartAverageRange.ten,
-                                          onSelected: (_) {
-                                            setState(() {
-                                              chartAvarageRange =
-                                                  ChartAverageRange.ten;
-                                            });
-                                            setChartAverageRage(book);
-                                          },
-                                        ),
-                                        ChartRageChip(
-                                          title: '20',
-                                          isActive: chartAvarageRange ==
-                                              ChartAverageRange.twenty,
-                                          onSelected: (_) {
-                                            setState(() {
-                                              chartAvarageRange =
-                                                  ChartAverageRange.twenty;
-                                            });
-                                            setChartAverageRage(book);
-                                          },
+                                        SizedBox(
+                                          height: 250,
+                                          child: AsyncValueWidget(
+                                            value: currentBookChartPoints,
+                                            data: (data) => Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: _MemoDistributionChart(
+                                                chartPoints:
+                                                    data.chartPointsAll,
+                                                secoundaryChartPoints:
+                                                    data.chartPointsOnlyRed,
+                                                isStepLineChart: true,
+                                                maxX: data.pageCount.toDouble(),
+                                                maxY: data.maxWordLength,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 250,
-                                      child: AsyncValueWidget(
-                                        value: currentBookChartPoints,
-                                        data: (data) => Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: _MemoDistributionChart(
-                                            chartPoints: data.chartPointsAll,
-                                            secoundaryChartPoints:
-                                                data.chartPointsOnlyRed,
-                                            isStepLineChart: true,
-                                            maxX: data.pageCount.toDouble(),
-                                            maxY: data.maxWordLength,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          sizedBoxH16,
-                          HomeContent(
-                            title: 'すべてのメモ文字数の遷移',
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 6),
-                              child: DecoratedBox(
-                                decoration: const BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8),
                                   ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    sizedBoxH8,
-                                    SizedBox(
-                                      height: 250,
-                                      child: AsyncValueWidget(
-                                        value: allMemoChartPoints,
-                                        data: (data) => Padding(
-                                          padding: const EdgeInsets.all(16),
-                                          child: _MemoDistributionChart(
-                                            chartPoints: data.chartPointsAll,
-                                            maxX:
-                                                data.allDaysDuration.toDouble(),
-                                            maxY: data.maxWordLength,
-                                            isDateChart: true,
-                                          ),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+                AsyncValueWidget(
+                  value: currentBook,
+                  data: (book) => book == null
+                      ? const Text('no data')
+                      : HomeContent(
+                          title: 'すべてのメモ文字数の遷移',
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
+                            child: DecoratedBox(
+                              decoration: const BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  sizedBoxH8,
+                                  SizedBox(
+                                    height: 250,
+                                    child: AsyncValueWidget(
+                                      value: allMemoChartPoints,
+                                      data: (data) => Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: _MemoDistributionChart(
+                                          chartPoints: data.chartPointsAll,
+                                          maxX: data.allDaysDuration.toDouble(),
+                                          maxY: data.maxWordLength,
+                                          isDateChart: true,
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-              ),
+                        ),
+                ),
+              ],
             ),
           ),
         ],

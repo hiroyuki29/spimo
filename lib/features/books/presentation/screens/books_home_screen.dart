@@ -53,9 +53,12 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
       endDrawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
-                decoration: BoxDecoration(color: primaryLight),
-                child: Text("ソート項目")),
+            const SizedBox(
+              height: 60,
+              child: DrawerHeader(
+                  decoration: BoxDecoration(color: primaryLight),
+                  child: Text("ソート項目")),
+            ),
             SortDrawerTile(
               title: "タイトル順",
               isSelected: sortType == BookSortType.title,
@@ -132,25 +135,29 @@ class SortDrawerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      // tileColor: isSelected ? accent.withOpacity(0.3) : color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      leading: isSelected
-          ? const Icon(
-              Icons.check,
-              color: accent,
-              size: 30,
-            )
-          : null,
-      title: Text(
-        title,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.subtitle2,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        onTap: onTap,
+        tileColor: isSelected ? accent.withOpacity(0.3) : color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        leading: isSelected
+            ? const Icon(
+                Icons.check,
+                color: accent,
+                size: 30,
+              )
+            : null,
+        title: Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
       ),
     );
   }

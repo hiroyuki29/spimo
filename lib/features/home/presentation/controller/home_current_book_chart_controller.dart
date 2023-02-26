@@ -18,7 +18,7 @@ enum ChartAverageRange {
 
 final homeCurrentBookChartControllerProvider =
     StateNotifierProvider.autoDispose<HomeCurrentBookChartController,
-        AsyncValue<PageChartViewModel>>((ref) {
+        AsyncValue<PageChartViewModel?>>((ref) {
   return HomeCurrentBookChartController(
     homeUseCase: ref.watch(homeUseCaseProvider),
     userId: ref.watch(userControllerProvider)!.id,
@@ -26,7 +26,7 @@ final homeCurrentBookChartControllerProvider =
 });
 
 class HomeCurrentBookChartController
-    extends StateNotifier<AsyncValue<PageChartViewModel>> {
+    extends StateNotifier<AsyncValue<PageChartViewModel?>> {
   HomeCurrentBookChartController({
     required this.homeUseCase,
     required this.userId,
@@ -44,6 +44,10 @@ class HomeCurrentBookChartController
       bookId: currentBook.id,
       averageRange: averageRange,
     );
+    if (chartPoints.isEmpty) {
+      state = const AsyncData(null);
+      return;
+    }
     double maxWordLength = homeUseCase.getMaxWordLength(chartPoints[0]);
     state = AsyncData(
       PageChartViewModel(

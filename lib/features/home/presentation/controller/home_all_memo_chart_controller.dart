@@ -5,7 +5,7 @@ import 'package:spimo/features/home/presentation/controller/view_model/date_char
 import 'package:spimo/features/home/use_case/home_use_case.dart';
 
 final homeAllMemoChartControllerProvider = StateNotifierProvider.autoDispose<
-    HomeAllMemoChartController, AsyncValue<DateChartViewModel>>((ref) {
+    HomeAllMemoChartController, AsyncValue<DateChartViewModel?>>((ref) {
   return HomeAllMemoChartController(
     homeUseCase: ref.watch(homeUseCaseProvider),
     // currentBook: ref.watch(currentBookControllerProvider),
@@ -14,11 +14,11 @@ final homeAllMemoChartControllerProvider = StateNotifierProvider.autoDispose<
 });
 
 class HomeAllMemoChartController
-    extends StateNotifier<AsyncValue<DateChartViewModel>> {
+    extends StateNotifier<AsyncValue<DateChartViewModel?>> {
   HomeAllMemoChartController({
     required this.homeUseCase,
     required this.userId,
-  }) : super(const AsyncLoading()) {
+  }) : super(const AsyncData(null)) {
     getChartPoints();
   }
 
@@ -32,6 +32,7 @@ class HomeAllMemoChartController
     List<FlSpot> chartPoints =
         await homeUseCase.createAllMemoChartPoints(userId);
     if (chartPoints.isEmpty) {
+      state = const AsyncData(null);
       return;
     }
     double maxWordLength = chartPoints.last.y;

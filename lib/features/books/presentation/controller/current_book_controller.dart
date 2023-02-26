@@ -50,12 +50,15 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
 
   Future<void> fetchCurrentBook() async {
     state = const AsyncLoading();
-    if (userController.state!.currentBookId != '') {
-      state = AsyncData(await booksUseCase.fetchBook(
-        userId: userController.state!.id,
-        bookId: userController.state!.currentBookId,
-      ));
+    if (userController.state!.currentBookId == '') {
+      state = const AsyncData(null);
+      return;
     }
+
+    state = AsyncData(await booksUseCase.fetchBook(
+      userId: userController.state!.id,
+      bookId: userController.state!.currentBookId,
+    ));
   }
 
   Future<void> reset() async {

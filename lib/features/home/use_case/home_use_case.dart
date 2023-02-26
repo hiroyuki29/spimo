@@ -28,11 +28,15 @@ class HomeUseCase {
   }) async {
     final book =
         await bookStorageRepository.fetchBook(userId: userId, bookId: bookId);
-    if (book == null) {
+    if (book == null || book.pageCount == null || book.pageCount == 0) {
       return [];
     }
     final memos = await memoStorageRepository.fetchBookMemos(
         userId: userId, bookId: bookId);
+
+    if (memos.isEmpty) {
+      return [];
+    }
 
     final memosWithStartPage =
         memos.where((memo) => memo.startPage != null).toList();

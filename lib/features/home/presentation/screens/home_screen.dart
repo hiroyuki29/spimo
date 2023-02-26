@@ -1,11 +1,14 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_method/datetime_formatter.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/compornent/no_data_display_widget.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
@@ -14,6 +17,7 @@ import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.d
 import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_controller.dart';
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -93,15 +97,24 @@ class AllMemoHomeContents extends ConsumerWidget {
                   height: 250,
                   child: AsyncValueWidget(
                     value: allMemoChartPoints,
-                    data: (data) => Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: _MemoDistributionChart(
-                        chartPoints: data.chartPointsAll,
-                        maxX: data.allDaysDuration.toDouble(),
-                        maxY: data.maxWordLength,
-                        isDateChart: true,
-                      ),
-                    ),
+                    data: (data) => data == null
+                        ? NoDataDisplayWidget(
+                            text: 'まだ保存したメモはありません。\n早速メモしてみましょう！',
+                            icon: IconAsset.speech,
+                            iconSize: 100,
+                            onTap: () => context.goNamed(
+                              AppRoute.record.name,
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: _MemoDistributionChart(
+                              chartPoints: data.chartPointsAll,
+                              maxX: data.allDaysDuration.toDouble(),
+                              maxY: data.maxWordLength,
+                              isDateChart: true,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -140,47 +153,53 @@ class MemoRanking extends HookConsumerWidget {
 
     return AsyncValueWidget(
       value: books,
-      data: (books) => SizedBox(
-        height: 150,
-        child: PageView.builder(
-            padEnds: false,
-            controller: pageController,
-            itemCount: books.length,
-            itemBuilder: ((context, index) {
-              final book = books[index];
-              return Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: MemoRankingTile(
-                        rankingTileWidth: rankingTileWidth,
-                        book: book,
-                      ),
-                    ),
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: accent),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 8),
-                          child: Text(
-                            (index + 1).toString(),
-                            style: const TextStyle(color: white),
+      data: (books) => books.isEmpty
+          ? NoDataDisplayWidget(
+              text: 'まだランキングはありません。\n本を登録してメモを始めよう！',
+              icon: IconAsset.memo,
+              iconSize: 100,
+            )
+          : SizedBox(
+              height: 150,
+              child: PageView.builder(
+                  padEnds: false,
+                  controller: pageController,
+                  itemCount: books.length,
+                  itemBuilder: ((context, index) {
+                    final book = books[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MemoRankingTile(
+                              rankingTileWidth: rankingTileWidth,
+                              book: book,
+                            ),
                           ),
-                        ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: accent),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                child: Text(
+                                  (index + 1).toString(),
+                                  style: const TextStyle(color: white),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              );
-            })),
-      ),
+                    );
+                  })),
+            ),
     );
   }
 }
@@ -300,7 +319,11 @@ class CurrentBookHomeContents extends HookConsumerWidget {
       child: AsyncValueWidget(
         value: currentBook,
         data: (book) => book == null
-            ? const Text('no data')
+            ? NoDataDisplayWidget(
+                text: '選択中の本はありません。\n今読んでいる本を選択しよう！',
+                icon: IconAsset.book,
+                onTap: () => context.goNamed(AppRoute.books.name),
+              )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -410,17 +433,26 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                               height: 250,
                               child: AsyncValueWidget(
                                 value: currentBookChartPoints,
-                                data: (data) => Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: _MemoDistributionChart(
-                                    chartPoints: data.chartPointsAll,
-                                    secoundaryChartPoints:
-                                        data.chartPointsOnlyRed,
-                                    isStepLineChart: true,
-                                    maxX: data.pageCount.toDouble(),
-                                    maxY: data.maxWordLength,
-                                  ),
-                                ),
+                                data: (data) => data == null
+                                    ? NoDataDisplayWidget(
+                                        text: 'まだ保存したメモはありません。\n早速メモしてみましょう！',
+                                        icon: IconAsset.speech,
+                                        iconSize: 100,
+                                        onTap: () => context.goNamed(
+                                          AppRoute.record.name,
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: _MemoDistributionChart(
+                                          chartPoints: data.chartPointsAll,
+                                          secoundaryChartPoints:
+                                              data.chartPointsOnlyRed,
+                                          isStepLineChart: true,
+                                          maxX: data.pageCount.toDouble(),
+                                          maxY: data.maxWordLength,
+                                        ),
+                                      ),
                               ),
                             ),
                           ],

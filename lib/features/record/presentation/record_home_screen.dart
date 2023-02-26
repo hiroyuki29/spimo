@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/compornent/no_data_display_widget.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class RecordHomeScreen extends ConsumerStatefulWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
@@ -82,7 +86,11 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
           value: currentBook,
           data: (book) {
             return book == null
-                ? const Text('no data')
+                ? NoDataDisplayWidget(
+                    text: '選択中の本はありません。\n今読んでいる本を選択しよう！',
+                    icon: IconAsset.book,
+                    onTap: () => context.goNamed(AppRoute.books.name),
+                  )
                 : Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

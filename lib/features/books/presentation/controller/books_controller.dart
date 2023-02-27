@@ -61,6 +61,19 @@ class BooksController extends StateNotifier<AsyncValue<List<Book>>> {
     state = AsyncData(await bookStorageRepository.fetchBooks(userId));
   }
 
+  bool checkAlreadyHadSameTitleBook(Book book) {
+    bool hasSameBookTitle = false;
+    if (state.hasValue) {
+      final checkList = state.value;
+      hasSameBookTitle =
+          checkList!.any((element) => element.title == book.title);
+    }
+    if (hasSameBookTitle) {
+      return true;
+    }
+    return false;
+  }
+
   Future<void> addBook(Book book) async {
     await bookStorageRepository.addBook(userId: userId, book: book);
     state = AsyncData(await bookStorageRepository.fetchBooks(userId));

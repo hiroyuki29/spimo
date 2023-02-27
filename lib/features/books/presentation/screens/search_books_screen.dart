@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
@@ -35,6 +37,35 @@ class SearchBooksScreen extends HookConsumerWidget {
         ),
         () => isLoading.value = false,
       );
+    }
+
+    Future<void> registerBook(Book book) async {
+      final hasSameBookTitle = ref
+          .read(booksControllerProvider.notifier)
+          .checkAlreadyHadSameTitleBook(book);
+      bool canAddBook = true;
+      if (hasSameBookTitle) {
+        canAddBook = await showCupertinoDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              title: '既に同じ名前の本を登録されています。\n登録してもよろしいですか？',
+              leftText: '登録',
+              rightText: 'キャンセル',
+              onTapLeft: () async {
+                Navigator.of(context).pop(true);
+              },
+              onTapRight: () {
+                Navigator.of(context).pop(false);
+              },
+            );
+          },
+        );
+      }
+      if (canAddBook) {
+        await ref.read(booksControllerProvider.notifier).addBook(book);
+        context.goNamed(AppRoute.books.name);
+      }
     }
 
     return GestureDetector(
@@ -120,11 +151,9 @@ class SearchBooksScreen extends HookConsumerWidget {
                         },
                         child: BookListView(
                             bookList: books.value,
-                            onTap: (Book book) {
-                              ref
-                                  .read(booksControllerProvider.notifier)
-                                  .addBook(book);
-                              context.goNamed(AppRoute.books.name);
+                            dismissible: false,
+                            onTap: (Book book) async {
+                              await registerBook(book);
                             }),
                       ),
                     ),

@@ -29,6 +29,13 @@
             {
               "client_id": "539254845226-354dcq5m0qs3o294u7b7h3b5kl5p1ad2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "539254845226-b761469v3mn2sd29glubc1jt5pl56atk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spimo"
+              }
             }
           ]
         }

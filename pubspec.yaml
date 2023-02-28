@@ -43,6 +43,8 @@ dependencies:
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
   cloud_firestore: ^4.3.1
+  firebase_app_check: ^0.1.1+12
+  firebase_analytics: ^10.1.4
   
   #ルーティング
   go_router: ^6.0.1
@@ -76,6 +78,7 @@ dependencies:
   url_launcher: ^6.1.8
   
   
+  
 
 dev_dependencies:
   flutter_test:
@@ -106,7 +109,6 @@ flutter:
     - assets/image/
     - assets/image/splash/
     - assets/image/app_icon/
-    - assets/svg/book/
     - assets/svg/bottom_navigation/
 
 flutter_native_splash:

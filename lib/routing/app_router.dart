@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -33,6 +34,9 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
     initialLocation: '/',
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: false,
+    observers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
     redirect: (context, state) {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null && state.subloc == '/') {
@@ -101,6 +105,14 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
     ],
   );
 });
+
+// class AnalyticsNavigatorObserver extends NavigatorObserver {
+//   @override
+//   void didPush(Route route, Route? previousRoute) {
+//     super.didPush(route, previousRoute);
+//     final goRouter = GoRouter();
+//   }
+// }
 
 class ScaffoldWithBottomNavBar extends ConsumerStatefulWidget {
   const ScaffoldWithBottomNavBar({Key? key, required this.child})

@@ -3,11 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/theme/custom_theme.dart';
 import 'package:spimo/firebase_options.dart';
 import 'package:spimo/routing/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,20 +33,17 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const jaLocale = Locale("ja", "JA");
-
     return MaterialApp.router(
       routerConfig: ref.watch(goRouterProvider),
       title: 'Flutter Demo',
-      locale: jaLocale,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        jaLocale,
-      ],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // localizationsDelegates: const [
+      //   AppLocalizations.localizations.Delegates,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: spimoTheme,
     );
   }

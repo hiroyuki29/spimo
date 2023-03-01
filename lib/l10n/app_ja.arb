@@ -1,0 +1,13 @@
+{
+  "@@locale": "ja",
+  "allMemoGraph": "全てのメモ文字数の推移",
+  "now": "現在",
+  "noSavedMemo": "まだ保存したメモはありません。\n 早速メモしてみましょう！",
+  "memoRanking": "メモランキング",
+  "noMemoRankingDescription": "まだランキングはありません。\n 本を登録してメモを始めよう！",
+  "memoCharacterCounts": "メモ文字数",
+  "noSelectedBook": "選択中の本はありません。\n 今読んでいる本を選択しよう！",
+  "selectedBook": "現在選択中の本",
+  "totalMemoCharacter": "合計メモ文字数",
+  "numberOfMemoCharactersPerPage": "各ページに対するメモ文字数"
+}

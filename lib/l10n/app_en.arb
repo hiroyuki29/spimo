@@ -1,0 +1,13 @@
+{
+  "@@locale":"en",
+  "allMemoGraph": "Graph of all memo character counts",
+  "now": "now",
+  "noSavedMemo": "No memos saved yet. \n let's make a memo!",
+  "memoRanking": "Ranking of Memo",
+  "noMemoRankingDescription": "No ranking yet. \n Register your books and start taking memos!",
+  "memoCharacterCounts": "Memo Character Counts",
+  "noSelectedBook": "There are no books currently selected. Choose the book you're reading now!",
+  "selectedBook": "Currently Selecting Books",
+  "totalMemoCharacter": "Total Memo Characters",
+  "numberOfMemoCharactersPerPage": "Number of memo characters per page"
+}

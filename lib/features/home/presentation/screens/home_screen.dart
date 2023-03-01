@@ -18,6 +18,7 @@ import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 import 'package:spimo/routing/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends HookWidget {
   const HomeScreen({super.key});
@@ -83,7 +84,7 @@ class AllMemoHomeContents extends ConsumerWidget {
       child: Column(
         children: [
           HomeContent(
-            title: '全てのメモ文字数の推移',
+            title: AppLocalizations.of(context)!.allMemoGraph,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               child: DecoratedBox(
@@ -99,7 +100,7 @@ class AllMemoHomeContents extends ConsumerWidget {
                     value: allMemoChartPoints,
                     data: (data) => data == null
                         ? NoDataDisplayWidget(
-                            text: 'まだ保存したメモはありません。\n早速メモしてみましょう！',
+                            text: AppLocalizations.of(context)!.noSavedMemo,
                             icon: IconAsset.speech,
                             iconSize: 100,
                             onTap: () => context.goNamed(
@@ -121,9 +122,9 @@ class AllMemoHomeContents extends ConsumerWidget {
             ),
           ),
           sizedBoxH16,
-          const HomeContent(
-            title: 'メモランキング',
-            child: MemoRanking(),
+          HomeContent(
+            title: AppLocalizations.of(context)!.memoRanking,
+            child: const MemoRanking(),
           ),
           sizedBoxH16,
         ],
@@ -155,7 +156,7 @@ class MemoRanking extends HookConsumerWidget {
       value: books,
       data: (books) => books.isEmpty
           ? NoDataDisplayWidget(
-              text: 'まだランキングはありません。\n本を登録してメモを始めよう！',
+              text: AppLocalizations.of(context)!.noMemoRankingDescription,
               icon: IconAsset.memo,
               iconSize: 100,
             )
@@ -260,7 +261,7 @@ class MemoRankingTile extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'メモ文字数',
+                          AppLocalizations.of(context)!.memoCharacterCounts,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyText2,
@@ -320,15 +321,16 @@ class CurrentBookHomeContents extends HookConsumerWidget {
         value: currentBook,
         data: (book) => book == null
             ? NoDataDisplayWidget(
-                text: '選択中の本はありません。\n今読んでいる本を選択しよう！',
+                text: AppLocalizations.of(context)!.noSelectedBook,
                 icon: IconAsset.book,
                 onTap: () => context.goNamed(AppRoute.books.name),
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  // Text(AppLocalizations.of(context).title),
                   HomeContent(
-                    title: '現在選択中の本',
+                    title: AppLocalizations.of(context)!.selectedBook,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: BookListTile(
@@ -340,7 +342,7 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                   ),
                   sizedBoxH24,
                   HomeContent(
-                    title: '合計メモ文字数',
+                    title: AppLocalizations.of(context)!.totalMemoCharacter,
                     child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: DecoratedBox(
@@ -368,7 +370,8 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                   ),
                   sizedBoxH24,
                   HomeContent(
-                    title: '各ページに対するメモ文字数',
+                    title: AppLocalizations.of(context)!
+                        .numberOfMemoCharactersPerPage,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 6),
@@ -435,7 +438,8 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                                 value: currentBookChartPoints,
                                 data: (data) => data == null
                                     ? NoDataDisplayWidget(
-                                        text: 'まだ保存したメモはありません。\n早速メモしてみましょう！',
+                                        text: AppLocalizations.of(context)!
+                                            .noSavedMemo,
                                         icon: IconAsset.speech,
                                         iconSize: 100,
                                         onTap: () => context.goNamed(
@@ -615,7 +619,7 @@ class _MemoDistributionChart extends StatelessWidget {
       } else if (value.toInt() == middleDurationDays) {
         text = formatDateToString(middleDay);
       } else if (value.toInt() == maxX) {
-        text = '現在';
+        text = 'Now';
       } else {
         text = '';
       }

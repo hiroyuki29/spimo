@@ -30,13 +30,12 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
+  ///observerでanalyticsのページ取得を行いたいが、ShellRouteを使用しているとうまくいかないため、
+  ///各builderの中でanalyticsメソッドを呼んでいる。
   return GoRouter(
     initialLocation: '/',
     navigatorKey: _rootNavigatorKey,
     debugLogDiagnostics: false,
-    observers: [
-      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-    ],
     redirect: (context, state) {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null && state.subloc == '/') {
@@ -53,18 +52,26 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: AppRoute.start.name,
-        builder: (context, state) => const StartScreen(),
+        builder: (context, state) {
+          FirebaseAnalytics.instance.logScreenView(screenName: state.location);
+          return const StartScreen();
+        },
         routes: [
           GoRoute(
             path: 'signUp',
             name: AppRoute.signUp.name,
-            builder: (context, state) => const SignUpScreen(),
+            builder: (context, state) {
+              FirebaseAnalytics.instance
+                  .logScreenView(screenName: state.location);
+              return const SignUpScreen();
+            },
           ),
         ],
       ),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
+          FirebaseAnalytics.instance.logScreenView(screenName: state.location);
           return ScaffoldWithBottomNavBar(child: child);
         },
         routes: [
@@ -91,7 +98,11 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
               GoRoute(
                 path: 'search',
                 name: AppRoute.searchBooks.name,
-                builder: (context, state) => const SearchBooksScreen(),
+                builder: (context, state) {
+                  FirebaseAnalytics.instance
+                      .logScreenView(screenName: state.location);
+                  return const SearchBooksScreen();
+                },
               )
             ],
           ),
@@ -105,14 +116,6 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
     ],
   );
 });
-
-// class AnalyticsNavigatorObserver extends NavigatorObserver {
-//   @override
-//   void didPush(Route route, Route? previousRoute) {
-//     super.didPush(route, previousRoute);
-//     final goRouter = GoRouter();
-//   }
-// }
 
 class ScaffoldWithBottomNavBar extends ConsumerStatefulWidget {
   const ScaffoldWithBottomNavBar({Key? key, required this.child})

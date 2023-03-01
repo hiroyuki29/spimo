@@ -681,7 +681,7 @@ class _MemoDistributionChart extends StatelessWidget {
           begin: FractionalOffset.topCenter,
           end: FractionalOffset.bottomCenter,
           colors: [
-            primary.withOpacity(0.3),
+            Colors.lightBlue.withOpacity(0.3),
             Colors.transparent,
           ],
           stops: const [
@@ -706,7 +706,7 @@ class _MemoDistributionChart extends StatelessWidget {
             end: FractionalOffset.bottomCenter,
             colors: [
               Colors.red.withOpacity(0.8),
-              Colors.red.withOpacity(0.3),
+              Colors.red.withOpacity(0.2),
             ],
             stops: const [
               0.0,

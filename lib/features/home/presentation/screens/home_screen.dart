@@ -27,16 +27,16 @@ class HomeScreen extends HookWidget {
     final tabController = useTabController(initialLength: 2);
 
     List<Widget> tabs = [
-      const Tab(
+      Tab(
         child: Text(
-          'currentBook',
-          style: TextStyle(color: primaryDark),
+          AppLocalizations.of(context)!.selectedBook,
+          style: const TextStyle(color: primaryDark),
         ),
       ),
-      const Tab(
+      Tab(
         child: Text(
-          'all',
-          style: TextStyle(color: primaryDark),
+          AppLocalizations.of(context)!.all,
+          style: const TextStyle(color: primaryDark),
         ),
       ),
     ];
@@ -328,9 +328,7 @@ class CurrentBookHomeContents extends HookConsumerWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Text(AppLocalizations.of(context).title),
                   HomeContent(
-                    title: AppLocalizations.of(context)!.selectedBook,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: BookListTile(
@@ -474,11 +472,11 @@ class CurrentBookHomeContents extends HookConsumerWidget {
 class HomeContent extends StatelessWidget {
   const HomeContent({
     Key? key,
-    required this.title,
+    this.title,
     required this.child,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final Widget child;
 
   @override
@@ -486,14 +484,17 @@ class HomeContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.subtitle2,
-            textAlign: TextAlign.center,
-          ),
-        ),
+        title != null
+            ? Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: Text(
+                  title!,
+                  style: Theme.of(context).textTheme.subtitle2,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            : sizedBoxH16,
         child,
       ],
     );

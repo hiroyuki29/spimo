@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/compornent/no_data_display_widget.dart';
-import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
-import 'package:spimo/routing/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecordHomeScreen extends ConsumerStatefulWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
@@ -86,11 +84,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
           value: currentBook,
           data: (book) {
             return book == null
-                ? NoDataDisplayWidget(
-                    text: '選択中の本はありません。\n今読んでいる本を選択しよう！',
-                    icon: IconAsset.book,
-                    onTap: () => context.goNamed(AppRoute.books.name),
-                  )
+                ? const NoSelectedBookWidget()
                 : Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -111,8 +105,9 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                             _speechToText.isListening
                                 ? _lastWords
                                 : _speechEnabled
-                                    ? '録音ボタンを押してメモを開始してください'
-                                    : '音声認識ができない状態です',
+                                    ? AppLocalizations.of(context)!.startRecord
+                                    : AppLocalizations.of(context)!
+                                        .disableRecord,
                           ),
                         ),
                         Expanded(
@@ -161,7 +156,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                       _wordList = [];
                                     });
                                   },
-                            child: const Text('保存'),
+                            child: Text(AppLocalizations.of(context)!.save),
                           ),
                         ),
                         Padding(
@@ -173,7 +168,8 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               SizedBox(
                                 width: 80,
                                 child: PageSetForm(
-                                  title: '開始ページ',
+                                  title:
+                                      AppLocalizations.of(context)!.startPage,
                                   onChange: (value) {
                                     setState(() {
                                       _startPage = int.tryParse(value);
@@ -185,7 +181,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               SizedBox(
                                 width: 80,
                                 child: PageSetForm(
-                                  title: '終了ページ',
+                                  title: AppLocalizations.of(context)!.endPage,
                                   onChange: (value) {
                                     setState(() {
                                       _endPage = int.tryParse(value);

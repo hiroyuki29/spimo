@@ -9,6 +9,7 @@ import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpScreen extends HookConsumerWidget {
   const SignUpScreen({super.key});
@@ -29,7 +30,7 @@ class SignUpScreen extends HookConsumerWidget {
 
     Future<void> doLaunchingUrl(Uri url) async {
       if (!await launchUrl(url)) {
-        throw Exception('接続できませんでした');
+        throw Exception(AppLocalizations.of(context)!.canNotConnection);
       }
     }
 
@@ -53,7 +54,8 @@ class SignUpScreen extends HookConsumerWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: CommonAppBar(context: context, title: '新規登録'),
+        appBar: CommonAppBar(
+            context: context, title: AppLocalizations.of(context)!.signUp),
         body: SafeArea(
             child: Form(
           key: formKey,
@@ -70,11 +72,13 @@ class SignUpScreen extends HookConsumerWidget {
                   ),
                   sizedBoxH32,
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: '名前（ニックネーム）',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.neckName,
                     ),
                     validator: (value) {
-                      String? checkedValue = value == null ? '必須項目です' : null;
+                      String? checkedValue = value == null
+                          ? AppLocalizations.of(context)!.requiredFields
+                          : null;
                       return checkedValue;
                     },
                     onChanged: (value) {
@@ -83,12 +87,12 @@ class SignUpScreen extends HookConsumerWidget {
                   ),
                   sizedBoxH32,
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'メールアドレス',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.email,
                     ),
                     validator: (value) {
                       String? checkedValue =
-                          Validator.email(value?.trim() ?? '');
+                          Validator.email(context, value?.trim() ?? '');
                       return checkedValue;
                     },
                     onChanged: (value) {
@@ -97,12 +101,12 @@ class SignUpScreen extends HookConsumerWidget {
                   ),
                   sizedBoxH32,
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'パスワード',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.passoword,
                     ),
                     validator: (value) {
                       String? checkedValue =
-                          Validator.password(value?.trim() ?? '');
+                          Validator.password(context, value?.trim() ?? '');
                       return checkedValue;
                     },
                     onChanged: (value) {
@@ -117,22 +121,25 @@ class SignUpScreen extends HookConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           MinimumTextButton(
-                            text: 'ご利用規約',
+                            text: AppLocalizations.of(context)!.termsOfUse,
                             onTap: () async {
                               await doLaunchingUrl(termsOfServiceUrl);
                             },
                           ),
-                          const Text('と'),
+                          Text(AppLocalizations.of(context)!.and),
                           MinimumTextButton(
-                            text: 'プライバシポリシー',
+                            text: AppLocalizations.of(context)!.privacyPolicy,
                             onTap: () async {
                               await doLaunchingUrl(privacyPolicyUrl);
                             },
                           ),
-                          const Text('に同意して、'),
+                          Text(AppLocalizations.of(context)!.agreeOnlyJp),
                         ],
                       ),
-                      const Text('アカウントを作成する'),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .agreeToTheAboveAndCreateAccount,
+                      ),
                     ],
                   ),
                   sizedBoxH16,
@@ -141,7 +148,7 @@ class SignUpScreen extends HookConsumerWidget {
                         email.value.isNotEmpty && password.value.isNotEmpty
                             ? submit
                             : null,
-                    child: const Text('新規登録'),
+                    child: Text(AppLocalizations.of(context)!.signUp),
                   ),
                 ],
               ),

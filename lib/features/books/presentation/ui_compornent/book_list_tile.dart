@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookListTile extends StatelessWidget {
   const BookListTile({
@@ -57,7 +58,7 @@ class BookListTile extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyText2,
           ),
           Text(
-            '${book.pageCount.toString()}ページ',
+            '${book.pageCount.toString()} ${AppLocalizations.of(context)!.pages}',
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
             style: Theme.of(context).textTheme.bodyText2,

@@ -12,6 +12,7 @@ import 'package:spimo/features/books/presentation/controller/books_controller.da
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_view.dart';
 import 'package:spimo/routing/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BooksHomeScreen extends StatefulHookConsumerWidget {
   const BooksHomeScreen({super.key});
@@ -53,26 +54,26 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
       endDrawer: Drawer(
         child: ListView(
           children: [
-            const SizedBox(
+            SizedBox(
               height: 60,
               child: DrawerHeader(
-                  decoration: BoxDecoration(color: primaryLight),
-                  child: Text("ソート項目")),
+                  decoration: const BoxDecoration(color: primaryLight),
+                  child: Text(AppLocalizations.of(context)!.sort)),
             ),
             SortDrawerTile(
-              title: "タイトル順",
+              title: AppLocalizations.of(context)!.title,
               isSelected: sortType == BookSortType.title,
               onTap: () => ref.read(bookSortTypeProvider.notifier).state =
                   BookSortType.title,
             ),
             SortDrawerTile(
-              title: "登録順",
+              title: AppLocalizations.of(context)!.registeredDay,
               isSelected: sortType == BookSortType.dateTime,
               onTap: () => ref.read(bookSortTypeProvider.notifier).state =
                   BookSortType.dateTime,
             ),
             SortDrawerTile(
-              title: "メモ合計文字数順",
+              title: AppLocalizations.of(context)!.characterCount,
               isSelected: sortType == BookSortType.ranking,
               onTap: () => ref.read(bookSortTypeProvider.notifier).state =
                   BookSortType.ranking,
@@ -84,7 +85,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
         value: books,
         data: (value) => value.isEmpty
             ? NoDataDisplayWidget(
-                text: '登録している本がありません。\n検索して本を登録しよう！',
+                text: AppLocalizations.of(context)!.noRegisterdBook,
                 icon: Icon(
                   Icons.search,
                   size: 160,

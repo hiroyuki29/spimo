@@ -1,23 +1,25 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Validator {
-  static String? email(String? value) {
+  static String? email(BuildContext context, String? value) {
     if (value == null || value.isEmpty) {
-      return '必須項目です';
+      return AppLocalizations.of(context)!.requiredFields;
     }
     if (!EmailValidator.validate(value)) {
-      return 'メールアドレスの形式が正しくありません';
+      return AppLocalizations.of(context)!.emailValidator;
     }
     return null;
   }
 
-  static String? password(String? value) {
+  static String? password(BuildContext context, String? value) {
     if (value == null || value.isEmpty) {
-      return '必須項目です';
+      return AppLocalizations.of(context)!.requiredFields;
     }
     RegExp regExp = RegExp(r'^[a-zA-Z0-9!@#\$&*~]{6,}$');
     if (!regExp.hasMatch(value)) {
-      return '６文字以上の英数字および記号を入力してください';
+      return AppLocalizations.of(context)!.passwordValidator;
     }
     return null;
   }

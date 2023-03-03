@@ -7,6 +7,7 @@ import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StartScreen extends HookConsumerWidget {
   const StartScreen({super.key});
@@ -55,12 +56,12 @@ class StartScreen extends HookConsumerWidget {
                     child: IconAsset.spimoLogo,
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'メールアドレス',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.email,
                     ),
                     validator: (value) {
                       String? checkedValue =
-                          Validator.email(value?.trim() ?? '');
+                          Validator.email(context, value?.trim() ?? '');
                       return checkedValue;
                     },
                     onChanged: (value) {
@@ -69,12 +70,12 @@ class StartScreen extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'パスワード',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.passoword,
                     ),
                     validator: (value) {
                       String? checkedValue =
-                          Validator.password(value?.trim() ?? '');
+                          Validator.password(context, value?.trim() ?? '');
                       return checkedValue;
                     },
                     onChanged: (value) {
@@ -87,12 +88,12 @@ class StartScreen extends HookConsumerWidget {
                         email.value.isNotEmpty && password.value.isNotEmpty
                             ? submit
                             : null,
-                    child: const Text('ログイン'),
+                    child: Text(AppLocalizations.of(context)!.login),
                   ),
                   const SizedBox(height: 30),
                   TextButton(
                     onPressed: () => context.goNamed(AppRoute.signUp.name),
-                    child: const Text('新規登録'),
+                    child: Text(AppLocalizations.of(context)!.signUp),
                   ),
                 ],
               ),

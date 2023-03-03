@@ -13,6 +13,7 @@ import 'package:spimo/features/books/domain/repository/search_books_repository.d
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_view.dart';
 import 'package:spimo/routing/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchBooksScreen extends HookConsumerWidget {
   const SearchBooksScreen({super.key});
@@ -49,9 +50,9 @@ class SearchBooksScreen extends HookConsumerWidget {
           context: context,
           builder: (context) {
             return CustomAlertDialog(
-              title: '既に同じ名前の本を登録されています。\n登録してもよろしいですか？',
-              leftText: '登録',
-              rightText: 'キャンセル',
+              title: AppLocalizations.of(context)!.alreadyRegisteredBook,
+              leftText: AppLocalizations.of(context)!.register,
+              rightText: AppLocalizations.of(context)!.cancel,
               onTapLeft: () async {
                 Navigator.of(context).pop(true);
               },
@@ -96,7 +97,7 @@ class SearchBooksScreen extends HookConsumerWidget {
                               Icons.search,
                               color: primaryDark,
                             ),
-                            hintText: '本の名称',
+                            hintText: AppLocalizations.of(context)!.bookName,
                             hintStyle: Theme.of(context).textTheme.bodyText1,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
@@ -135,7 +136,7 @@ class SearchBooksScreen extends HookConsumerWidget {
               ),
             ),
             books.value.isEmpty
-                ? const Text('データなし')
+                ? Text(AppLocalizations.of(context)!.noData)
                 : Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),

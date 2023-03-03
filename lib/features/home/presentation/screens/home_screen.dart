@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_method/datetime_formatter.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
@@ -17,7 +16,6 @@ import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.d
 import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_controller.dart';
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
-import 'package:spimo/routing/app_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends HookWidget {
@@ -99,14 +97,7 @@ class AllMemoHomeContents extends ConsumerWidget {
                   child: AsyncValueWidget(
                     value: allMemoChartPoints,
                     data: (data) => data == null
-                        ? NoDataDisplayWidget(
-                            text: AppLocalizations.of(context)!.noSavedMemo,
-                            icon: IconAsset.speech,
-                            iconSize: 100,
-                            onTap: () => context.goNamed(
-                              AppRoute.record.name,
-                            ),
-                          )
+                        ? const NoSavedMemoWidget(iconSize: 100)
                         : Padding(
                             padding: const EdgeInsets.all(16),
                             child: _MemoDistributionChart(
@@ -262,7 +253,7 @@ class MemoRankingTile extends StatelessWidget {
                       children: [
                         Text(
                           AppLocalizations.of(context)!.memoCharacterCounts,
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
@@ -320,11 +311,7 @@ class CurrentBookHomeContents extends HookConsumerWidget {
       child: AsyncValueWidget(
         value: currentBook,
         data: (book) => book == null
-            ? NoDataDisplayWidget(
-                text: AppLocalizations.of(context)!.noSelectedBook,
-                icon: IconAsset.book,
-                onTap: () => context.goNamed(AppRoute.books.name),
-              )
+            ? const NoSelectedBookWidget()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -356,7 +343,7 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                               padding: const EdgeInsets.all(16.0),
                               child: Center(
                                   child: Text(
-                                '${book.totalMemoCount}字',
+                                '${book.totalMemoCount}',
                                 style: const TextStyle(
                                   color: black,
                                   fontSize: 20,
@@ -435,15 +422,7 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                               child: AsyncValueWidget(
                                 value: currentBookChartPoints,
                                 data: (data) => data == null
-                                    ? NoDataDisplayWidget(
-                                        text: AppLocalizations.of(context)!
-                                            .noSavedMemo,
-                                        icon: IconAsset.speech,
-                                        iconSize: 100,
-                                        onTap: () => context.goNamed(
-                                          AppRoute.record.name,
-                                        ),
-                                      )
+                                    ? const NoSavedMemoWidget(iconSize: 100)
                                     : Padding(
                                         padding: const EdgeInsets.all(16),
                                         child: _MemoDistributionChart(

@@ -12,6 +12,7 @@ import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountHomeScreen extends StatefulHookConsumerWidget {
   const AccountHomeScreen({super.key});
@@ -38,7 +39,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
 
     Future<void> doLaunchingUrl(Uri url) async {
       if (!await launchUrl(url)) {
-        throw Exception('接続できませんでした');
+        throw Exception(AppLocalizations.of(context)!.canNotConnection);
       }
     }
 
@@ -47,9 +48,9 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
         context: context,
         builder: (context) {
           return CustomAlertDialog(
-            title: 'ログアウトしますか？',
-            leftText: 'ログアウト',
-            rightText: 'キャンセル',
+            title: AppLocalizations.of(context)!.doLogout,
+            leftText: AppLocalizations.of(context)!.logout,
+            rightText: AppLocalizations.of(context)!.cancel,
             onTapLeft: () async {
               isLoading.value = true;
               await ref.read(userRepositoryProvider).signOut();
@@ -71,10 +72,10 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
         context: context,
         builder: (context) {
           return CustomAlertDialog(
-            title: '退会すると全てのデータが削除されますが\nよろしいですか？',
-            content: '削除すると元に戻すことはできません。',
-            leftText: '退会する',
-            rightText: 'キャンセル',
+            title: AppLocalizations.of(context)!.deleteMembershipTitle,
+            content: AppLocalizations.of(context)!.deleteMembershipContent,
+            leftText: AppLocalizations.of(context)!.deletingMembership,
+            rightText: AppLocalizations.of(context)!.cancel,
             onTapLeft: () async {
               isLoading.value = true;
               await ref.read(userRepositoryProvider).deleteUser();
@@ -104,7 +105,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   Text(email ?? ''),
                   sizedBoxH32,
                   AccountButton(
-                    title: 'ご利用規約',
+                    title: AppLocalizations.of(context)!.termsOfUse,
                     privacyPolicyUrl: termsOfServiceUrl,
                     onTap: () async {
                       await doLaunchingUrl(termsOfServiceUrl);
@@ -112,7 +113,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   ),
                   sizedBoxH24,
                   AccountButton(
-                    title: 'プライバシーポリシー',
+                    title: AppLocalizations.of(context)!.privacyPolicy,
                     privacyPolicyUrl: privacyPolicyUrl,
                     onTap: () async {
                       await doLaunchingUrl(privacyPolicyUrl);
@@ -120,7 +121,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   ),
                   sizedBoxH24,
                   AccountButton(
-                    title: 'お問い合わせ',
+                    title: AppLocalizations.of(context)!.inquiry,
                     privacyPolicyUrl: inquiryUrl,
                     onTap: () async {
                       await doLaunchingUrl(inquiryUrl);
@@ -128,7 +129,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   ),
                   sizedBoxH24,
                   AccountButton(
-                    title: '退会',
+                    title: AppLocalizations.of(context)!.withdrawal,
                     privacyPolicyUrl: inquiryUrl,
                     onTap: () async {
                       await deleteUser();
@@ -136,7 +137,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                   ),
                   sizedBoxH24,
                   AccountButton(
-                    title: 'ログアウト',
+                    title: AppLocalizations.of(context)!.logout,
                     onTap: () async {
                       await logout();
                     },

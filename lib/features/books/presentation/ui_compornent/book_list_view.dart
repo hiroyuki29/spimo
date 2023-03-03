@@ -4,6 +4,7 @@ import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookListView extends StatelessWidget {
   const BookListView({
@@ -97,10 +98,10 @@ class DismissibleBookTile extends StatelessWidget {
           context: context,
           builder: (context) {
             return CustomAlertDialog(
-              title: '本の削除します。\nよろしいですか？',
-              content: '本を削除すると、その本に対するメモのデータも削除されます',
-              leftText: '削除',
-              rightText: 'キャンセル',
+              title: AppLocalizations.of(context)!.removeBookTitle,
+              content: AppLocalizations.of(context)!.removeBookContent,
+              leftText: AppLocalizations.of(context)!.delete,
+              rightText: AppLocalizations.of(context)!.cancel,
               onTapLeft: () {
                 Navigator.of(context).pop(true);
               },

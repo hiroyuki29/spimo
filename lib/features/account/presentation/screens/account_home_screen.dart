@@ -142,12 +142,6 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                       await logout();
                     },
                   ),
-                  const SizedBox(height: 30),
-                  //TODO: 削除のこと
-                  TextButton(
-                    onPressed: () => throw Exception(),
-                    child: const Text("Throw Test Exception"),
-                  ),
                 ],
               ),
             ),

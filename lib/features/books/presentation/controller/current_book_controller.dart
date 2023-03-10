@@ -84,4 +84,18 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
     await memosUseCase.removeMemo(userId: userController.state!.id, memo: memo);
     fetchCurrentBook();
   }
+
+  Future<void> addHeadingTitle({
+    required String bookId,
+    required int page,
+    required String title,
+  }) async {
+    await memosUseCase.addHeadingTitle(
+      userId: userController.state!.id,
+      bookId: bookId,
+      page: page,
+      title: title,
+    );
+    fetchCurrentBook();
+  }
 }

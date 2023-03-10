@@ -111,4 +111,25 @@ class MockMemoStorageRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+  @override
+  _i3.Future<void> addHeadingTitle({
+    required String? userId,
+    required String? bookId,
+    required int? page,
+    required String? title,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addHeadingTitle,
+          [],
+          {
+            #userId: userId,
+            #bookId: bookId,
+            #page: page,
+            #title: title,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

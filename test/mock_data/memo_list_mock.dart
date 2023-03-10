@@ -13,6 +13,7 @@ List<Memo> mockMemoList = <Memo>[
     bookId: 'bookId',
     startPage: 3,
     createdAt: DateTime(1000),
+    isTitle: false,
   ),
   Memo(
     id: 'id2',
@@ -25,6 +26,7 @@ List<Memo> mockMemoList = <Memo>[
     bookId: 'bookId',
     startPage: 1,
     createdAt: DateTime(2000),
+    isTitle: false,
   ),
   Memo(
     id: 'id3',
@@ -37,6 +39,7 @@ List<Memo> mockMemoList = <Memo>[
     bookId: 'bookId',
     startPage: 2,
     createdAt: DateTime(3000),
+    isTitle: false,
   ),
 ];
 
@@ -52,6 +55,7 @@ List<Memo> sortedMemoListForTest = <Memo>[
     bookId: 'bookId',
     startPage: 1,
     createdAt: DateTime(2000),
+    isTitle: false,
   ),
   Memo(
     id: 'id3',
@@ -64,6 +68,7 @@ List<Memo> sortedMemoListForTest = <Memo>[
     bookId: 'bookId',
     startPage: 2,
     createdAt: DateTime(3000),
+    isTitle: false,
   ),
   Memo(
     id: 'id1',
@@ -76,5 +81,6 @@ List<Memo> sortedMemoListForTest = <Memo>[
     bookId: 'bookId',
     startPage: 3,
     createdAt: DateTime(1000),
+    isTitle: false,
   ),
 ];

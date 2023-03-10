@@ -52,5 +52,7 @@
   "characterCount": "Memo Characters",
   "noRegisterdBook": "There are no books registered. Search and register your book!",
   "removeBookTitle": "Delete the book?",
-  "removeBookContent": "When you delete a book, the memo data for that book will also be deleted." 
+  "removeBookContent": "When you delete a book, the memo data for that book will also be deleted." ,
+  "addingAHeadingTitle": "Adding a Heading Title",
+  "headingTitle": "Heading Title"
 }

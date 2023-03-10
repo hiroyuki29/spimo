@@ -18,6 +18,7 @@ class FirestoreMemo with _$FirestoreMemo {
     int? startPage,
     int? endPage,
     @TimestampToDatetimeConverter() required DateTime createdAt,
+    required bool isTitle,
   }) = _FirestoreMemo;
 
   factory FirestoreMemo.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +32,7 @@ class FirestoreMemo with _$FirestoreMemo {
       startPage: startPage,
       endPage: endPage,
       createdAt: createdAt,
+      isTitle: isTitle,
     );
   }
 }

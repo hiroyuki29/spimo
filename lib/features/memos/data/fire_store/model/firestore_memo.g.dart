@@ -17,6 +17,7 @@ _$_FirestoreMemo _$$_FirestoreMemoFromJson(Map<String, dynamic> json) =>
       endPage: json['endPage'] as int?,
       createdAt: const TimestampToDatetimeConverter()
           .fromJson(json['createdAt'] as Timestamp),
+      isTitle: json['isTitle'] as bool,
     );
 
 Map<String, dynamic> _$$_FirestoreMemoToJson(_$_FirestoreMemo instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$_FirestoreMemoToJson(_$_FirestoreMemo instance) =>
       'endPage': instance.endPage,
       'createdAt':
           const TimestampToDatetimeConverter().toJson(instance.createdAt),
+      'isTitle': instance.isTitle,
     };

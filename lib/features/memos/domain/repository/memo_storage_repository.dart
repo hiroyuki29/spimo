@@ -27,4 +27,11 @@ abstract class MemoStorageRepository {
     required int addedMemoLength,
     required DateTime date,
   });
+
+  Future<void> addHeadingTitle({
+    required String userId,
+    required String bookId,
+    required int page,
+    required String title,
+  });
 }

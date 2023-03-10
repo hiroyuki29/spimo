@@ -35,4 +35,18 @@ class MemosUseCase {
   Future<void> removeMemo({required String userId, required Memo memo}) async {
     await memoStorageRepository.removeMemo(userId: userId, memo: memo);
   }
+
+  Future<void> addHeadingTitle({
+    required String userId,
+    required String bookId,
+    required int page,
+    required String title,
+  }) async {
+    await memoStorageRepository.addHeadingTitle(
+      userId: userId,
+      bookId: bookId,
+      page: page,
+      title: title,
+    );
+  }
 }

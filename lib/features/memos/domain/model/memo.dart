@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
-import 'package:spimo/util/converter/timestamp_to_datetime_converter.dart';
 
 part 'memo.freezed.dart';
 part 'memo.g.dart';
@@ -16,6 +14,7 @@ class Memo with _$Memo {
     int? startPage,
     int? endPage,
     required DateTime createdAt,
+    required bool isTitle,
   }) = _Memo;
 
   factory Memo.fromJson(Map<String, dynamic> json) => _$MemoFromJson(json);

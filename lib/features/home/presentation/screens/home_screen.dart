@@ -12,7 +12,7 @@ import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
-import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
 import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_controller.dart';
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
@@ -318,10 +318,9 @@ class CurrentBookHomeContents extends HookConsumerWidget {
                   HomeContent(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: BookListTile(
+                      child: CurrentBookCard(
                         isSelected: false,
                         book: book,
-                        color: white,
                       ),
                     ),
                   ),

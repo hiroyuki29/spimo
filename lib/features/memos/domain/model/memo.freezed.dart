@@ -26,6 +26,7 @@ mixin _$Memo {
   int? get startPage => throw _privateConstructorUsedError;
   int? get endPage => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  bool get isTitle => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $MemoCopyWith<$Res> {
       String bookId,
       int? startPage,
       int? endPage,
-      DateTime createdAt});
+      DateTime createdAt,
+      bool isTitle});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
     Object? startPage = freezed,
     Object? endPage = freezed,
     Object? createdAt = null,
+    Object? isTitle = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -91,6 +94,10 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isTitle: null == isTitle
+          ? _value.isTitle
+          : isTitle // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -107,7 +114,8 @@ abstract class _$$_MemoCopyWith<$Res> implements $MemoCopyWith<$Res> {
       String bookId,
       int? startPage,
       int? endPage,
-      DateTime createdAt});
+      DateTime createdAt,
+      bool isTitle});
 }
 
 /// @nodoc
@@ -125,6 +133,7 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
     Object? startPage = freezed,
     Object? endPage = freezed,
     Object? createdAt = null,
+    Object? isTitle = null,
   }) {
     return _then(_$_Memo(
       id: null == id
@@ -151,6 +160,10 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      isTitle: null == isTitle
+          ? _value.isTitle
+          : isTitle // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -164,7 +177,8 @@ class _$_Memo extends _Memo {
       required this.bookId,
       this.startPage,
       this.endPage,
-      required this.createdAt})
+      required this.createdAt,
+      required this.isTitle})
       : _contents = contents,
         super._();
 
@@ -188,10 +202,12 @@ class _$_Memo extends _Memo {
   final int? endPage;
   @override
   final DateTime createdAt;
+  @override
+  final bool isTitle;
 
   @override
   String toString() {
-    return 'Memo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt)';
+    return 'Memo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt, isTitle: $isTitle)';
   }
 
   @override
@@ -206,7 +222,8 @@ class _$_Memo extends _Memo {
                 other.startPage == startPage) &&
             (identical(other.endPage, endPage) || other.endPage == endPage) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.isTitle, isTitle) || other.isTitle == isTitle));
   }
 
   @JsonKey(ignore: true)
@@ -218,7 +235,8 @@ class _$_Memo extends _Memo {
       bookId,
       startPage,
       endPage,
-      createdAt);
+      createdAt,
+      isTitle);
 
   @JsonKey(ignore: true)
   @override
@@ -241,7 +259,8 @@ abstract class _Memo extends Memo {
       required final String bookId,
       final int? startPage,
       final int? endPage,
-      required final DateTime createdAt}) = _$_Memo;
+      required final DateTime createdAt,
+      required final bool isTitle}) = _$_Memo;
   _Memo._() : super._();
 
   factory _Memo.fromJson(Map<String, dynamic> json) = _$_Memo.fromJson;
@@ -258,6 +277,8 @@ abstract class _Memo extends Memo {
   int? get endPage;
   @override
   DateTime get createdAt;
+  @override
+  bool get isTitle;
   @override
   @JsonKey(ignore: true)
   _$$_MemoCopyWith<_$_Memo> get copyWith => throw _privateConstructorUsedError;

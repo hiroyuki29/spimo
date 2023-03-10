@@ -8,7 +8,7 @@ import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/compornent/no_data_display_widget.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
-import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -94,7 +94,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                             vertical: 16.0,
                             horizontal: 16.0,
                           ),
-                          child: BookListTile(
+                          child: CurrentBookCard(
                             isSelected: false,
                             book: book,
                           ),
@@ -141,12 +141,14 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                 ? null
                                 : () async {
                                     final memo = Memo(
-                                        id: 'id',
-                                        contents: _wordList,
-                                        startPage: _startPage,
-                                        endPage: _endPage,
-                                        bookId: book.id,
-                                        createdAt: DateTime.now());
+                                      id: 'id',
+                                      contents: _wordList,
+                                      startPage: _startPage,
+                                      endPage: _endPage,
+                                      bookId: book.id,
+                                      createdAt: DateTime.now(),
+                                      isTitle: false,
+                                    );
                                     currentBookController.addMemo(
                                       bookId: book.id,
                                       memo: memo,

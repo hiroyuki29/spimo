@@ -36,13 +36,6 @@ class BookListTile extends StatelessWidget {
           );
         },
       ),
-      // trailing: isSelected
-      //     ? const Icon(
-      //         Icons.check,
-      //         color: accent,
-      //         size: 30,
-      //       )
-      //     : null,
       title: Column(
         children: [
           Text(

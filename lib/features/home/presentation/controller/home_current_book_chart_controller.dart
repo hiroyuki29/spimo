@@ -38,7 +38,8 @@ class HomeCurrentBookChartController
   Future<void> getChartPoints(
       {required int averageRange, required Book currentBook}) async {
     state = const AsyncLoading();
-    List<List<FlSpot>> chartPoints =
+
+    List<Map<double, double>> chartPoints =
         await homeUseCase.createCurrentBookMemoChartPoints(
       userId: userId,
       bookId: currentBook.id,
@@ -48,11 +49,21 @@ class HomeCurrentBookChartController
       state = const AsyncData(null);
       return;
     }
+
     double maxWordLength = homeUseCase.getMaxWordLength(chartPoints[0]);
+
+    final List<FlSpot> graphPointsAll = chartPoints[0].entries.map((e) {
+      return FlSpot(e.key, e.value);
+    }).toList();
+
+    final List<FlSpot> graphPointsOnlyRed = chartPoints[1].entries.map((e) {
+      return FlSpot(e.key, e.value);
+    }).toList();
+
     state = AsyncData(
       PageChartViewModel(
-        chartPointsAll: chartPoints[0],
-        chartPointsOnlyRed: chartPoints[1],
+        chartPointsAll: graphPointsAll,
+        chartPointsOnlyRed: graphPointsOnlyRed,
         pageCount: currentBook.pageCount!,
         maxWordLength: maxWordLength,
       ),

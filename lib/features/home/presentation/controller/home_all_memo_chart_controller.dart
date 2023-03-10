@@ -8,7 +8,6 @@ final homeAllMemoChartControllerProvider = StateNotifierProvider.autoDispose<
     HomeAllMemoChartController, AsyncValue<DateChartViewModel?>>((ref) {
   return HomeAllMemoChartController(
     homeUseCase: ref.watch(homeUseCaseProvider),
-    // currentBook: ref.watch(currentBookControllerProvider),
     userId: ref.watch(userControllerProvider)!.id,
   );
 });
@@ -29,17 +28,22 @@ class HomeAllMemoChartController
   Future<void> getChartPoints() async {
     state = const AsyncLoading();
 
-    List<FlSpot> chartPoints =
+    Map<int, double> chartPoints =
         await homeUseCase.createAllMemoChartPoints(userId);
     if (chartPoints.isEmpty) {
       state = const AsyncData(null);
       return;
     }
-    double maxWordLength = chartPoints.last.y;
-    double allDaysDuration = chartPoints.last.x;
+    double maxWordLength = chartPoints.values.last;
+    double allDaysDuration = chartPoints.keys.last.toDouble();
+
+    final List<FlSpot> graphPointsAll = chartPoints.entries.map((e) {
+      return FlSpot(e.key.toDouble(), e.value);
+    }).toList();
+
     state = AsyncData(
       DateChartViewModel(
-        chartPointsAll: chartPoints,
+        chartPointsAll: graphPointsAll,
         allDaysDuration: allDaysDuration,
         maxWordLength: maxWordLength,
       ),

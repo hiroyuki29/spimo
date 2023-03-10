@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
@@ -21,7 +20,7 @@ class HomeUseCase {
   final MemoStorageRepository memoStorageRepository;
   final BookStorageRepository bookStorageRepository;
 
-  Future<List<List<FlSpot>>> createCurrentBookMemoChartPoints({
+  Future<List<Map<double, double>>> createCurrentBookMemoChartPoints({
     required String userId,
     required String bookId,
     required int averageRange,
@@ -74,33 +73,45 @@ class HomeUseCase {
       );
     }
 
-    final chartPointsAll = wordAndPageMap.entries.map((entry) {
-      final page = entry.key * averageRange + averageRange / 2;
-      return FlSpot(page.toDouble(), entry.value);
-    }).toList();
+    Map<double, double> chartPointsAll = {0: wordAndPageMap.values.first};
+    wordAndPageMap.forEach((k, v) {
+      final page = k * averageRange + averageRange / 2;
+      final addedMap = {page.toDouble(): v};
+      chartPointsAll.addAll(addedMap);
+    });
 
-    final chartPointsOnlyRed = wordAndPageMapOnlyRed.entries.map((entry) {
-      final page = entry.key * averageRange + averageRange / 2;
-      return FlSpot(page.toDouble(), entry.value);
-    }).toList();
+    Map<double, double> chartPointsOnlyRed = {
+      0: wordAndPageMapOnlyRed.values.first
+    };
+    wordAndPageMapOnlyRed.forEach((k, v) {
+      final page = k * averageRange + averageRange / 2;
+      final addedMap = {page.toDouble(): v};
+      chartPointsOnlyRed.addAll(addedMap);
+    });
 
-    final firstAll = FlSpot(0, chartPointsAll.first.y);
-    final firstOnlyRed = FlSpot(0, chartPointsOnlyRed.first.y);
-    final lastAll = FlSpot(book.pageCount!.toDouble(), chartPointsAll.last.y);
-    final lastOnlyRed =
-        FlSpot(book.pageCount!.toDouble(), chartPointsOnlyRed.last.y);
+    //グラフ末尾のデータ追加（全部のメモ）
+    final Map<double, double> lastAll = {
+      book.pageCount!.toDouble(): chartPointsAll.values.last,
+    };
+    chartPointsAll.addAll(lastAll);
+
+    //グラフ末尾のデータ追加（赤色のメモ）
+    final Map<double, double> lastOnlyRed = {
+      book.pageCount!.toDouble(): chartPointsOnlyRed.values.last,
+    };
+    chartPointsOnlyRed.addAll(lastOnlyRed);
 
     return [
-      [firstAll, ...chartPointsAll, lastAll],
-      [firstOnlyRed, ...chartPointsOnlyRed, lastOnlyRed],
+      chartPointsAll,
+      chartPointsOnlyRed,
     ];
   }
 
-  double getMaxWordLength(List<FlSpot> chartPoints) {
+  double getMaxWordLength(Map<double, double> chartPoints) {
     double maxWordLength = 0;
-    for (FlSpot chartPoint in chartPoints) {
-      if (maxWordLength < chartPoint.y) {
-        maxWordLength = chartPoint.y;
+    for (double chartPoint in chartPoints.values) {
+      if (maxWordLength < chartPoint) {
+        maxWordLength = chartPoint;
       }
     }
     return maxWordLength;
@@ -123,13 +134,13 @@ class HomeUseCase {
     return memoWordsLength;
   }
 
-  Future<List<FlSpot>> createAllMemoChartPoints(String userId) async {
+  Future<Map<int, double>> createAllMemoChartPoints(String userId) async {
     final memos = await memoStorageRepository.fetchAllMemos(userId);
 
     memos.sort((a, b) => a.date.compareTo(b.date));
 
     if (memos.isEmpty) {
-      return [];
+      return {};
     }
 
     final initialDay = memos.first.date;
@@ -158,10 +169,8 @@ class HomeUseCase {
     for (int j = checkingDuration; j <= allDuration; j++) {
       wordAndPageMap[j] += sumWordLength;
     }
-    List<FlSpot> chartPointsAll = [];
-    for (int i = 0; i < wordAndPageMap.length; i++) {
-      chartPointsAll.add(FlSpot(i.toDouble(), wordAndPageMap[i]));
-    }
+    Map<int, double> chartPointsAll = wordAndPageMap.asMap();
+
     return chartPointsAll;
   }
 }

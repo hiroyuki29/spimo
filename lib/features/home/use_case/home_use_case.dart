@@ -154,16 +154,16 @@ class HomeUseCase {
 
     for (MemoLengthStock memo in memos) {
       int durationDifference = memo.date.difference(checkingDate).inDays;
-      memoLength = memo.memoLength.toDouble();
-      sumWordLength += memoLength;
 
-      if (durationDifference != 0) {
-        for (int i = 1; i <= durationDifference; i++) {
+      if (durationDifference > 1) {
+        for (int i = 1; i <= durationDifference - 1; i++) {
           wordAndPageMap[checkingDuration] += sumWordLength;
           checkingDate = checkingDate.add(const Duration(days: 1));
           checkingDuration++;
         }
       }
+      memoLength = memo.memoLength.toDouble();
+      sumWordLength += memoLength;
     }
     // 最後の日の加算が上記for文の中でされないため下記で行う
     for (int j = checkingDuration; j <= allDuration; j++) {

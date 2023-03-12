@@ -44,7 +44,6 @@ class FirestoreBooksRepository implements BookStorageRepository {
         }).toList();
         return dataList;
       });
-      memoList.sort(((a, b) => a.startPage!.compareTo(b.startPage!)));
       return book.copyWith(memoList: memoList);
     });
     return book;

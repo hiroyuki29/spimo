@@ -27,19 +27,18 @@ class BooksUseCase {
       userId: userId,
       bookId: bookId,
     );
-    return book;
-  }
 
-  Future<void> addMemo({required String userId, required Memo memo}) async {
-    await memoStorageRepository.addMemo(userId: userId, memo: memo);
+    if (book == null) return null;
 
-    await memoStorageRepository.stockMemoLength(
-        userId: userId,
-        addedMemoLength: memo.memoTextLength,
-        date: DateTime.now());
-  }
-
-  Future<void> removeMemo({required String userId, required Memo memo}) async {
-    await memoStorageRepository.removeMemo(userId: userId, memo: memo);
+    //memoListはそのままではunmodifiableなのでソートできるようにリストを作り直している
+    List<Memo> sortedMemoList = List.from(book.memoList);
+    sortedMemoList.sort(((a, b) {
+      int result = a.startPage!.compareTo(b.startPage!);
+      if (result != 0) return result;
+      if (b.isTitle) return 1;
+      return -1;
+    }));
+    final sortedBook = book.copyWith(memoList: sortedMemoList);
+    return sortedBook;
   }
 }

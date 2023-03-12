@@ -11,6 +11,8 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_view.dart';
+import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
+import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,6 +27,7 @@ class BooksHomeScreen extends StatefulHookConsumerWidget {
 class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final currentBook = ref.watch(currentBookControllerProvider);
     final books = ref.watch(sortedBookListProvider);
     final user = ref.watch(userControllerProvider);
     final sortType = ref.watch(bookSortTypeProvider);
@@ -81,38 +84,70 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
           ],
         ),
       ),
-      body: AsyncValueWidget(
-        value: books,
-        data: (value) => value.isEmpty
-            ? NoDataDisplayWidget(
-                text: AppLocalizations.of(context)!.noRegisterdBook,
-                icon: Icon(
-                  Icons.search,
-                  size: 160,
-                  color: Colors.grey.shade300,
-                ),
-                onTap: () => context.goNamed(AppRoute.searchBooks.name),
-              )
-            : Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                child: BookListView(
-                  bookList: value,
-                  currentBookId: user!.currentBookId,
-                  slideCallback: ((Book book) {
-                    if (book.id == user.currentBookId) {
-                      currentBookNotifier.reset();
-                      ref
-                          .read(userControllerProvider.notifier)
-                          .resetCurrentBookId;
-                    }
-                    ref.read(booksControllerProvider.notifier).removeBook(book);
-                  }),
-                  onTap: (Book book) {
-                    currentBookNotifier.setCurrentBookId(book.id);
-                  },
-                ),
-              ),
+      body: Column(
+        children: [
+          AsyncValueWidget(
+            value: currentBook,
+            data: (book) => book == null
+                ? const NoSelectedBookWidget()
+                : ColoredBox(
+                    color: backgroundGray,
+                    child: Column(
+                      children: [
+                        HomeContent(
+                          title: AppLocalizations.of(context)!.selectedBook,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: CurrentBookCard(
+                              isSelected: true,
+                              book: book,
+                            ),
+                          ),
+                        ),
+                        Container(height: 16, color: backgroundGray),
+                      ],
+                    ),
+                  ),
+          ),
+          Expanded(
+            child: AsyncValueWidget(
+              value: books,
+              data: (value) => value.isEmpty
+                  ? NoDataDisplayWidget(
+                      text: AppLocalizations.of(context)!.noRegisterdBook,
+                      icon: Icon(
+                        Icons.search,
+                        size: 160,
+                        color: Colors.grey.shade300,
+                      ),
+                      onTap: () => context.goNamed(AppRoute.searchBooks.name),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 16),
+                      child: BookListView(
+                        bookList: value,
+                        currentBookId: user!.currentBookId,
+                        slideCallback: ((Book book) {
+                          if (book.id == user.currentBookId) {
+                            currentBookNotifier.reset();
+                            ref
+                                .read(userControllerProvider.notifier)
+                                .resetCurrentBookId;
+                          }
+                          ref
+                              .read(booksControllerProvider.notifier)
+                              .removeBook(book);
+                        }),
+                        onTap: (Book book) {
+                          currentBookNotifier.setCurrentBookId(book.id);
+                        },
+                      ),
+                    ),
+            ),
+          ),
+        ],
       ),
     );
   }

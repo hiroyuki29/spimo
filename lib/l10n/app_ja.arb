@@ -53,6 +53,7 @@
   "noRegisterdBook": "登録している本がありません。\n 検索して本を登録しよう！",
   "removeBookTitle": "本の削除します。\n よろしいですか？",
   "removeBookContent": "本を削除すると、その本に対するメモのデータも削除されます" ,
-  "addingAHeadingTitle": "見出しタイトルの追加",
-  "headingTitle": "見出しタイトル"
+  "addingMemo": "メモの追加",
+  "redText": "赤色",
+  "text": "テキスト"
 }

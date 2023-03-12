@@ -13,6 +13,7 @@ import 'package:spimo/features/books/presentation/controller/current_book_contro
 import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
 
 class MemosHomeScreen extends HookConsumerWidget {
@@ -240,82 +241,173 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titlePage = useState<int?>(null);
-    final headingTitle = useState<String?>(null);
+    final startPage = useState<int?>(null);
+    final endPage = useState<int?>(null);
+    final memoLetter = useState<String?>(null);
+    final isRedText = useState<bool>(false);
+    final isTitle = useState<bool>(false);
 
-    Future<void> saveHeadingTitle() async {
-      if (titlePage.value == null || headingTitle.value == null) {
+    Future<void> addMemo() async {
+      if (startPage.value == null || memoLetter.value == null) {
         return;
       }
-      await ref.read(currentBookControllerProvider.notifier).addHeadingTitle(
-          bookId: currentBook.id,
-          page: titlePage.value!,
-          title: headingTitle.value!);
+      final memoText = MemoText(
+          text: memoLetter.value!,
+          textColor: isRedText.value ? TextColor.red : TextColor.black);
+      final memo = Memo(
+        id: 'id',
+        contents: [memoText],
+        startPage: startPage.value,
+        endPage: endPage.value,
+        bookId: currentBook.id,
+        createdAt: DateTime.now(),
+        isTitle: isTitle.value,
+      );
+      await ref.read(currentBookControllerProvider.notifier).addMemo(
+            bookId: currentBook.id,
+            memo: memo,
+          );
     }
 
-    return Container(
-      height: 350.0,
-      color: Colors.transparent,
-      child: Column(
-        children: [
-          sizedBoxH16,
-          const SizedBox(
-            width: 80,
-            height: 5,
-            child: ColoredBox(color: primaryLight),
-          ),
-          sizedBoxH16,
-          Text(
-            AppLocalizations.of(context)!.addingAHeadingTitle,
-            style: Theme.of(context).textTheme.subtitle2,
-          ),
-          sizedBoxH16,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PageSetForm(
-                  title: AppLocalizations.of(context)!.startPage,
-                  onChange: (value) {
-                    titlePage.value = int.tryParse(value);
-                  },
-                ),
-                sizedBoxH16,
-                TitleSetForm(
-                  title: AppLocalizations.of(context)!.headingTitle,
-                  onChange: (value) {
-                    headingTitle.value = value;
-                  },
-                ),
-              ],
+    return Wrap(
+      children: [
+        Column(
+          children: [
+            sizedBoxH16,
+            const SizedBox(
+              width: 80,
+              height: 5,
+              child: ColoredBox(color: primaryLight),
             ),
-          ),
-          sizedBoxH24,
-          SizedBox(
-            width: 200,
-            height: 60,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
-              ),
-              onPressed: (titlePage.value == null || headingTitle.value == null)
-                  ? null
-                  : () {
-                      saveHeadingTitle();
-                      Navigator.of(context).pop();
+            sizedBoxH16,
+            Text(
+              AppLocalizations.of(context)!.addingMemo,
+              style: Theme.of(context).textTheme.subtitle2,
+            ),
+            sizedBoxH16,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 80,
+                        child: PageSetForm(
+                          title: AppLocalizations.of(context)!.startPage,
+                          onChange: (value) {
+                            startPage.value = int.tryParse(value);
+                          },
+                        ),
+                      ),
+                      sizedBoxW24,
+                      SizedBox(
+                        width: 80,
+                        child: PageSetForm(
+                          title: AppLocalizations.of(context)!.endPage,
+                          onChange: (value) {
+                            endPage.value = int.tryParse(value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  sizedBoxH16,
+                  TitleSetForm(
+                    title: AppLocalizations.of(context)!.text,
+                    onChange: (value) {
+                      memoLetter.value = value;
                     },
-              child: Text(
-                AppLocalizations.of(context)!.save,
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2!
-                    .copyWith(color: white),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
+            sizedBoxH24,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CheckBoxWithTitle(
+                        title: AppLocalizations.of(context)!.redText,
+                        checkItem: isRedText.value,
+                        onTap: (_) {
+                          isRedText.value = !isRedText.value;
+                        },
+                      ),
+                      CheckBoxWithTitle(
+                        title: AppLocalizations.of(context)!.title,
+                        checkItem: isTitle.value,
+                        onTap: (_) {
+                          isTitle.value = !isTitle.value;
+                        },
+                      ),
+                    ],
+                  ),
+                  sizedBoxW32,
+                  SizedBox(
+                    width: 180,
+                    height: 60,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary,
+                      ),
+                      onPressed:
+                          (startPage.value == null || memoLetter.value == null)
+                              ? null
+                              : () {
+                                  addMemo();
+                                  Navigator.of(context).pop();
+                                },
+                      child: Text(
+                        AppLocalizations.of(context)!.save,
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(color: white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            sizedBoxH32,
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class CheckBoxWithTitle extends StatelessWidget {
+  const CheckBoxWithTitle({
+    Key? key,
+    required this.title,
+    required this.checkItem,
+    required this.onTap,
+  }) : super(key: key);
+
+  final String title;
+  final bool checkItem;
+  final Function(bool?) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Checkbox(
+          value: checkItem,
+          onChanged: onTap,
+        ),
+        Text(
+          title,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+      ],
     );
   }
 }

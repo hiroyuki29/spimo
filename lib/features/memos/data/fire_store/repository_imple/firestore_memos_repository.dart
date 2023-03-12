@@ -4,7 +4,6 @@ import 'package:spimo/features/memos/data/fire_store/model/firestore_memo.dart';
 import 'package:spimo/features/memos/data/fire_store/model/firestore_memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_length_stock.dart';
-import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
 
 class FireStoreMemosRepository implements MemoStorageRepository {
@@ -66,7 +65,7 @@ class FireStoreMemosRepository implements MemoStorageRepository {
       'startPage': memo.startPage,
       'endPage': memo.endPage,
       'createdAt': FieldValue.serverTimestamp(),
-      'isTitle': false,
+      'isTitle': memo.isTitle,
     });
 
     final totalMemoCount = memo.contents.fold(
@@ -105,28 +104,5 @@ class FireStoreMemosRepository implements MemoStorageRepository {
       },
       SetOptions(merge: true),
     );
-  }
-
-  @override
-  Future<void> addHeadingTitle({
-    required String userId,
-    required String bookId,
-    required int page,
-    required String title,
-  }) async {
-    final memoRef = usersBooks(userId).doc(bookId).collection('memos').doc();
-
-    final sendTitle = [
-      MemoText(text: title, textColor: TextColor.black).toJson(),
-    ];
-
-    await memoRef.set({
-      'id': memoRef.id,
-      'contents': sendTitle,
-      'bookId': bookId,
-      'startPage': page,
-      'createdAt': FieldValue.serverTimestamp(),
-      'isTitle': true,
-    });
   }
 }

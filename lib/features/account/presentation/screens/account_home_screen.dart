@@ -10,6 +10,7 @@ import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
+import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -92,7 +93,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
       );
     }
 
-    final email = ref.watch(userControllerProvider)?.email;
+    final user = ref.watch(userControllerProvider);
 
     return isLoading.value
         ? const LoadingCircleIndicator()
@@ -102,7 +103,33 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
             body: Center(
               child: Column(
                 children: [
-                  Text(email ?? ''),
+                  HomeContent(
+                    title: AppLocalizations.of(context)!.nickName,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(
+                                  child: Text(
+                                user?.nickName ?? '',
+                                style: const TextStyle(
+                                  color: black,
+                                  fontSize: 20,
+                                ),
+                              )),
+                            ),
+                          ),
+                        )),
+                  ),
                   sizedBoxH32,
                   AccountButton(
                     title: AppLocalizations.of(context)!.termsOfUse,

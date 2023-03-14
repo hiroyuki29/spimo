@@ -6,7 +6,7 @@
   "passwordValidator": "６文字以上の英数字および記号を入力してください",
   "login": "ログイン",
   "signUp": "新規登録",
-  "neckName": "名前（ニックネーム）",
+  "nickName": "名前（ニックネーム）",
   "requiredFields": "必須項目です",
   "and": "と",
   "agreeOnlyJp": "に同意して、",

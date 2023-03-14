@@ -6,7 +6,7 @@
   "passwordValidator": "Please enter at least 6 alphanumeric characters and symbols",
   "login": "Login",
   "signUp": "Sign up",
-  "neckName": "Name (Nickname)",
+  "nickName": "Name (Nickname)",
   "requiredFields": "Required Field",
   "and": " and ",
   "agreeOnlyJp": "",

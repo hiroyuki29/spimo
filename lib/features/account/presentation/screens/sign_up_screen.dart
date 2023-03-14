@@ -72,7 +72,7 @@ class SignUpScreen extends HookConsumerWidget {
                   sizedBoxH32,
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.neckName,
+                      labelText: AppLocalizations.of(context)!.nickName,
                     ),
                     validator: (value) {
                       String? checkedValue = value == null

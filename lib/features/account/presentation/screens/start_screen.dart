@@ -41,61 +41,62 @@ class StartScreen extends HookConsumerWidget {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
           body: SafeArea(
               child: Form(
             key: formKey,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 260,
-                    child: IconAsset.spimoLogo,
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.email,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 260,
+                      child: IconAsset.spimoLogo,
                     ),
-                    validator: (value) {
-                      String? checkedValue =
-                          Validator.email(context, value?.trim() ?? '');
-                      return checkedValue;
-                    },
-                    onChanged: (value) {
-                      email.value = value;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.passoword,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.email,
+                      ),
+                      validator: (value) {
+                        String? checkedValue =
+                            Validator.email(context, value?.trim() ?? '');
+                        return checkedValue;
+                      },
+                      onChanged: (value) {
+                        email.value = value;
+                      },
                     ),
-                    validator: (value) {
-                      String? checkedValue =
-                          Validator.password(context, value?.trim() ?? '');
-                      return checkedValue;
-                    },
-                    onChanged: (value) {
-                      password.value = value;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed:
-                        email.value.isNotEmpty && password.value.isNotEmpty
-                            ? submit
-                            : null,
-                    child: Text(AppLocalizations.of(context)!.login),
-                  ),
-                  const SizedBox(height: 30),
-                  TextButton(
-                    onPressed: () => context.goNamed(AppRoute.signUp.name),
-                    child: Text(AppLocalizations.of(context)!.signUp),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.passoword,
+                      ),
+                      validator: (value) {
+                        String? checkedValue =
+                            Validator.password(context, value?.trim() ?? '');
+                        return checkedValue;
+                      },
+                      onChanged: (value) {
+                        password.value = value;
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed:
+                          email.value.isNotEmpty && password.value.isNotEmpty
+                              ? submit
+                              : null,
+                      child: Text(AppLocalizations.of(context)!.login),
+                    ),
+                    const SizedBox(height: 30),
+                    TextButton(
+                      onPressed: () => context.goNamed(AppRoute.signUp.name),
+                      child: Text(AppLocalizations.of(context)!.signUp),
+                    ),
+                  ],
+                ),
               ),
             ),
           )),

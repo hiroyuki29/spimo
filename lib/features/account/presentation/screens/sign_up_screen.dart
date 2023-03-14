@@ -53,7 +53,6 @@ class SignUpScreen extends HookConsumerWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: CommonAppBar(
             context: context, title: AppLocalizations.of(context)!.signUp),
         body: SafeArea(

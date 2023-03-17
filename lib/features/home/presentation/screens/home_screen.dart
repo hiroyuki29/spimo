@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_method/datetime_formatter.dart';
@@ -38,6 +39,9 @@ class HomeScreen extends HookWidget {
         ),
       ),
     ];
+
+    //TODO: 削除のこと
+    print(dotenv.env['VAR_NAME']);
 
     return Scaffold(
       backgroundColor: backgroundGray,

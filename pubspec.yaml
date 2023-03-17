@@ -77,6 +77,9 @@ dependencies:
   flutter_svg: ^1.1.6
   url_launcher: ^6.1.8
   firebase_crashlytics: ^3.0.15
+
+  #環境変数
+  flutter_dotenv: ^5.0.2
   
   
   
@@ -114,6 +117,7 @@ flutter:
     - assets/image/splash/
     - assets/image/app_icon/
     - assets/svg/bottom_navigation/
+    - .env
 
 flutter_native_splash:
   image: 'assets/image/splash/splash.png'

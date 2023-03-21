@@ -8,10 +8,6 @@ import 'package:http/http.dart' as http;
 class OpenAISummaryRepository implements SummaryRepository {
   @override
   Future<String> createSummary({required List<String> memoList}) async {
-    // final memoList = book.memoList
-    //       .expand((memo) => memo.contents.map((e) => '${e.text}。'))
-    //       .toList();
-
     final message =
         '次の文章は音声入力により作成されたものです。変換間違いが含まれていることを考慮した上で要約してください。ここから要約して欲しい文章です。${memoList.join('。')}。';
 

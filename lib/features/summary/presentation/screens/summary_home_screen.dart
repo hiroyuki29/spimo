@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/async_value/async_value_widget.dart';
@@ -21,6 +22,25 @@ class SummaryHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBook = ref.watch(currentBookControllerProvider);
+    final rewardedAd = useState<RewardedAd?>(null);
+
+    // useEffect(() {
+    //   RewardedAd.load(
+    //     adUnitId: 'ca-app-pub-3940256099942544/1712485313',
+    //     request: const AdRequest(),
+    //     rewardedAdLoadCallback: RewardedAdLoadCallback(
+    //       onAdLoaded: (RewardedAd ad) {
+    //         print('$ad loaded.');
+    //         rewardedAd.value = ad;
+    //       },
+    //       onAdFailedToLoad: (LoadAdError error) {
+    //         print('RewardedAd failed to load: $error');
+    //       },
+    //     ),
+    //   );
+
+    //   return null;
+    // }, []);
 
     return Scaffold(
       backgroundColor: backgroundGray,
@@ -46,6 +66,32 @@ class SummaryHomeScreen extends HookConsumerWidget {
                         ),
                         child: AddSummaryBottomsheet(
                           currentBook: currentBook.value!,
+                          showAds: () {
+                            if (rewardedAd.value == null) {
+                              return;
+                            }
+                            rewardedAd.value!.fullScreenContentCallback =
+                                FullScreenContentCallback(
+                              onAdShowedFullScreenContent: (RewardedAd ad) =>
+                                  print('$ad onAdShowedFullScreenContent.'),
+                              onAdDismissedFullScreenContent: (RewardedAd ad) {
+                                print('$ad onAdDismissedFullScreenContent.');
+                                ad.dispose();
+                              },
+                              onAdFailedToShowFullScreenContent:
+                                  (RewardedAd ad, AdError error) {
+                                print(
+                                    '$ad onAdFailedToShowFullScreenContent: $error');
+                                ad.dispose();
+                              },
+                              onAdImpression: (RewardedAd ad) =>
+                                  print('$ad impression occurred.'),
+                            );
+                            rewardedAd.value!.show(
+                                onUserEarnedReward: ((ad, reward) {
+                              print('広告のテストです');
+                            }));
+                          },
                         ),
                       );
                     },
@@ -208,9 +254,11 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
   const AddSummaryBottomsheet({
     Key? key,
     required this.currentBook,
+    required this.showAds,
   }) : super(key: key);
 
   final Book currentBook;
+  final VoidCallback showAds;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -292,6 +340,7 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
                           (startPage.value == null || endPage.value == null)
                               ? null
                               : () {
+                                  showAds();
                                   addSummary();
                                   Navigator.of(context).pop();
                                 },

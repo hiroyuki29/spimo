@@ -80,6 +80,7 @@ dependencies:
 
   #環境変数
   flutter_dotenv: ^5.0.2
+  google_mobile_ads: ^2.3.0
   
   
   

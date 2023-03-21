@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
@@ -18,7 +15,6 @@ import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
-import 'package:http/http.dart' as http;
 
 class MemosHomeScreen extends HookConsumerWidget {
   const MemosHomeScreen({super.key});
@@ -26,48 +22,6 @@ class MemosHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBook = ref.watch(currentBookControllerProvider);
-
-    Future<String> _getResponse(Book book) async {
-      final memoList = book.memoList
-          .expand((memo) => memo.contents.map((e) => '${e.text}。'))
-          .toList();
-
-      final message =
-          '次の文章は音声入力により作成されたものです。変換間違いが含まれていることを考慮した上で要約してください。ここから要約して欲しい文章です。${memoList.join('。')}。';
-
-      final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${dotenv.env['GPT_API_KEY']!}',
-        },
-        body: jsonEncode({
-          "model": "gpt-3.5-turbo",
-          "messages": [
-            {"role": "user", "content": message}
-          ]
-        }),
-        encoding: Encoding.getByName('utf-8'),
-      );
-
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      final result = responseData['choices'][0]['message']['content'];
-      return result;
-    }
-
-    useEffect(() {
-      Future(
-        () async {
-          currentBook.whenData((value) async {
-            if (value != null) {
-              final result = await _getResponse(value);
-              print(result);
-            }
-          });
-        },
-      );
-      return null;
-    }, [currentBook]);
 
     return Scaffold(
       backgroundColor: backgroundGray,

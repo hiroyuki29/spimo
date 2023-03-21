@@ -20,6 +20,10 @@ _$_Book _$$_BookFromJson(Map<String, dynamic> json) => _$_Book(
               ?.map((e) => Memo.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      summaryList: (json['summaryList'] as List<dynamic>?)
+              ?.map((e) => Summary.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$_BookToJson(_$_Book instance) => <String, dynamic>{
@@ -32,4 +36,5 @@ Map<String, dynamic> _$$_BookToJson(_$_Book instance) => <String, dynamic>{
           const TimestampToDatetimeConverter().toJson(instance.createdAt),
       'totalMemoCount': instance.totalMemoCount,
       'memoList': instance.memoList,
+      'summaryList': instance.summaryList,
     };

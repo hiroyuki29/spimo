@@ -5,6 +5,8 @@ import 'package:spimo/features/books/domain/repository/book_storage_repository.d
 import 'package:spimo/features/books/use_case/books_use_case.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/use_case/memos_use_case.dart';
+import 'package:spimo/features/summary/domain/model/summary.dart';
+import 'package:spimo/features/summary/use_case/summary_use_case.dart';
 
 final currentBookControllerProvider =
     StateNotifierProvider.autoDispose<CurrentBookController, AsyncValue<Book?>>(
@@ -14,6 +16,7 @@ final currentBookControllerProvider =
     userController: ref.watch(userControllerProvider.notifier),
     memosUseCase: ref.watch(memosUseCaseProvider),
     booksUseCase: ref.watch(booksUseCaseProvider),
+    summaryUseCase: ref.watch(summaryUseCaseProvider),
   );
 });
 
@@ -23,6 +26,7 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
     required this.userController,
     required this.memosUseCase,
     required this.booksUseCase,
+    required this.summaryUseCase,
   }) : super(const AsyncData(null)) {
     fetchCurrentBook();
   }
@@ -30,6 +34,7 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
   final UserController userController;
   final MemosUseCase memosUseCase;
   final BooksUseCase booksUseCase;
+  final SummaryUseCase summaryUseCase;
 
   Future<void> setCurrentBookId(String bookId) async {
     await bookStorageRepository.setCurrentBookId(
@@ -82,6 +87,32 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
 
   Future<void> removeMemo({required Memo memo}) async {
     await memosUseCase.removeMemo(userId: userController.state!.id, memo: memo);
+    fetchCurrentBook();
+  }
+
+  Future<void> addSummary({
+    required Book book,
+    required int startPage,
+    required int endPage,
+  }) async {
+    final summaryText = await summaryUseCase.createSummary(
+        book: book, startPage: startPage, endPage: endPage);
+    final summary = Summary(
+      id: 'id',
+      text: summaryText,
+      bookId: book.id,
+      startPage: startPage,
+      endPage: endPage,
+      createdAt: DateTime.now(),
+    );
+    await summaryUseCase.addSummary(
+        userId: userController.state!.id, summary: summary);
+    fetchCurrentBook();
+  }
+
+  Future<void> removeSummary({required Summary summary}) async {
+    await summaryUseCase.removeSummary(
+        userId: userController.state!.id, summary: summary);
     fetchCurrentBook();
   }
 }

@@ -3,6 +3,8 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 import 'package:spimo/features/memos/data/fire_store/model/firestore_memo.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
+import 'package:spimo/features/summary/data/model/firestore_summary.dart';
+import 'package:spimo/features/summary/domain/model/summary.dart';
 
 class FirestoreBooksRepository implements BookStorageRepository {
   FirestoreBooksRepository();
@@ -44,7 +46,20 @@ class FirestoreBooksRepository implements BookStorageRepository {
         }).toList();
         return dataList;
       });
-      return book.copyWith(memoList: memoList);
+
+      final summaryRef = doc.reference.collection('summaries');
+      final summaryList = await summaryRef.get().then((docList) {
+        List<Summary> dataList = docList.docs.map((doc) {
+          Map<String, dynamic> data = doc.data();
+          final firestoreSummary = FirestoreSummary.fromJson(data);
+          return firestoreSummary.transferToSummary();
+        }).toList();
+        return dataList;
+      });
+      return book.copyWith(
+        memoList: memoList,
+        summaryList: summaryList,
+      );
     });
     return book;
   }

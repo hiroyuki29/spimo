@@ -3,6 +3,7 @@ import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/domain/repository/book_storage_repository.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
+import 'package:spimo/features/summary/domain/model/summary.dart';
 
 final booksUseCaseProvider = Provider.autoDispose<BooksUseCase>((ref) {
   return BooksUseCase(
@@ -38,7 +39,13 @@ class BooksUseCase {
       if (b.isTitle) return 1;
       return -1;
     }));
-    final sortedBook = book.copyWith(memoList: sortedMemoList);
+
+    //memoListはそのままではunmodifiableなのでソートできるようにリストを作り直している
+    List<Summary> sortedSummaryList = List.from(book.summaryList);
+    sortedSummaryList.sort(((a, b) => a.startPage.compareTo(b.startPage)));
+
+    final sortedBook =
+        book.copyWith(memoList: sortedMemoList, summaryList: sortedSummaryList);
     return sortedBook;
   }
 }

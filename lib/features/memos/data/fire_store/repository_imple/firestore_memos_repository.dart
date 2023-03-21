@@ -5,6 +5,7 @@ import 'package:spimo/features/memos/data/fire_store/model/firestore_memo_length
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart';
+import 'package:spimo/features/summary/domain/model/summary.dart';
 
 class FireStoreMemosRepository implements MemoStorageRepository {
   FireStoreMemosRepository();
@@ -104,5 +105,34 @@ class FireStoreMemosRepository implements MemoStorageRepository {
       },
       SetOptions(merge: true),
     );
+  }
+
+  @override
+  Future<void> addSummary({
+    required String userId,
+    required Summary summary,
+  }) async {
+    final summaryRef =
+        usersBooks(userId).doc(summary.bookId).collection('summaries').doc();
+
+    await summaryRef.set({
+      'id': summaryRef.id,
+      'text': summary.text,
+      'bookId': summary.bookId,
+      'startPage': summary.startPage,
+      'endPage': summary.endPage,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  @override
+  Future<void> removeSummary(
+      {required String userId, required Summary summary}) async {
+    final summaryRef = usersBooks(userId)
+        .doc(summary.bookId)
+        .collection('summaries')
+        .doc(summary.id);
+
+    await summaryRef.delete();
   }
 }

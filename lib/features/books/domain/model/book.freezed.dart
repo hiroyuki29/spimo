@@ -29,6 +29,7 @@ mixin _$Book {
   DateTime get createdAt => throw _privateConstructorUsedError;
   int get totalMemoCount => throw _privateConstructorUsedError;
   List<Memo> get memoList => throw _privateConstructorUsedError;
+  List<Summary> get summaryList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $BookCopyWith<$Res> {
       int? pageCount,
       @TimestampToDatetimeConverter() DateTime createdAt,
       int totalMemoCount,
-      List<Memo> memoList});
+      List<Memo> memoList,
+      List<Summary> summaryList});
 }
 
 /// @nodoc
@@ -72,6 +74,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? createdAt = null,
     Object? totalMemoCount = null,
     Object? memoList = null,
+    Object? summaryList = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -106,6 +109,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.memoList
           : memoList // ignore: cast_nullable_to_non_nullable
               as List<Memo>,
+      summaryList: null == summaryList
+          ? _value.summaryList
+          : summaryList // ignore: cast_nullable_to_non_nullable
+              as List<Summary>,
     ) as $Val);
   }
 }
@@ -124,7 +131,8 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
       int? pageCount,
       @TimestampToDatetimeConverter() DateTime createdAt,
       int totalMemoCount,
-      List<Memo> memoList});
+      List<Memo> memoList,
+      List<Summary> summaryList});
 }
 
 /// @nodoc
@@ -144,6 +152,7 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
     Object? createdAt = null,
     Object? totalMemoCount = null,
     Object? memoList = null,
+    Object? summaryList = null,
   }) {
     return _then(_$_Book(
       id: null == id
@@ -178,6 +187,10 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value._memoList
           : memoList // ignore: cast_nullable_to_non_nullable
               as List<Memo>,
+      summaryList: null == summaryList
+          ? _value._summaryList
+          : summaryList // ignore: cast_nullable_to_non_nullable
+              as List<Summary>,
     ));
   }
 }
@@ -193,9 +206,11 @@ class _$_Book implements _Book {
       this.pageCount,
       @TimestampToDatetimeConverter() required this.createdAt,
       this.totalMemoCount = 0,
-      final List<Memo> memoList = const []})
+      final List<Memo> memoList = const [],
+      final List<Summary> summaryList = const []})
       : _authors = authors,
-        _memoList = memoList;
+        _memoList = memoList,
+        _summaryList = summaryList;
 
   factory _$_Book.fromJson(Map<String, dynamic> json) => _$$_BookFromJson(json);
 
@@ -232,9 +247,18 @@ class _$_Book implements _Book {
     return EqualUnmodifiableListView(_memoList);
   }
 
+  final List<Summary> _summaryList;
+  @override
+  @JsonKey()
+  List<Summary> get summaryList {
+    if (_summaryList is EqualUnmodifiableListView) return _summaryList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_summaryList);
+  }
+
   @override
   String toString() {
-    return 'Book(id: $id, title: $title, authors: $authors, imageLinks: $imageLinks, pageCount: $pageCount, createdAt: $createdAt, totalMemoCount: $totalMemoCount, memoList: $memoList)';
+    return 'Book(id: $id, title: $title, authors: $authors, imageLinks: $imageLinks, pageCount: $pageCount, createdAt: $createdAt, totalMemoCount: $totalMemoCount, memoList: $memoList, summaryList: $summaryList)';
   }
 
   @override
@@ -253,7 +277,9 @@ class _$_Book implements _Book {
                 other.createdAt == createdAt) &&
             (identical(other.totalMemoCount, totalMemoCount) ||
                 other.totalMemoCount == totalMemoCount) &&
-            const DeepCollectionEquality().equals(other._memoList, _memoList));
+            const DeepCollectionEquality().equals(other._memoList, _memoList) &&
+            const DeepCollectionEquality()
+                .equals(other._summaryList, _summaryList));
   }
 
   @JsonKey(ignore: true)
@@ -267,7 +293,8 @@ class _$_Book implements _Book {
       pageCount,
       createdAt,
       totalMemoCount,
-      const DeepCollectionEquality().hash(_memoList));
+      const DeepCollectionEquality().hash(_memoList),
+      const DeepCollectionEquality().hash(_summaryList));
 
   @JsonKey(ignore: true)
   @override
@@ -292,7 +319,8 @@ abstract class _Book implements Book {
       final int? pageCount,
       @TimestampToDatetimeConverter() required final DateTime createdAt,
       final int totalMemoCount,
-      final List<Memo> memoList}) = _$_Book;
+      final List<Memo> memoList,
+      final List<Summary> summaryList}) = _$_Book;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
@@ -313,6 +341,8 @@ abstract class _Book implements Book {
   int get totalMemoCount;
   @override
   List<Memo> get memoList;
+  @override
+  List<Summary> get summaryList;
   @override
   @JsonKey(ignore: true)
   _$$_BookCopyWith<_$_Book> get copyWith => throw _privateConstructorUsedError;

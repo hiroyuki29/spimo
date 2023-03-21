@@ -11,6 +11,7 @@ import 'package:spimo/features/memos/domain/model/memo_length_stock.dart'
     as _i4;
 import 'package:spimo/features/memos/domain/repository/memo_storage_repository.dart'
     as _i2;
+import 'package:spimo/features/summary/domain/model/summary.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -112,21 +113,17 @@ class MockMemoStorageRepository extends _i1.Mock
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
   @override
-  _i3.Future<void> addHeadingTitle({
+  _i3.Future<void> addSummary({
     required String? userId,
-    required String? bookId,
-    required int? page,
-    required String? title,
+    required _i6.Summary? summary,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #addHeadingTitle,
+          #addSummary,
           [],
           {
             #userId: userId,
-            #bookId: bookId,
-            #page: page,
-            #title: title,
+            #summary: summary,
           },
         ),
         returnValue: _i3.Future<void>.value(),

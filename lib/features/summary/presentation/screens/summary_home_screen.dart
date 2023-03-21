@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
@@ -14,60 +11,16 @@ import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
-import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
-import 'package:http/http.dart' as http;
+import 'package:spimo/features/summary/domain/model/summary.dart';
 
-class MemosHomeScreen extends HookConsumerWidget {
-  const MemosHomeScreen({super.key});
+class SummaryHomeScreen extends HookConsumerWidget {
+  const SummaryHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBook = ref.watch(currentBookControllerProvider);
-
-    Future<String> _getResponse(Book book) async {
-      final memoList = book.memoList
-          .expand((memo) => memo.contents.map((e) => '${e.text}。'))
-          .toList();
-
-      final message =
-          '次の文章は音声入力により作成されたものです。変換間違いが含まれていることを考慮した上で要約してください。ここから要約して欲しい文章です。${memoList.join('。')}。';
-
-      final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${dotenv.env['GPT_API_KEY']!}',
-        },
-        body: jsonEncode({
-          "model": "gpt-3.5-turbo",
-          "messages": [
-            {"role": "user", "content": message}
-          ]
-        }),
-        encoding: Encoding.getByName('utf-8'),
-      );
-
-      final responseData = jsonDecode(utf8.decode(response.bodyBytes));
-      final result = responseData['choices'][0]['message']['content'];
-      return result;
-    }
-
-    useEffect(() {
-      Future(
-        () async {
-          currentBook.whenData((value) async {
-            if (value != null) {
-              final result = await _getResponse(value);
-              print(result);
-            }
-          });
-        },
-      );
-      return null;
-    }, [currentBook]);
 
     return Scaffold(
       backgroundColor: backgroundGray,
@@ -91,7 +44,7 @@ class MemosHomeScreen extends HookConsumerWidget {
                         padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom,
                         ),
-                        child: AddHeadingTitleBottomSheet(
+                        child: AddSummaryBottomsheet(
                           currentBook: currentBook.value!,
                         ),
                       );
@@ -120,15 +73,15 @@ class MemosHomeScreen extends HookConsumerWidget {
                   ),
                   Container(height: 16, color: backgroundGray),
                   Expanded(
-                    child: currentBook.memoList.isEmpty
+                    child: currentBook.summaryList.isEmpty
                         ? const NoSavedMemoWidget()
                         : Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             child: ListView.separated(
-                              itemCount: currentBook.memoList.length,
+                              itemCount: currentBook.summaryList.length,
                               itemBuilder: (context, index) {
-                                final memo = currentBook.memoList[index];
+                                final summary = currentBook.summaryList[index];
                                 return Dismissible(
                                   key: UniqueKey(),
                                   background: Container(
@@ -182,13 +135,13 @@ class MemosHomeScreen extends HookConsumerWidget {
                                     ref
                                         .read(currentBookControllerProvider
                                             .notifier)
-                                        .removeMemo(memo: memo);
+                                        .removeSummary(summary: summary);
                                   },
-                                  child: MemoListTile(memo: memo),
+                                  child: SummaryListTile(summary: summary),
                                 );
                               },
                               separatorBuilder: (context, index) {
-                                return sizedBoxH8;
+                                return sizedBoxH32;
                               },
                             ),
                           ),
@@ -200,85 +153,59 @@ class MemosHomeScreen extends HookConsumerWidget {
   }
 }
 
-class MemoListTile extends StatelessWidget {
-  const MemoListTile({
+class SummaryListTile extends StatelessWidget {
+  const SummaryListTile({
     Key? key,
-    required this.memo,
+    required this.summary,
   }) : super(key: key);
 
-  final Memo memo;
+  final Summary summary;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      tileColor: memo.isTitle ? Colors.transparent : white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      title: Row(
-        children: [
-          memo.isTitle
-              ? Text(
-                  'p.${memo.startPage?.toString() ?? ''} ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(color: accent),
-                )
-              : Text(
-                  'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-          sizedBoxW16,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: memo.contents.map((text) {
-                return Text(
-                  text.text,
-                  style: memo.isTitle
-                      ? Theme.of(context).textTheme.subtitle1!.copyWith(
-                            color: accent,
-                          )
-                      : Theme.of(context).textTheme.bodyText2!.copyWith(
-                            color: text.textColor.color,
-                          ),
-                );
-              }).toList(),
+    return Column(
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: accent.withOpacity(0.3),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(8),
             ),
           ),
-        ],
-      ),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
+              child: Text(
+                'p.${summary.startPage.toString()} ~ p.${summary.endPage.toString()}',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          ),
+        ),
+        DecoratedBox(
+          decoration: const BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(8),
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
+            child: Text(
+              summary.text,
+              style: Theme.of(context).textTheme.bodyText2!,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
-class TitleSetForm extends StatelessWidget {
-  const TitleSetForm({
-    Key? key,
-    required this.onChange,
-    required this.title,
-  }) : super(key: key);
-
-  final void Function(String) onChange;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: title,
-        labelStyle: Theme.of(context).textTheme.bodyText1,
-      ),
-      keyboardType: TextInputType.text,
-      onChanged: onChange,
-      style: Theme.of(context).textTheme.bodyText1,
-    );
-  }
-}
-
-class AddHeadingTitleBottomSheet extends HookConsumerWidget {
-  const AddHeadingTitleBottomSheet({
+class AddSummaryBottomsheet extends HookConsumerWidget {
+  const AddSummaryBottomsheet({
     Key? key,
     required this.currentBook,
   }) : super(key: key);
@@ -289,29 +216,15 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final startPage = useState<int?>(null);
     final endPage = useState<int?>(null);
-    final memoLetter = useState<String?>(null);
-    final isRedText = useState<bool>(false);
-    final isTitle = useState<bool>(false);
 
-    Future<void> addMemo() async {
-      if (startPage.value == null || memoLetter.value == null) {
+    Future<void> addSummary() async {
+      if (startPage.value == null || endPage.value == null) {
         return;
       }
-      final memoText = MemoText(
-          text: memoLetter.value!,
-          textColor: isRedText.value ? TextColor.red : TextColor.black);
-      final memo = Memo(
-        id: 'id',
-        contents: [memoText],
-        startPage: startPage.value,
-        endPage: endPage.value,
-        bookId: currentBook.id,
-        createdAt: DateTime.now(),
-        isTitle: isTitle.value,
-      );
-      await ref.read(currentBookControllerProvider.notifier).addMemo(
-            bookId: currentBook.id,
-            memo: memo,
+      await ref.read(currentBookControllerProvider.notifier).addSummary(
+            book: currentBook,
+            startPage: startPage.value!,
+            endPage: endPage.value!,
           );
     }
 
@@ -359,13 +272,6 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
                       ),
                     ],
                   ),
-                  sizedBoxH16,
-                  TitleSetForm(
-                    title: AppLocalizations.of(context)!.text,
-                    onChange: (value) {
-                      memoLetter.value = value;
-                    },
-                  ),
                 ],
               ),
             ),
@@ -375,26 +281,6 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CheckBoxWithTitle(
-                        title: AppLocalizations.of(context)!.redText,
-                        checkItem: isRedText.value,
-                        onTap: (_) {
-                          isRedText.value = !isRedText.value;
-                        },
-                      ),
-                      CheckBoxWithTitle(
-                        title: AppLocalizations.of(context)!.title,
-                        checkItem: isTitle.value,
-                        onTap: (_) {
-                          isTitle.value = !isTitle.value;
-                        },
-                      ),
-                    ],
-                  ),
-                  sizedBoxW32,
                   SizedBox(
                     width: 180,
                     height: 60,
@@ -403,10 +289,10 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
                         backgroundColor: primary,
                       ),
                       onPressed:
-                          (startPage.value == null || memoLetter.value == null)
+                          (startPage.value == null || endPage.value == null)
                               ? null
                               : () {
-                                  addMemo();
+                                  addSummary();
                                   Navigator.of(context).pop();
                                 },
                       child: Text(
@@ -423,35 +309,6 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
             ),
             sizedBoxH32,
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class CheckBoxWithTitle extends StatelessWidget {
-  const CheckBoxWithTitle({
-    Key? key,
-    required this.title,
-    required this.checkItem,
-    required this.onTap,
-  }) : super(key: key);
-
-  final String title;
-  final bool checkItem;
-  final Function(bool?) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          value: checkItem,
-          onChanged: onTap,
-        ),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.bodyText1,
         ),
       ],
     );

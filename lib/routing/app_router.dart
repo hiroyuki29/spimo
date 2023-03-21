@@ -13,7 +13,7 @@ import 'package:spimo/features/books/presentation/screens/books_home_screen.dart
 import 'package:spimo/features/books/presentation/screens/search_books_screen.dart';
 import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/features/memos/presentation/screens/memos_home_screen.dart';
-import 'package:spimo/features/record/presentation/record_home_screen.dart';
+import 'package:spimo/features/summary/presentation/screens/summary_home_screen.dart';
 
 enum AppRoute {
   start,
@@ -88,7 +88,7 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
           GoRoute(
             path: '/record',
             name: AppRoute.record.name,
-            builder: (context, state) => const RecordHomeScreen(),
+            builder: (context, state) => const SummaryHomeScreen(),
           ),
           GoRoute(
             path: '/books',

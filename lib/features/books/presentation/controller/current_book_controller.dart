@@ -90,14 +90,14 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
     fetchCurrentBook();
   }
 
-  Future<void> addSummary({
+  Future<Summary> createSummary({
     required Book book,
     required int startPage,
     required int endPage,
   }) async {
     final summaryText = await summaryUseCase.createSummary(
         book: book, startPage: startPage, endPage: endPage);
-    final summary = Summary(
+    return Summary(
       id: 'id',
       text: summaryText,
       bookId: book.id,
@@ -105,6 +105,11 @@ class CurrentBookController extends StateNotifier<AsyncValue<Book?>> {
       endPage: endPage,
       createdAt: DateTime.now(),
     );
+  }
+
+  Future<void> addSummary({
+    required Summary summary,
+  }) async {
     await summaryUseCase.addSummary(
         userId: userController.state!.id, summary: summary);
     fetchCurrentBook();

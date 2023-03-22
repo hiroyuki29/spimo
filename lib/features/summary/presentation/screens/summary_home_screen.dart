@@ -22,6 +22,19 @@ class SummaryHomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBook = ref.watch(currentBookControllerProvider);
+    final isGettedReward = useState<bool>(false);
+    final summary = useState<Summary?>(null);
+
+    useEffect(() {
+      if (isGettedReward.value && summary.value != null) {
+        ref
+            .read(currentBookControllerProvider.notifier)
+            .addSummary(summary: summary.value!);
+        isGettedReward.value = false;
+        summary.value = null;
+      }
+      return null;
+    }, [isGettedReward.value, summary.value]);
 
     return Scaffold(
       backgroundColor: backgroundGray,
@@ -47,6 +60,8 @@ class SummaryHomeScreen extends HookConsumerWidget {
                         ),
                         child: AddSummaryBottomsheet(
                           currentBook: currentBook.value!,
+                          isGettedReward: isGettedReward,
+                          summary: summary,
                         ),
                       );
                     },
@@ -213,9 +228,13 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
   const AddSummaryBottomsheet({
     Key? key,
     required this.currentBook,
+    required this.isGettedReward,
+    required this.summary,
   }) : super(key: key);
 
   final Book currentBook;
+  final ValueNotifier<bool> isGettedReward;
+  final ValueNotifier<Summary?> summary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -227,7 +246,14 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
     useEffect(() {
       RewardedAd.load(
         adUnitId: 'ca-app-pub-3940256099942544/1712485313',
-        request: const AdRequest(),
+        request: const AdRequest(
+          keywords: [
+            'technology',
+            'programming',
+            'book',
+            'study',
+          ],
+        ),
         rewardedAdLoadCallback: RewardedAdLoadCallback(
           onAdLoaded: (RewardedAd ad) {
             print('$ad loaded.');
@@ -252,8 +278,14 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
       }
 
       rewardedAd.value!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdShowedFullScreenContent: (RewardedAd ad) =>
-            print('$ad onAdShowedFullScreenContent.'),
+        onAdShowedFullScreenContent: (RewardedAd ad) => ref
+            .read(currentBookControllerProvider.notifier)
+            .createSummary(
+              book: currentBook,
+              startPage: startPage.value!,
+              endPage: endPage.value!,
+            )
+            .then((result) => summary.value = result),
         onAdDismissedFullScreenContent: (RewardedAd ad) {
           print('$ad onAdDismissedFullScreenContent.');
           ad.dispose();
@@ -264,15 +296,10 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
         },
         onAdImpression: (RewardedAd ad) => print('$ad impression occurred.'),
       );
-      rewardedAd.value!.show(onUserEarnedReward: ((ad, reward) {
-        print('広告のテストです');
-      }));
 
-      await ref.read(currentBookControllerProvider.notifier).addSummary(
-            book: currentBook,
-            startPage: startPage.value!,
-            endPage: endPage.value!,
-          );
+      rewardedAd.value!.show(onUserEarnedReward: ((ad, reward) {
+        isGettedReward.value = true;
+      }));
     }
 
     return Wrap(
@@ -338,7 +365,7 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
                       onPressed:
                           (startPage.value == null || endPage.value == null)
                               ? null
-                              : () {
+                              : () async {
                                   addSummary();
                                   Navigator.of(context).pop();
                                 },

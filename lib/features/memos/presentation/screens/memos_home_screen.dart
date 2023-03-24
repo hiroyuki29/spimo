@@ -10,50 +10,40 @@ import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
-import 'package:spimo/features/books/presentation/ui_compornent/current_book_card.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
+import 'package:spimo/features/summary/presentation/screens/summary_home_screen.dart';
 
 class MemosHomeScreen extends HookConsumerWidget {
   const MemosHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tabController = useTabController(initialLength: 2);
     final currentBook = ref.watch(currentBookControllerProvider);
+
+    List<Widget> tabs = [
+      Tab(
+        child: Text(
+          AppLocalizations.of(context)!.memo,
+          style: const TextStyle(color: primaryDark),
+        ),
+      ),
+      Tab(
+        child: Text(
+          AppLocalizations.of(context)!.summary,
+          style: const TextStyle(color: primaryDark),
+        ),
+      ),
+    ];
 
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(
         context: context,
-        title: 'memos',
-        action: currentBook.value == null
-            ? const SizedBox.shrink()
-            : IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(25.0)),
-                    ),
-                    builder: (BuildContext context) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: AddHeadingTitleBottomSheet(
-                          currentBook: currentBook.value!,
-                        ),
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(Icons.add),
-              ),
+        title: 'Memo',
       ),
       body: AsyncValueWidget(
         value: currentBook,
@@ -61,95 +51,193 @@ class MemosHomeScreen extends HookConsumerWidget {
             ? const NoSelectedBookWidget()
             : Column(
                 children: [
-                  Container(height: 16, color: backgroundGray),
                   ColoredBox(
-                    color: backgroundGray,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: CurrentBookCard(
-                        isSelected: false,
-                        book: currentBook,
-                      ),
-                    ),
-                  ),
-                  Container(height: 16, color: backgroundGray),
-                  Expanded(
-                    child: currentBook.memoList.isEmpty
-                        ? const NoSavedMemoWidget()
-                        : Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: ListView.separated(
-                              itemCount: currentBook.memoList.length,
-                              itemBuilder: (context, index) {
-                                final memo = currentBook.memoList[index];
-                                return Dismissible(
-                                  key: UniqueKey(),
-                                  background: Container(
-                                    color: Colors.red,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: const [
-                                        sizedBoxW24,
-                                        Icon(Icons.delete, color: Colors.white),
-                                      ],
-                                    ),
-                                  ),
-                                  secondaryBackground: Container(
-                                    color: Colors.red,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: const [
-                                        Icon(Icons.delete, color: Colors.white),
-                                        sizedBoxW24,
-                                      ],
-                                    ),
-                                  ),
-                                  confirmDismiss:
-                                      (DismissDirection direction) async {
-                                    return await showCupertinoDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return CustomAlertDialog(
-                                          title: AppLocalizations.of(context)!
-                                              .deleteMemoTitle,
-                                          content: AppLocalizations.of(context)!
-                                              .deleteMemoContent,
-                                          leftText:
-                                              AppLocalizations.of(context)!
-                                                  .delete,
-                                          rightText:
-                                              AppLocalizations.of(context)!
-                                                  .cancel,
-                                          onTapLeft: () {
-                                            Navigator.of(context).pop(true);
-                                          },
-                                          onTapRight: () {
-                                            Navigator.of(context).pop(false);
-                                          },
-                                        );
-                                      },
+                    color: white,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              sizedBoxW16,
+                              SizedBox(
+                                height: 80,
+                                child: Image.network(
+                                  currentBook.imageLinks ?? '',
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.image_not_supported_outlined,
                                     );
                                   },
-                                  onDismissed: (DismissDirection direction) {
-                                    ref
-                                        .read(currentBookControllerProvider
-                                            .notifier)
-                                        .removeMemo(memo: memo);
-                                  },
-                                  child: MemoListTile(memo: memo),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return sizedBoxH8;
-                              },
-                            ),
+                                ),
+                              ),
+                              sizedBoxW24,
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      currentBook.title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle2,
+                                    ),
+                                    Text(
+                                      currentBook.authors.toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                    Text(
+                                      '${currentBook.pageCount.toString()} ${AppLocalizations.of(context)!.pages}',
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
+                        ),
+                        TabBar(
+                          controller: tabController,
+                          indicatorColor: primaryDark,
+                          indicatorWeight: 3,
+                          tabs: tabs,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(controller: tabController, children: [
+                      MemoListView(
+                        currentBook: currentBook,
+                      ),
+                      SummaryHomeScreen(
+                        currentBook: currentBook,
+                      ),
+                    ]),
                   ),
                 ],
               ),
       ),
+    );
+  }
+}
+
+class MemoListView extends ConsumerWidget {
+  const MemoListView({
+    Key? key,
+    required this.currentBook,
+  }) : super(key: key);
+
+  final Book currentBook;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Stack(
+      children: [
+        currentBook.memoList.isEmpty
+            ? const NoSavedMemoWidget()
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ListView.separated(
+                  padding: const EdgeInsets.only(bottom: 100),
+                  itemCount: currentBook.memoList.length,
+                  itemBuilder: (context, index) {
+                    final memo = currentBook.memoList[index];
+                    return Dismissible(
+                      key: UniqueKey(),
+                      background: Container(
+                        color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            sizedBoxW24,
+                            Icon(Icons.delete, color: Colors.white),
+                          ],
+                        ),
+                      ),
+                      secondaryBackground: Container(
+                        color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Icon(Icons.delete, color: Colors.white),
+                            sizedBoxW24,
+                          ],
+                        ),
+                      ),
+                      confirmDismiss: (DismissDirection direction) async {
+                        return await showCupertinoDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomAlertDialog(
+                              title:
+                                  AppLocalizations.of(context)!.deleteMemoTitle,
+                              content: AppLocalizations.of(context)!
+                                  .deleteMemoContent,
+                              leftText: AppLocalizations.of(context)!.delete,
+                              rightText: AppLocalizations.of(context)!.cancel,
+                              onTapLeft: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              onTapRight: () {
+                                Navigator.of(context).pop(false);
+                              },
+                            );
+                          },
+                        );
+                      },
+                      onDismissed: (DismissDirection direction) {
+                        ref
+                            .read(currentBookControllerProvider.notifier)
+                            .removeMemo(memo: memo);
+                      },
+                      child: MemoListTile(memo: memo),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return sizedBoxH8;
+                  },
+                ),
+              ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16, right: 16),
+            child: FloatingActionButton(
+              backgroundColor: accent,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(25.0)),
+                  ),
+                  builder: (BuildContext context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: AddHeadingTitleBottomSheet(
+                        currentBook: currentBook,
+                      ),
+                    );
+                  },
+                );
+              },
+              child: const Icon(Icons.add),
+            ),
+          ),
+        )
+      ],
     );
   }
 }

@@ -13,7 +13,7 @@ import 'package:spimo/features/books/presentation/screens/books_home_screen.dart
 import 'package:spimo/features/books/presentation/screens/search_books_screen.dart';
 import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/features/memos/presentation/screens/memos_home_screen.dart';
-import 'package:spimo/features/summary/presentation/screens/summary_home_screen.dart';
+import 'package:spimo/features/record/presentation/record_home_screen.dart';
 
 enum AppRoute {
   start,
@@ -88,7 +88,7 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
           GoRoute(
             path: '/record',
             name: AppRoute.record.name,
-            builder: (context, state) => const SummaryHomeScreen(),
+            builder: (context, state) => const RecordHomeScreen(),
           ),
           GoRoute(
             path: '/books',
@@ -145,31 +145,31 @@ class _ScaffoldWithBottomNavBarState
       initialLocation: '/home',
       icon: SizedBox(width: 32, height: 32, child: IconAsset.home),
       activeIcon: SizedBox(width: 32, child: IconAsset.homeActive),
-      label: 'home',
+      label: 'Home',
     ),
     ScaffoldWithNavBarTabItem(
       initialLocation: '/memos',
       icon: SizedBox(width: 32, height: 32, child: IconAsset.memo),
       activeIcon: SizedBox(width: 32, child: IconAsset.memoActive),
-      label: 'memo',
+      label: 'Memo',
     ),
     ScaffoldWithNavBarTabItem(
       initialLocation: '/record',
       icon: SizedBox(width: 32, height: 32, child: IconAsset.speech),
       activeIcon: SizedBox(width: 32, child: IconAsset.speechActive),
-      label: 'record',
+      label: 'Record',
     ),
     ScaffoldWithNavBarTabItem(
       initialLocation: '/books',
       icon: SizedBox(width: 32, height: 32, child: IconAsset.book),
       activeIcon: SizedBox(width: 32, child: IconAsset.bookActive),
-      label: 'book',
+      label: 'Book',
     ),
     ScaffoldWithNavBarTabItem(
       initialLocation: '/account',
       icon: SizedBox(width: 32, height: 32, child: IconAsset.account),
       activeIcon: SizedBox(width: 32, child: IconAsset.accountActive),
-      label: 'account',
+      label: 'Account',
     ),
   ];
 

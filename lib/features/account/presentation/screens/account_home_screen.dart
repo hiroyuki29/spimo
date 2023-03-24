@@ -99,77 +99,79 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
         ? const LoadingCircleIndicator()
         : Scaffold(
             backgroundColor: backgroundGray,
-            appBar: CommonAppBar(context: context, title: 'account'),
+            appBar: CommonAppBar(context: context, title: 'Account'),
             body: Center(
-              child: Column(
-                children: [
-                  HomeContent(
-                    title: AppLocalizations.of(context)!.nickName,
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            color: white,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    HomeContent(
+                      title: AppLocalizations.of(context)!.nickName,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: DecoratedBox(
+                            decoration: const BoxDecoration(
+                              color: white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8),
+                              ),
                             ),
-                          ),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Center(
-                                  child: Text(
-                                user?.nickName ?? '',
-                                style: const TextStyle(
-                                  color: black,
-                                  fontSize: 20,
-                                ),
-                              )),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Center(
+                                    child: Text(
+                                  user?.nickName ?? '',
+                                  style: const TextStyle(
+                                    color: black,
+                                    fontSize: 20,
+                                  ),
+                                )),
+                              ),
                             ),
-                          ),
-                        )),
-                  ),
-                  sizedBoxH32,
-                  AccountButton(
-                    title: AppLocalizations.of(context)!.termsOfUse,
-                    privacyPolicyUrl: termsOfServiceUrl,
-                    onTap: () async {
-                      await doLaunchingUrl(termsOfServiceUrl);
-                    },
-                  ),
-                  sizedBoxH24,
-                  AccountButton(
-                    title: AppLocalizations.of(context)!.privacyPolicy,
-                    privacyPolicyUrl: privacyPolicyUrl,
-                    onTap: () async {
-                      await doLaunchingUrl(privacyPolicyUrl);
-                    },
-                  ),
-                  sizedBoxH24,
-                  AccountButton(
-                    title: AppLocalizations.of(context)!.inquiry,
-                    privacyPolicyUrl: inquiryUrl,
-                    onTap: () async {
-                      await doLaunchingUrl(inquiryUrl);
-                    },
-                  ),
-                  sizedBoxH24,
-                  AccountButton(
-                    title: AppLocalizations.of(context)!.withdrawal,
-                    privacyPolicyUrl: inquiryUrl,
-                    onTap: () async {
-                      await deleteUser();
-                    },
-                  ),
-                  sizedBoxH24,
-                  AccountButton(
-                    title: AppLocalizations.of(context)!.logout,
-                    onTap: () async {
-                      await logout();
-                    },
-                  ),
-                ],
+                          )),
+                    ),
+                    sizedBoxH32,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.termsOfUse,
+                      privacyPolicyUrl: termsOfServiceUrl,
+                      onTap: () async {
+                        await doLaunchingUrl(termsOfServiceUrl);
+                      },
+                    ),
+                    sizedBoxH24,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.privacyPolicy,
+                      privacyPolicyUrl: privacyPolicyUrl,
+                      onTap: () async {
+                        await doLaunchingUrl(privacyPolicyUrl);
+                      },
+                    ),
+                    sizedBoxH24,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.inquiry,
+                      privacyPolicyUrl: inquiryUrl,
+                      onTap: () async {
+                        await doLaunchingUrl(inquiryUrl);
+                      },
+                    ),
+                    sizedBoxH24,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.withdrawal,
+                      privacyPolicyUrl: inquiryUrl,
+                      onTap: () async {
+                        await deleteUser();
+                      },
+                    ),
+                    sizedBoxH24,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.logout,
+                      onTap: () async {
+                        await logout();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );

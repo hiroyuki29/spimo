@@ -52,7 +52,7 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
       ),
       appBar: CommonAppBar(
         context: context,
-        title: 'books',
+        title: 'Book',
       ),
       endDrawer: Drawer(
         child: ListView(

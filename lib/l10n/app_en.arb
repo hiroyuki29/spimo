@@ -55,5 +55,14 @@
   "removeBookContent": "When you delete a book, the memo data for that book will also be deleted." ,
   "addingMemo": "Adding Memo",
   "redText": "Red Text",
-  "text": "Text"
+  "text": "Text",
+  "aiSummary": "AI Summary",
+  "createSummary": "Create Summary",
+  "create": "Create",
+  "memo": "Memo",
+  "summary": "Summary",
+   "home": "Home",
+  "record": "Record",
+  "book": "Book",
+  "account": "Account"
 }

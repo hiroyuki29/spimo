@@ -43,7 +43,7 @@ class HomeScreen extends HookWidget {
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(
         context: context,
-        title: 'home',
+        title: 'Home',
         bottom: TabBar(
           controller: tabController,
           indicatorColor: primaryDark,

@@ -55,5 +55,14 @@
   "removeBookContent": "本を削除すると、その本に対するメモのデータも削除されます" ,
   "addingMemo": "メモの追加",
   "redText": "赤色",
-  "text": "テキスト"
+  "text": "テキスト",
+  "aiSummary": "AI要約",
+  "createSummary": "要約の作成",
+  "create": "作成",
+  "memo": "メモ",
+  "summary": "要約",
+  "home": "ホーム",
+  "record": "録音",
+  "book": "本",
+  "account": "アカウント"
 }

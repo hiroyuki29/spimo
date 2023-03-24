@@ -146,7 +146,7 @@ class MemoListView extends ConsumerWidget {
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ListView.separated(
-                  padding: const EdgeInsets.only(bottom: 100),
+                  padding: const EdgeInsets.only(top: 16, bottom: 100),
                   itemCount: currentBook.memoList.length,
                   itemBuilder: (context, index) {
                     final memo = currentBook.memoList[index];

@@ -21,7 +21,11 @@ class UserController extends StateNotifier<AppUser?> {
   final BookStorageRepository bookStorageRepository;
 
   Future<void> fetchUser(String userId) async {
-    state = await userRepository.fetchUser(userId);
+    try {
+      state = await userRepository.fetchUser(userId);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> setCurrentBookId(String bookId) async {

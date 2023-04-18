@@ -24,6 +24,7 @@ class FirebaseAuthRepository implements UserRepository {
         'email': emailAddress,
         'nickName': nickName,
         'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
       });
       return userId;
     } on FirebaseAuthException catch (e) {

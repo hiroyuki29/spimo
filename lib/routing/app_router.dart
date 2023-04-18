@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
+import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
@@ -131,10 +132,18 @@ class _ScaffoldWithBottomNavBarState
     extends ConsumerState<ScaffoldWithBottomNavBar> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref
           .read(userControllerProvider.notifier)
           .fetchUser(FirebaseAuth.instance.currentUser!.uid);
+
+      final user = ref.read(userControllerProvider);
+      if (user == null) {
+        Future(() async {
+          await ref.read(userRepositoryProvider).signOut();
+          context.goNamed(AppRoute.start.name);
+        });
+      }
     });
 
     super.initState();

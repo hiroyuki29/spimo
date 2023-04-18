@@ -64,5 +64,6 @@
    "home": "Home",
   "record": "Record",
   "book": "Book",
-  "account": "Account"
+  "account": "Account",
+  "license": "License"
 }

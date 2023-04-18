@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
+import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/indicator/loading_circle_indicator.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
@@ -134,7 +136,6 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                     sizedBoxH32,
                     AccountButton(
                       title: AppLocalizations.of(context)!.termsOfUse,
-                      privacyPolicyUrl: termsOfServiceUrl,
                       onTap: () async {
                         await doLaunchingUrl(termsOfServiceUrl);
                       },
@@ -142,7 +143,6 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                     sizedBoxH24,
                     AccountButton(
                       title: AppLocalizations.of(context)!.privacyPolicy,
-                      privacyPolicyUrl: privacyPolicyUrl,
                       onTap: () async {
                         await doLaunchingUrl(privacyPolicyUrl);
                       },
@@ -150,17 +150,23 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                     sizedBoxH24,
                     AccountButton(
                       title: AppLocalizations.of(context)!.inquiry,
-                      privacyPolicyUrl: inquiryUrl,
                       onTap: () async {
                         await doLaunchingUrl(inquiryUrl);
                       },
                     ),
                     sizedBoxH24,
                     AccountButton(
-                      title: AppLocalizations.of(context)!.withdrawal,
-                      privacyPolicyUrl: inquiryUrl,
+                      title: AppLocalizations.of(context)!.license,
                       onTap: () async {
-                        await deleteUser();
+                        final info = await PackageInfo.fromPlatform();
+                        if (!context.mounted) return;
+                        showAboutDialog(
+                          context: context,
+                          applicationName: info.appName,
+                          applicationVersion: info.version,
+                          applicationIcon:
+                              SizedBox(height: 50, child: IconAsset.spimoLogo),
+                        );
                       },
                     ),
                     sizedBoxH24,
@@ -170,6 +176,14 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                         await logout();
                       },
                     ),
+                    sizedBoxH24,
+                    AccountButton(
+                      title: AppLocalizations.of(context)!.withdrawal,
+                      onTap: () async {
+                        await deleteUser();
+                      },
+                    ),
+                    sizedBoxH24,
                   ],
                 ),
               ),
@@ -181,12 +195,10 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
 class AccountButton extends StatelessWidget {
   const AccountButton({
     Key? key,
-    this.privacyPolicyUrl,
     required this.title,
     this.onTap,
   }) : super(key: key);
 
-  final Uri? privacyPolicyUrl;
   final String title;
   final VoidCallback? onTap;
 

@@ -37,9 +37,8 @@ class HomeUseCase {
       return [];
     }
 
-    final memosWithStartPage =
-        memos.where((memo) => memo.startPage != null).toList();
-    memosWithStartPage.sort((a, b) => a.startPage!.compareTo(b.startPage!));
+    final memosWithStartPage = memos;
+    memosWithStartPage.sort((a, b) => a.startPage.compareTo(b.startPage));
 
     final wordAndPageMap = Map<int, double>.fromIterable(
       List.generate((book.pageCount! / averageRange).ceil(), (i) => i),
@@ -58,7 +57,7 @@ class HomeUseCase {
         }
       }
 
-      final page = memo.startPage!;
+      final page = memo.startPage;
       final key = (page / averageRange).floor();
       wordAndPageMap.update(
         key,

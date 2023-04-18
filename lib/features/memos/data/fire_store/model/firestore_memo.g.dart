@@ -13,8 +13,8 @@ _$_FirestoreMemo _$$_FirestoreMemoFromJson(Map<String, dynamic> json) =>
           .map((e) => MemoText.fromJson(e as Map<String, dynamic>))
           .toList(),
       bookId: json['bookId'] as String,
-      startPage: json['startPage'] as int?,
-      endPage: json['endPage'] as int?,
+      startPage: json['startPage'] as int,
+      endPage: json['endPage'] as int,
       createdAt: const TimestampToDatetimeConverter()
           .fromJson(json['createdAt'] as Timestamp),
       isTitle: json['isTitle'] as bool,

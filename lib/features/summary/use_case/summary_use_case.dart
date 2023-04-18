@@ -27,10 +27,7 @@ class SummaryUseCase {
   }) async {
     final memoList = book.memoList
         .where(
-          (memo) =>
-              memo.startPage != null &&
-              memo.startPage! >= startPage &&
-              memo.startPage! <= endPage,
+          (memo) => memo.startPage >= startPage && memo.startPage <= endPage,
         )
         .expand((memo) => memo.contents.map((e) => '${e.text}。'))
         .toList();

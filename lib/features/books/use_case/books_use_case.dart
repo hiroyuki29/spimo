@@ -34,7 +34,7 @@ class BooksUseCase {
     //memoListはそのままではunmodifiableなのでソートできるようにリストを作り直している
     List<Memo> sortedMemoList = List.from(book.memoList);
     sortedMemoList.sort(((a, b) {
-      int result = a.startPage!.compareTo(b.startPage!);
+      int result = a.startPage.compareTo(b.startPage);
       if (result != 0) return result;
       if (b.isTitle) return 1;
       return -1;

@@ -252,6 +252,10 @@ class MemoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String pageDisplay = memo.startPage == memo.endPage
+        ? 'p.${memo.startPage.toString()}'
+        : 'p.${memo.startPage.toString()} ~\n  p.${memo.endPage.toString()}';
+
     return ListTile(
       tileColor: memo.isTitle ? Colors.transparent : white,
       shape: RoundedRectangleBorder(
@@ -261,14 +265,14 @@ class MemoListTile extends StatelessWidget {
         children: [
           memo.isTitle
               ? Text(
-                  'p.${memo.startPage?.toString() ?? ''} ',
+                  'p.${memo.startPage.toString()} ',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
                       .copyWith(color: accent),
                 )
               : Text(
-                  'p.${memo.startPage?.toString() ?? ''} ~\n  p.${memo.endPage?.toString() ?? ''}',
+                  pageDisplay,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
           sizedBoxW16,
@@ -345,8 +349,8 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
       final memo = Memo(
         id: 'id',
         contents: [memoText],
-        startPage: startPage.value,
-        endPage: endPage.value,
+        startPage: startPage.value!,
+        endPage: endPage.value ?? startPage.value!,
         bookId: currentBook.id,
         createdAt: DateTime.now(),
         isTitle: isTitle.value,

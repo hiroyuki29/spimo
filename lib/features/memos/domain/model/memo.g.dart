@@ -12,8 +12,8 @@ _$_Memo _$$_MemoFromJson(Map<String, dynamic> json) => _$_Memo(
           .map((e) => MemoText.fromJson(e as Map<String, dynamic>))
           .toList(),
       bookId: json['bookId'] as String,
-      startPage: json['startPage'] as int?,
-      endPage: json['endPage'] as int?,
+      startPage: json['startPage'] as int,
+      endPage: json['endPage'] as int,
       createdAt: DateTime.parse(json['createdAt'] as String),
       isTitle: json['isTitle'] as bool,
     );

@@ -9,6 +9,7 @@ import 'package:spimo/common_widget/color/color.dart';
 import 'package:spimo/common_widget/compornent/no_data_display_widget.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
 import 'package:spimo/features/books/presentation/controller/current_book_controller.dart';
@@ -18,10 +19,10 @@ import 'package:spimo/features/home/presentation/controller/home_current_book_ch
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends HookWidget {
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(initialLength: 2);
 
     List<Widget> tabs = [
@@ -38,6 +39,8 @@ class HomeScreen extends HookWidget {
         ),
       ),
     ];
+
+    final user = ref.watch(userControllerProvider);
 
     return Scaffold(
       backgroundColor: backgroundGray,

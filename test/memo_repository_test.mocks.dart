@@ -129,4 +129,21 @@ class MockMemoStorageRepository extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+  @override
+  _i3.Future<void> removeSummary({
+    required String? userId,
+    required _i6.Summary? summary,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #removeSummary,
+          [],
+          {
+            #userId: userId,
+            #summary: summary,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

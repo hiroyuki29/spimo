@@ -143,8 +143,8 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                     final memo = Memo(
                                       id: 'id',
                                       contents: _wordList,
-                                      startPage: _startPage,
-                                      endPage: _endPage,
+                                      startPage: _startPage!,
+                                      endPage: _endPage ?? _startPage!,
                                       bookId: book.id,
                                       createdAt: DateTime.now(),
                                       isTitle: false,

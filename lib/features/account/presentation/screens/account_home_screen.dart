@@ -160,7 +160,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                       onTap: () async {
                         final info = await PackageInfo.fromPlatform();
                         if (!context.mounted) return;
-                        showAboutDialog(
+                        showLicensePage(
                           context: context,
                           applicationName: info.appName,
                           applicationVersion: info.version,

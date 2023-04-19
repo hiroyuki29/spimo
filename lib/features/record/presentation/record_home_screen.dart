@@ -215,7 +215,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                       'Stop',
                       style: Theme.of(context)
                           .textTheme
-                          .subtitle2!
+                          .titleSmall!
                           .copyWith(color: white),
                     ),
                   ),
@@ -227,6 +227,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     FloatingActionButton(
+                      heroTag: 'red_btn',
                       backgroundColor: Colors.red,
                       onPressed: () => _startListening(isAccent: true),
                       tooltip: 'Listen',
@@ -234,6 +235,7 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                     ),
                     sizedBoxW24,
                     FloatingActionButton(
+                      heroTag: 'black_btn',
                       backgroundColor: primaryDark,
                       onPressed: () => _startListening(isAccent: false),
                       tooltip: 'Listen',
@@ -262,11 +264,11 @@ class PageSetForm extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         labelText: title,
-        labelStyle: Theme.of(context).textTheme.bodyText1,
+        labelStyle: Theme.of(context).textTheme.bodyLarge,
       ),
       keyboardType: TextInputType.number,
       onChanged: onChange,
-      style: Theme.of(context).textTheme.bodyText1,
+      style: Theme.of(context).textTheme.bodyLarge,
     );
   }
 }

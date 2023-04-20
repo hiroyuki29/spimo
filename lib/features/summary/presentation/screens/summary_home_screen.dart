@@ -152,7 +152,7 @@ class SummaryHomeScreen extends HookConsumerWidget {
                           AppLocalizations.of(context)!.aiSummary,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle1!
+                              .titleMedium!
                               .copyWith(color: white),
                         ),
                       ),
@@ -191,7 +191,7 @@ class SummaryListTile extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
               child: Text(
                 'p.${summary.startPage.toString()} ~ p.${summary.endPage.toString()}',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ),
@@ -210,7 +210,7 @@ class SummaryListTile extends StatelessWidget {
                   const EdgeInsets.symmetric(vertical: 8, horizontal: 16.0),
               child: Text(
                 summary.text,
-                style: Theme.of(context).textTheme.bodyText2!,
+                style: Theme.of(context).textTheme.bodyMedium!,
               ),
             ),
           ),
@@ -311,7 +311,7 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
             sizedBoxH16,
             Text(
               AppLocalizations.of(context)!.createSummary,
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             sizedBoxH16,
             Padding(
@@ -366,7 +366,7 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
                     AppLocalizations.of(context)!.create,
                     style: Theme.of(context)
                         .textTheme
-                        .subtitle2!
+                        .titleSmall!
                         .copyWith(color: white),
                   ),
                 ),

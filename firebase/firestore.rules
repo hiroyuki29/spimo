@@ -68,7 +68,7 @@ service cloud.firestore {
         allow delete: if isUserAuthenticated(userId);
 
         function isValidMemo(memo) {
-            return memo.size() == 7
+            return memo.size() == 6
             && 'id' in memo && memo.id is string
             && 'bookId' in memo && memo.bookId is string
             && 'contents' in memo && memo.contents is list

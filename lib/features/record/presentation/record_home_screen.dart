@@ -27,13 +27,19 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   List<MemoText> _wordList = [];
   String _currentLocaleId = '';
   bool _isAccent = false;
-  int? _startPage;
-  int? _endPage;
+  // int? _startPage;
+  final TextEditingController _startPageController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _initSpeech();
+  }
+
+  @override
+  void dispose() {
+    _startPageController.dispose();
+    super.dispose();
   }
 
   void _initSpeech() async {
@@ -137,13 +143,15 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                             ),
                             onPressed: _speechToText.isListening ||
                                     _wordList.isEmpty ||
-                                    _startPage == null
+                                    _startPageController.text == ''
                                 ? null
                                 : () async {
                                     final memo = Memo(
                                       id: 'id',
                                       contents: _wordList,
-                                      startPage: _startPage!,
+                                      startPage: int.tryParse(
+                                              _startPageController.text) ??
+                                          0,
                                       bookId: book.id,
                                       createdAt: DateTime.now(),
                                       isTitle: false,
@@ -165,17 +173,49 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                               horizontal: 16, vertical: 32),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: 80,
                                 child: PageSetForm(
+                                  controller: _startPageController,
                                   title:
                                       AppLocalizations.of(context)!.startPage,
-                                  onChange: (value) {
-                                    setState(() {
-                                      _startPage = int.tryParse(value);
-                                    });
-                                  },
+                                ),
+                              ),
+                              sizedBoxW8,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Row(
+                                  children: [
+                                    PageChangeButton(
+                                      icon: Icons.add,
+                                      onTap: () {
+                                        final currentPage = int.tryParse(
+                                                _startPageController.text) ??
+                                            0;
+                                        final increasedPage = currentPage + 1;
+                                        setState(() {
+                                          _startPageController.text =
+                                              increasedPage.toString();
+                                        });
+                                      },
+                                    ),
+                                    PageChangeButton(
+                                      icon: Icons.remove,
+                                      onTap: () {
+                                        final currentPage = int.tryParse(
+                                                _startPageController.text) ??
+                                            0;
+                                        if (currentPage < 1) return;
+                                        final decreasedPage = currentPage - 1;
+                                        setState(() {
+                                          _startPageController.text =
+                                              decreasedPage.toString();
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 80),
@@ -236,19 +276,50 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
   }
 }
 
+class PageChangeButton extends StatelessWidget {
+  const PageChangeButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        minimumSize: Size.zero,
+        padding: EdgeInsets.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(icon),
+      ),
+    );
+  }
+}
+
+///onChangeプロパティもしくはcontrollerプロパティのいづれかを引数で渡す必要があります
 class PageSetForm extends StatelessWidget {
   const PageSetForm({
     Key? key,
-    required this.onChange,
+    this.onChange,
+    this.controller,
     required this.title,
   }) : super(key: key);
 
-  final void Function(String) onChange;
+  final void Function(String)? onChange;
+  final TextEditingController? controller;
   final String title;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       decoration: InputDecoration(
         labelText: title,
         labelStyle: Theme.of(context).textTheme.bodyLarge,

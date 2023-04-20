@@ -24,7 +24,6 @@ mixin _$FirestoreMemo {
   List<MemoText> get contents => throw _privateConstructorUsedError;
   String get bookId => throw _privateConstructorUsedError;
   int get startPage => throw _privateConstructorUsedError;
-  int get endPage => throw _privateConstructorUsedError;
   @TimestampToDatetimeConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
   bool get isTitle => throw _privateConstructorUsedError;
@@ -46,7 +45,6 @@ abstract class $FirestoreMemoCopyWith<$Res> {
       List<MemoText> contents,
       String bookId,
       int startPage,
-      int endPage,
       @TimestampToDatetimeConverter() DateTime createdAt,
       bool isTitle});
 }
@@ -68,7 +66,6 @@ class _$FirestoreMemoCopyWithImpl<$Res, $Val extends FirestoreMemo>
     Object? contents = null,
     Object? bookId = null,
     Object? startPage = null,
-    Object? endPage = null,
     Object? createdAt = null,
     Object? isTitle = null,
   }) {
@@ -88,10 +85,6 @@ class _$FirestoreMemoCopyWithImpl<$Res, $Val extends FirestoreMemo>
       startPage: null == startPage
           ? _value.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _value.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -118,7 +111,6 @@ abstract class _$$_FirestoreMemoCopyWith<$Res>
       List<MemoText> contents,
       String bookId,
       int startPage,
-      int endPage,
       @TimestampToDatetimeConverter() DateTime createdAt,
       bool isTitle});
 }
@@ -138,7 +130,6 @@ class __$$_FirestoreMemoCopyWithImpl<$Res>
     Object? contents = null,
     Object? bookId = null,
     Object? startPage = null,
-    Object? endPage = null,
     Object? createdAt = null,
     Object? isTitle = null,
   }) {
@@ -158,10 +149,6 @@ class __$$_FirestoreMemoCopyWithImpl<$Res>
       startPage: null == startPage
           ? _value.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _value.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -183,7 +170,6 @@ class _$_FirestoreMemo extends _FirestoreMemo {
       required final List<MemoText> contents,
       required this.bookId,
       required this.startPage,
-      required this.endPage,
       @TimestampToDatetimeConverter() required this.createdAt,
       required this.isTitle})
       : _contents = contents,
@@ -207,8 +193,6 @@ class _$_FirestoreMemo extends _FirestoreMemo {
   @override
   final int startPage;
   @override
-  final int endPage;
-  @override
   @TimestampToDatetimeConverter()
   final DateTime createdAt;
   @override
@@ -216,7 +200,7 @@ class _$_FirestoreMemo extends _FirestoreMemo {
 
   @override
   String toString() {
-    return 'FirestoreMemo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt, isTitle: $isTitle)';
+    return 'FirestoreMemo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, createdAt: $createdAt, isTitle: $isTitle)';
   }
 
   @override
@@ -229,7 +213,6 @@ class _$_FirestoreMemo extends _FirestoreMemo {
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.startPage, startPage) ||
                 other.startPage == startPage) &&
-            (identical(other.endPage, endPage) || other.endPage == endPage) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.isTitle, isTitle) || other.isTitle == isTitle));
@@ -243,7 +226,6 @@ class _$_FirestoreMemo extends _FirestoreMemo {
       const DeepCollectionEquality().hash(_contents),
       bookId,
       startPage,
-      endPage,
       createdAt,
       isTitle);
 
@@ -267,7 +249,6 @@ abstract class _FirestoreMemo extends FirestoreMemo {
       required final List<MemoText> contents,
       required final String bookId,
       required final int startPage,
-      required final int endPage,
       @TimestampToDatetimeConverter() required final DateTime createdAt,
       required final bool isTitle}) = _$_FirestoreMemo;
   const _FirestoreMemo._() : super._();
@@ -283,8 +264,6 @@ abstract class _FirestoreMemo extends FirestoreMemo {
   String get bookId;
   @override
   int get startPage;
-  @override
-  int get endPage;
   @override
   @TimestampToDatetimeConverter()
   DateTime get createdAt;

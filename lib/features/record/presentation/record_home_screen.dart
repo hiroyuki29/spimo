@@ -144,7 +144,6 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                       id: 'id',
                                       contents: _wordList,
                                       startPage: _startPage!,
-                                      endPage: _endPage ?? _startPage!,
                                       bookId: book.id,
                                       createdAt: DateTime.now(),
                                       isTitle: false,
@@ -175,18 +174,6 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                                   onChange: (value) {
                                     setState(() {
                                       _startPage = int.tryParse(value);
-                                    });
-                                  },
-                                ),
-                              ),
-                              sizedBoxW24,
-                              SizedBox(
-                                width: 80,
-                                child: PageSetForm(
-                                  title: AppLocalizations.of(context)!.endPage,
-                                  onChange: (value) {
-                                    setState(() {
-                                      _endPage = int.tryParse(value);
                                     });
                                   },
                                 ),

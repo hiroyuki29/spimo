@@ -80,22 +80,25 @@ class MemosHomeScreen extends HookConsumerWidget {
                                       currentBook.title,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style:
-                                          Theme.of(context).textTheme.subtitle2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
                                     ),
                                     Text(
                                       currentBook.authors.toString(),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                     Text(
                                       '${currentBook.pageCount.toString()} ${AppLocalizations.of(context)!.pages}',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
                                   ],
                                 ),
@@ -252,9 +255,7 @@ class MemoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String pageDisplay = memo.startPage == memo.endPage
-        ? 'p.${memo.startPage.toString()}'
-        : 'p.${memo.startPage.toString()} ~\n  p.${memo.endPage.toString()}';
+    String pageDisplay = 'p.${memo.startPage.toString()}';
 
     return ListTile(
       tileColor: memo.isTitle ? Colors.transparent : white,
@@ -268,12 +269,12 @@ class MemoListTile extends StatelessWidget {
                   'p.${memo.startPage.toString()} ',
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle1!
+                      .titleMedium!
                       .copyWith(color: accent),
                 )
               : Text(
                   pageDisplay,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
           sizedBoxW16,
           Expanded(
@@ -283,10 +284,10 @@ class MemoListTile extends StatelessWidget {
                 return Text(
                   text.text,
                   style: memo.isTitle
-                      ? Theme.of(context).textTheme.subtitle1!.copyWith(
+                      ? Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: accent,
                           )
-                      : Theme.of(context).textTheme.bodyText2!.copyWith(
+                      : Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: text.textColor.color,
                           ),
                 );
@@ -314,11 +315,11 @@ class TitleSetForm extends StatelessWidget {
     return TextFormField(
       decoration: InputDecoration(
         labelText: title,
-        labelStyle: Theme.of(context).textTheme.bodyText1,
+        labelStyle: Theme.of(context).textTheme.bodyLarge,
       ),
       keyboardType: TextInputType.text,
       onChanged: onChange,
-      style: Theme.of(context).textTheme.bodyText1,
+      style: Theme.of(context).textTheme.bodyLarge,
     );
   }
 }
@@ -350,7 +351,6 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
         id: 'id',
         contents: [memoText],
         startPage: startPage.value!,
-        endPage: endPage.value ?? startPage.value!,
         bookId: currentBook.id,
         createdAt: DateTime.now(),
         isTitle: isTitle.value,
@@ -374,7 +374,7 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
             sizedBoxH16,
             Text(
               AppLocalizations.of(context)!.addingMemo,
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
             sizedBoxH16,
             Padding(
@@ -390,16 +390,6 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
                           title: AppLocalizations.of(context)!.startPage,
                           onChange: (value) {
                             startPage.value = int.tryParse(value);
-                          },
-                        ),
-                      ),
-                      sizedBoxW24,
-                      SizedBox(
-                        width: 80,
-                        child: PageSetForm(
-                          title: AppLocalizations.of(context)!.endPage,
-                          onChange: (value) {
-                            endPage.value = int.tryParse(value);
                           },
                         ),
                       ),
@@ -459,7 +449,7 @@ class AddHeadingTitleBottomSheet extends HookConsumerWidget {
                         AppLocalizations.of(context)!.save,
                         style: Theme.of(context)
                             .textTheme
-                            .subtitle2!
+                            .titleSmall!
                             .copyWith(color: white),
                       ),
                     ),
@@ -497,7 +487,7 @@ class CheckBoxWithTitle extends StatelessWidget {
         ),
         Text(
           title,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

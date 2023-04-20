@@ -14,7 +14,6 @@ _$_FirestoreMemo _$$_FirestoreMemoFromJson(Map<String, dynamic> json) =>
           .toList(),
       bookId: json['bookId'] as String,
       startPage: json['startPage'] as int,
-      endPage: json['endPage'] as int,
       createdAt: const TimestampToDatetimeConverter()
           .fromJson(json['createdAt'] as Timestamp),
       isTitle: json['isTitle'] as bool,
@@ -26,7 +25,6 @@ Map<String, dynamic> _$$_FirestoreMemoToJson(_$_FirestoreMemo instance) =>
       'contents': instance.contents,
       'bookId': instance.bookId,
       'startPage': instance.startPage,
-      'endPage': instance.endPage,
       'createdAt':
           const TimestampToDatetimeConverter().toJson(instance.createdAt),
       'isTitle': instance.isTitle,

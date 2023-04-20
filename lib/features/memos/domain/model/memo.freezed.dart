@@ -24,7 +24,6 @@ mixin _$Memo {
   List<MemoText> get contents => throw _privateConstructorUsedError;
   String get bookId => throw _privateConstructorUsedError;
   int get startPage => throw _privateConstructorUsedError;
-  int get endPage => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   bool get isTitle => throw _privateConstructorUsedError;
 
@@ -43,7 +42,6 @@ abstract class $MemoCopyWith<$Res> {
       List<MemoText> contents,
       String bookId,
       int startPage,
-      int endPage,
       DateTime createdAt,
       bool isTitle});
 }
@@ -65,7 +63,6 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
     Object? contents = null,
     Object? bookId = null,
     Object? startPage = null,
-    Object? endPage = null,
     Object? createdAt = null,
     Object? isTitle = null,
   }) {
@@ -85,10 +82,6 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
       startPage: null == startPage
           ? _value.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _value.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -113,7 +106,6 @@ abstract class _$$_MemoCopyWith<$Res> implements $MemoCopyWith<$Res> {
       List<MemoText> contents,
       String bookId,
       int startPage,
-      int endPage,
       DateTime createdAt,
       bool isTitle});
 }
@@ -131,7 +123,6 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
     Object? contents = null,
     Object? bookId = null,
     Object? startPage = null,
-    Object? endPage = null,
     Object? createdAt = null,
     Object? isTitle = null,
   }) {
@@ -151,10 +142,6 @@ class __$$_MemoCopyWithImpl<$Res> extends _$MemoCopyWithImpl<$Res, _$_Memo>
       startPage: null == startPage
           ? _value.startPage
           : startPage // ignore: cast_nullable_to_non_nullable
-              as int,
-      endPage: null == endPage
-          ? _value.endPage
-          : endPage // ignore: cast_nullable_to_non_nullable
               as int,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -176,7 +163,6 @@ class _$_Memo extends _Memo {
       required final List<MemoText> contents,
       required this.bookId,
       required this.startPage,
-      required this.endPage,
       required this.createdAt,
       required this.isTitle})
       : _contents = contents,
@@ -199,15 +185,13 @@ class _$_Memo extends _Memo {
   @override
   final int startPage;
   @override
-  final int endPage;
-  @override
   final DateTime createdAt;
   @override
   final bool isTitle;
 
   @override
   String toString() {
-    return 'Memo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, endPage: $endPage, createdAt: $createdAt, isTitle: $isTitle)';
+    return 'Memo(id: $id, contents: $contents, bookId: $bookId, startPage: $startPage, createdAt: $createdAt, isTitle: $isTitle)';
   }
 
   @override
@@ -220,7 +204,6 @@ class _$_Memo extends _Memo {
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.startPage, startPage) ||
                 other.startPage == startPage) &&
-            (identical(other.endPage, endPage) || other.endPage == endPage) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.isTitle, isTitle) || other.isTitle == isTitle));
@@ -234,7 +217,6 @@ class _$_Memo extends _Memo {
       const DeepCollectionEquality().hash(_contents),
       bookId,
       startPage,
-      endPage,
       createdAt,
       isTitle);
 
@@ -258,7 +240,6 @@ abstract class _Memo extends Memo {
       required final List<MemoText> contents,
       required final String bookId,
       required final int startPage,
-      required final int endPage,
       required final DateTime createdAt,
       required final bool isTitle}) = _$_Memo;
   _Memo._() : super._();
@@ -273,8 +254,6 @@ abstract class _Memo extends Memo {
   String get bookId;
   @override
   int get startPage;
-  @override
-  int get endPage;
   @override
   DateTime get createdAt;
   @override

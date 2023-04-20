@@ -64,7 +64,6 @@ class FireStoreMemosRepository implements MemoStorageRepository {
       'contents': sendMemoTextList,
       'bookId': memo.bookId,
       'startPage': memo.startPage,
-      'endPage': memo.endPage,
       'createdAt': FieldValue.serverTimestamp(),
       'isTitle': memo.isTitle,
     });

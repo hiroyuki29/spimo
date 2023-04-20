@@ -16,7 +16,6 @@ class FirestoreMemo with _$FirestoreMemo {
     required List<MemoText> contents,
     required String bookId,
     required int startPage,
-    required int endPage,
     @TimestampToDatetimeConverter() required DateTime createdAt,
     required bool isTitle,
   }) = _FirestoreMemo;
@@ -30,7 +29,6 @@ class FirestoreMemo with _$FirestoreMemo {
       contents: contents,
       bookId: bookId,
       startPage: startPage,
-      endPage: endPage,
       createdAt: createdAt,
       isTitle: isTitle,
     );

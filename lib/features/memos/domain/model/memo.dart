@@ -12,7 +12,6 @@ class Memo with _$Memo {
     required List<MemoText> contents,
     required String bookId,
     required int startPage,
-    required int endPage,
     required DateTime createdAt,
     required bool isTitle,
   }) = _Memo;

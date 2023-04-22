@@ -65,5 +65,9 @@
   "record": "録音",
   "book": "本",
   "account": "アカウント",
-  "license": "ライセンス"
+  "license": "ライセンス",
+  "forgotPassword": "パスワードを忘れた方はこちら",
+  "resetPassword": "パスワード再設定",
+  "sendEmailForPassword": "パスワード再設定用のリンクをメールで送信します",
+  "send": "送信"
 }

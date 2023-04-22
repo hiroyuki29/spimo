@@ -3,31 +3,31 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common_widget/button/long_width_button.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
+import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class StartScreen extends HookConsumerWidget {
-  const StartScreen({super.key});
+class ResetPasswordScreen extends HookConsumerWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final email = useState<String>('');
-    final password = useState<String>('');
     final isLoading = useState<bool>(false);
 
-    Future<void> submit() async {
-      isLoading.value = true;
+    Future<void> sendEmail() async {
       if (formKey.currentState!.validate()) {
-        final userId = await ref
+        isLoading.value = true;
+        await ref
             .read(userRepositoryProvider)
-            .signInWithEmailAndPassword(
+            .resetPassword(
               emailAddress: email.value,
-              password: password.value,
             )
             .catchError((e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -35,11 +35,11 @@ class StartScreen extends HookConsumerWidget {
           ));
           return null;
         });
-        if (userId != null && context.mounted) {
+        if (context.mounted) {
           context.goNamed(AppRoute.home.name);
         }
+        isLoading.value = false;
       }
-      isLoading.value = false;
     }
 
     return LoadingOverlay(
@@ -47,19 +47,26 @@ class StartScreen extends HookConsumerWidget {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
+          appBar: CommonAppBar(
+              context: context,
+              title: AppLocalizations.of(context)!.resetPassword),
           body: SafeArea(
               child: Form(
             key: formKey,
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
+              padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    sizedBoxH16,
                     SizedBox(
-                      height: 260,
+                      height: 160,
                       child: IconAsset.spimoLogo,
+                    ),
+                    sizedBoxH32,
+                    Text(
+                      AppLocalizations.of(context)!.sendEmailForPassword,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
@@ -75,42 +82,13 @@ class StartScreen extends HookConsumerWidget {
                       },
                     ),
                     const SizedBox(height: 30),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.passoword,
+                    sizedBoxH16,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: LongWidthButton(
+                        title: AppLocalizations.of(context)!.send,
+                        onTap: email.value.isNotEmpty ? sendEmail : null,
                       ),
-                      validator: (value) {
-                        String? checkedValue =
-                            Validator.password(context, value?.trim() ?? '');
-                        return checkedValue;
-                      },
-                      onChanged: (value) {
-                        password.value = value;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    LongWidthButton(
-                      title: AppLocalizations.of(context)!.login,
-                      onTap: email.value.isNotEmpty && password.value.isNotEmpty
-                          ? submit
-                          : null,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () =>
-                              context.goNamed(AppRoute.resetPasword.name),
-                          child: Text(
-                            AppLocalizations.of(context)!.forgotPassword,
-                            style: const TextStyle(fontSize: 10),
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () => context.goNamed(AppRoute.signUp.name),
-                      child: Text(AppLocalizations.of(context)!.signUp),
                     ),
                   ],
                 ),
@@ -119,6 +97,34 @@ class StartScreen extends HookConsumerWidget {
           )),
         ),
       ),
+    );
+  }
+}
+
+class MinimumTextButton extends StatelessWidget {
+  const MinimumTextButton({
+    Key? key,
+    required this.text,
+    this.textStyle = const TextStyle(
+      decoration: TextDecoration.underline,
+    ),
+    required this.onTap,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle textStyle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onTap,
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.zero),
+        minimumSize: MaterialStateProperty.all(Size.zero),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      child: Text(text, style: textStyle),
     );
   }
 }

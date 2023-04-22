@@ -45,7 +45,13 @@ class SignUpScreen extends HookConsumerWidget {
               emailAddress: email.value,
               password: password.value,
               nickName: nickName.value,
-            );
+            )
+            .catchError((e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e),
+          ));
+          return null;
+        });
         if (userId != null && context.mounted) {
           context.goNamed(AppRoute.home.name);
         }
@@ -147,11 +153,15 @@ class SignUpScreen extends HookConsumerWidget {
                       ],
                     ),
                     sizedBoxH16,
-                    LongWidthButton(
-                      title: AppLocalizations.of(context)!.signUp,
-                      onTap: email.value.isNotEmpty && password.value.isNotEmpty
-                          ? submit
-                          : null,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: LongWidthButton(
+                        title: AppLocalizations.of(context)!.signUp,
+                        onTap:
+                            email.value.isNotEmpty && password.value.isNotEmpty
+                                ? submit
+                                : null,
+                      ),
                     ),
                   ],
                 ),

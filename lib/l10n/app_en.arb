@@ -65,5 +65,9 @@
   "record": "Record",
   "book": "Book",
   "account": "Account",
-  "license": "License"
+  "license": "License",
+  "forgotPassword": "If you forgot your password, click here",
+  "resetPassword": "Resetting a password",
+  "sendEmailForPassword": "We will send you a link to reset your password to the email address you submit.",
+  "send": "send"
 }

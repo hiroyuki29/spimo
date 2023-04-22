@@ -8,6 +8,7 @@ import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
+import 'package:spimo/features/account/presentation/screens/reset_password_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
 import 'package:spimo/features/books/presentation/screens/books_home_screen.dart';
@@ -19,6 +20,7 @@ import 'package:spimo/features/record/presentation/record_home_screen.dart';
 enum AppRoute {
   start,
   signUp,
+  resetPasword,
   home,
   memos,
   record,
@@ -44,7 +46,8 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
       }
       if (currentUser == null &&
           state.subloc != '/' &&
-          state.subloc != '/signUp') {
+          state.subloc != '/signUp' &&
+          state.subloc != '/resetPassword') {
         return '/';
       }
       return null;
@@ -65,6 +68,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
               FirebaseAnalytics.instance
                   .logScreenView(screenName: state.location);
               return const SignUpScreen();
+            },
+          ),
+          GoRoute(
+            path: 'resetPassword',
+            name: AppRoute.resetPasword.name,
+            builder: (context, state) {
+              FirebaseAnalytics.instance
+                  .logScreenView(screenName: state.location);
+              return const ResetPasswordScreen();
             },
           ),
         ],

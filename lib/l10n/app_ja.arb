@@ -70,5 +70,6 @@
   "resetPassword": "パスワード再設定",
   "sendEmailForPassword": "パスワード再設定用のリンクをメールで送信します",
   "send": "送信",
-  "sentEmail": "パスワード再設定用のメールを送信しました"
+  "sentEmail": "パスワード再設定用のメールを送信しました",
+  "advertisementAppear": "要約を作成中に広告が表示されます"
 }

@@ -313,6 +313,10 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
               AppLocalizations.of(context)!.createSummary,
               style: Theme.of(context).textTheme.titleSmall,
             ),
+            Text(
+              AppLocalizations.of(context)!.advertisementAppear,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             sizedBoxH16,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),

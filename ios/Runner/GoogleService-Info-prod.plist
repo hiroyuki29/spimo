@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>263400118297-jedqv7f1u6gtauspdlhgmkckoo6aviii.apps.googleusercontent.com</string>
+	<string>539254845226-j83jorc8ibio4ajr1iup71uq5r9gsqes.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.263400118297-jedqv7f1u6gtauspdlhgmkckoo6aviii</string>
+	<string>com.googleusercontent.apps.539254845226-j83jorc8ibio4ajr1iup71uq5r9gsqes</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDmmaxfSSSaRPxnd-GA5Co9_kLOV3eY3qI</string>
+	<string>AIzaSyDoBIgJbzC-FM5hGIWzHboh3OQpnY6-KsQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>263400118297</string>
+	<string>539254845226</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>info.nasuhiro.spimo</string>
 	<key>PROJECT_ID</key>
-	<string>spimo-project-dev</string>
+	<string>spimo-project</string>
 	<key>STORAGE_BUCKET</key>
-	<string>spimo-project-dev.appspot.com</string>
+	<string>spimo-project.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:263400118297:ios:e0c7e440eb83d235987288</string>
+	<string>1:539254845226:ios:ef49d49c827bcdd045f853</string>
 </dict>
 </plist>

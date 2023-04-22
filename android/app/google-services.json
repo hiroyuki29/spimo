@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "539254845226",
+    "project_id": "spimo-project",
+    "storage_bucket": "spimo-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539254845226:android:6cff7a07bba8ed1145f853",
+        "android_client_info": {
+          "package_name": "info.nasuhiro.spimo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539254845226-354dcq5m0qs3o294u7b7h3b5kl5p1ad2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn0akHgKvAaXkU8WJzuEnHXuiayffuUDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539254845226-354dcq5m0qs3o294u7b7h3b5kl5p1ad2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539254845226-b761469v3mn2sd29glubc1jt5pl56atk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spimo"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-7712851539992039~5274006193"
+    }
+  ],
+  "configuration_version": "1"
+}

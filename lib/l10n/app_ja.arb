@@ -69,5 +69,6 @@
   "forgotPassword": "パスワードを忘れた方はこちら",
   "resetPassword": "パスワード再設定",
   "sendEmailForPassword": "パスワード再設定用のリンクをメールで送信します",
-  "send": "送信"
+  "send": "送信",
+  "sentEmail": "パスワード再設定用のメールを送信しました"
 }

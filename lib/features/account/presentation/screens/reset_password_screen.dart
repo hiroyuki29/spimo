@@ -35,7 +35,11 @@ class ResetPasswordScreen extends HookConsumerWidget {
           ));
           return null;
         });
+
         if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!.sentEmail),
+          ));
           context.goNamed(AppRoute.home.name);
         }
         isLoading.value = false;

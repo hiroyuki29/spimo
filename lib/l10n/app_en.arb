@@ -69,5 +69,6 @@
   "forgotPassword": "If you forgot your password, click here",
   "resetPassword": "Resetting a password",
   "sendEmailForPassword": "We will send you a link to reset your password to the email address you submit.",
-  "send": "send"
+  "send": "send",
+  "sentEmail": "Email for password reset sent."
 }

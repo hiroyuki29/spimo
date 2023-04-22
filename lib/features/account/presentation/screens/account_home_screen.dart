@@ -29,7 +29,6 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = useState<bool>(false);
-    final isMounted = useIsMounted();
 
     final Uri termsOfServiceUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/terms_of_service');
@@ -57,7 +56,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
             onTapLeft: () async {
               isLoading.value = true;
               await ref.read(userRepositoryProvider).signOut();
-              if (isMounted()) {
+              if (context.mounted) {
                 context.goNamed(AppRoute.start.name);
               }
               isLoading.value = false;
@@ -82,7 +81,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
             onTapLeft: () async {
               isLoading.value = true;
               await ref.read(userRepositoryProvider).deleteUser();
-              if (isMounted()) {
+              if (context.mounted) {
                 context.goNamed(AppRoute.start.name);
               }
               isLoading.value = false;

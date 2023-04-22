@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:loading_overlay/loading_overlay.dart';
 import 'package:spimo/common_widget/app_bar/common_app_bar.dart';
+import 'package:spimo/common_widget/button/long_width_button.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
@@ -20,7 +22,7 @@ class SignUpScreen extends HookConsumerWidget {
     final email = useState<String>('');
     final password = useState<String>('');
     final nickName = useState<String>('');
-    final isMounted = useIsMounted();
+    final isLoading = useState<bool>(false);
 
     final Uri termsOfServiceUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/terms_of_service');
@@ -36,6 +38,7 @@ class SignUpScreen extends HookConsumerWidget {
 
     Future<void> submit() async {
       if (formKey.currentState!.validate()) {
+        isLoading.value = true;
         final userId = await ref
             .read(userRepositoryProvider)
             .createUserWithEmailAndPassword(
@@ -43,117 +46,119 @@ class SignUpScreen extends HookConsumerWidget {
               password: password.value,
               nickName: nickName.value,
             );
-        print(userId);
-        if (userId != null && isMounted()) {
+        if (userId != null && context.mounted) {
           context.goNamed(AppRoute.home.name);
         }
+        isLoading.value = false;
       }
     }
 
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: CommonAppBar(
-            context: context, title: AppLocalizations.of(context)!.signUp),
-        body: SafeArea(
-            child: Form(
-          key: formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  sizedBoxH16,
-                  SizedBox(
-                    height: 160,
-                    child: IconAsset.spimoLogo,
-                  ),
-                  sizedBoxH32,
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.nickName,
+    return LoadingOverlay(
+      isLoading: isLoading.value,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          appBar: CommonAppBar(
+              context: context, title: AppLocalizations.of(context)!.signUp),
+          body: SafeArea(
+              child: Form(
+            key: formKey,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    sizedBoxH16,
+                    SizedBox(
+                      height: 160,
+                      child: IconAsset.spimoLogo,
                     ),
-                    validator: (value) {
-                      String? checkedValue = value == null
-                          ? AppLocalizations.of(context)!.requiredFields
-                          : null;
-                      return checkedValue;
-                    },
-                    onChanged: (value) {
-                      nickName.value = value;
-                    },
-                  ),
-                  sizedBoxH32,
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.email,
-                    ),
-                    validator: (value) {
-                      String? checkedValue =
-                          Validator.email(context, value?.trim() ?? '');
-                      return checkedValue;
-                    },
-                    onChanged: (value) {
-                      email.value = value;
-                    },
-                  ),
-                  sizedBoxH32,
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.passoword,
-                    ),
-                    validator: (value) {
-                      String? checkedValue =
-                          Validator.password(context, value?.trim() ?? '');
-                      return checkedValue;
-                    },
-                    onChanged: (value) {
-                      password.value = value;
-                    },
-                  ),
-                  const SizedBox(height: 30),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          MinimumTextButton(
-                            text: AppLocalizations.of(context)!.termsOfUse,
-                            onTap: () async {
-                              await doLaunchingUrl(termsOfServiceUrl);
-                            },
-                          ),
-                          Text(AppLocalizations.of(context)!.and),
-                          MinimumTextButton(
-                            text: AppLocalizations.of(context)!.privacyPolicy,
-                            onTap: () async {
-                              await doLaunchingUrl(privacyPolicyUrl);
-                            },
-                          ),
-                          Text(AppLocalizations.of(context)!.agreeOnlyJp),
-                        ],
+                    sizedBoxH32,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.nickName,
                       ),
-                      Text(
-                        AppLocalizations.of(context)!
-                            .agreeToTheAboveAndCreateAccount,
+                      validator: (value) {
+                        String? checkedValue = value == null
+                            ? AppLocalizations.of(context)!.requiredFields
+                            : null;
+                        return checkedValue;
+                      },
+                      onChanged: (value) {
+                        nickName.value = value;
+                      },
+                    ),
+                    sizedBoxH32,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.email,
                       ),
-                    ],
-                  ),
-                  sizedBoxH16,
-                  ElevatedButton(
-                    onPressed:
-                        email.value.isNotEmpty && password.value.isNotEmpty
-                            ? submit
-                            : null,
-                    child: Text(AppLocalizations.of(context)!.signUp),
-                  ),
-                ],
+                      validator: (value) {
+                        String? checkedValue =
+                            Validator.email(context, value?.trim() ?? '');
+                        return checkedValue;
+                      },
+                      onChanged: (value) {
+                        email.value = value;
+                      },
+                    ),
+                    sizedBoxH32,
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.passoword,
+                      ),
+                      validator: (value) {
+                        String? checkedValue =
+                            Validator.password(context, value?.trim() ?? '');
+                        return checkedValue;
+                      },
+                      onChanged: (value) {
+                        password.value = value;
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MinimumTextButton(
+                              text: AppLocalizations.of(context)!.termsOfUse,
+                              onTap: () async {
+                                await doLaunchingUrl(termsOfServiceUrl);
+                              },
+                            ),
+                            Text(AppLocalizations.of(context)!.and),
+                            MinimumTextButton(
+                              text: AppLocalizations.of(context)!.privacyPolicy,
+                              onTap: () async {
+                                await doLaunchingUrl(privacyPolicyUrl);
+                              },
+                            ),
+                            Text(AppLocalizations.of(context)!.agreeOnlyJp),
+                          ],
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!
+                              .agreeToTheAboveAndCreateAccount,
+                        ),
+                      ],
+                    ),
+                    sizedBoxH16,
+                    LongWidthButton(
+                      title: AppLocalizations.of(context)!.signUp,
+                      onTap: email.value.isNotEmpty && password.value.isNotEmpty
+                          ? submit
+                          : null,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        )),
+          )),
+        ),
       ),
     );
   }

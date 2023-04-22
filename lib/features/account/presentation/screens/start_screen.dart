@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:spimo/common_widget/button/long_width_button.dart';
 import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
@@ -17,7 +18,6 @@ class StartScreen extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final email = useState<String>('');
     final password = useState<String>('');
-    final isMounted = useIsMounted();
     final isLoading = useState<bool>(false);
 
     Future<void> submit() async {
@@ -28,8 +28,7 @@ class StartScreen extends HookConsumerWidget {
                   emailAddress: email.value,
                   password: password.value,
                 );
-        print(userId.toString());
-        if (userId != null && isMounted()) {
+        if (userId != null && context.mounted) {
           context.goNamed(AppRoute.home.name);
         }
       }
@@ -83,12 +82,11 @@ class StartScreen extends HookConsumerWidget {
                       },
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed:
-                          email.value.isNotEmpty && password.value.isNotEmpty
-                              ? submit
-                              : null,
-                      child: Text(AppLocalizations.of(context)!.login),
+                    LongWidthButton(
+                      title: AppLocalizations.of(context)!.login,
+                      onTap: email.value.isNotEmpty && password.value.isNotEmpty
+                          ? submit
+                          : null,
                     ),
                     const SizedBox(height: 30),
                     TextButton(

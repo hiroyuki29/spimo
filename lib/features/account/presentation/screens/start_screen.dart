@@ -3,6 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
+import 'package:spimo/common/method/show_update_dialog.dart';
+import 'package:spimo/common/provider/remote_config_provider.dart';
 import 'package:spimo/common/widget/button/long_width_button.dart';
 import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
@@ -41,6 +43,16 @@ class StartScreen extends HookConsumerWidget {
       }
       isLoading.value = false;
     }
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        ref
+            .read(remoteConfigProvider)
+            .versionCheck()
+            .then((isNeedUpdate) => showUpdateDialog(isNeedUpdate, context));
+      });
+      return null;
+    }, []);
 
     return LoadingOverlay(
       isLoading: isLoading.value,

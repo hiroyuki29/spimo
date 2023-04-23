@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common/widget/color/color.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({

@@ -1,10 +1,13 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:spimo/common_widget/color/color.dart';
-import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
+import 'package:spimo/common/constant.dart';
+import 'package:spimo/common/provider/remote_config_provider.dart';
+import 'package:spimo/common/widget/color/color.dart';
+import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
@@ -16,6 +19,7 @@ import 'package:spimo/features/books/presentation/screens/search_books_screen.da
 import 'package:spimo/features/home/presentation/screens/home_screen.dart';
 import 'package:spimo/features/memos/presentation/screens/memos_home_screen.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum AppRoute {
   start,
@@ -145,6 +149,10 @@ class _ScaffoldWithBottomNavBarState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      ref
+          .read(remoteConfigProvider)
+          .versionCheck()
+          .then((isNeedUpdate) => _showUpdateDialog(isNeedUpdate, context));
       await ref
           .read(userControllerProvider.notifier)
           .fetchUser(FirebaseAuth.instance.currentUser!.uid);
@@ -239,4 +247,37 @@ class ScaffoldWithNavBarTabItem extends BottomNavigationBarItem {
 
   /// The initial location/path
   final String initialLocation;
+}
+
+void _showUpdateDialog(bool needUpdate, BuildContext context) {
+  if (!needUpdate) return;
+
+  final Uri appStoreUrl = Uri.parse(APP_STORE_URL);
+  final Uri playStoreUrl = Uri.parse(PLAY_STORE_URL);
+
+  showCupertinoDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      final title = AppLocalizations.of(context)!.updateNotification;
+      final message = AppLocalizations.of(context)!.updateMessage;
+      final btnLabel = AppLocalizations.of(context)!.updateNow;
+      return CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(message),
+        //TODO:アプリ登録後修正
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text(
+              AppLocalizations.of(context)!.close,
+              style: const TextStyle(color: Colors.red),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

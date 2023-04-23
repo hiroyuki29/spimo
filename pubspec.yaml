@@ -46,6 +46,7 @@ dependencies:
   cloud_firestore: ^4.5.2
   firebase_app_check: ^0.1.2+2
   firebase_analytics: ^10.2.1
+  firebase_remote_config: ^4.0.1
   
   #ルーティング
   go_router: ^6.0.1
@@ -84,9 +85,8 @@ dependencies:
 
   #広告関連
   google_mobile_ads: ^2.3.0
-  
-  
-  
+
+
 
 dev_dependencies:
   flutter_test:

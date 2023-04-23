@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:spimo/common_widget/theme/custom_theme.dart';
+import 'package:spimo/common/method/is_release.dart';
+import 'package:spimo/common/widget/theme/custom_theme.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/firebase_options_prod.dart' as prod;
@@ -30,14 +31,6 @@ void main() async {
   };
   await dotenv.load(fileName: ".env");
   runApp(const ProviderScope(child: MyApp()));
-}
-
-bool isRelease() {
-  bool isRelease;
-  const bool.fromEnvironment('dart.vm.product')
-      ? isRelease = true
-      : isRelease = false;
-  return isRelease;
 }
 
 FirebaseOptions getFirebaseOptions() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common/widget/color/color.dart';
 
 AppBar CommonAppBar({
   required BuildContext context,

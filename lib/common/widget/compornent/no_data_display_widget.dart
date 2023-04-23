@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:spimo/common_widget/icon_asset/Icon_asset.dart';
-import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
+import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/routing/app_router.dart';
 

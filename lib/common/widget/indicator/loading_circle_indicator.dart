@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spimo/common_widget/color/color.dart';
+import 'package:spimo/common/widget/color/color.dart';
 
 class LoadingCircleIndicator extends StatelessWidget {
   const LoadingCircleIndicator({super.key});

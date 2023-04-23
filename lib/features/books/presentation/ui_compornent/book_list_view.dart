@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spimo/common_widget/dialog/custom_alert_dialog.dart';
-import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/common/widget/dialog/custom_alert_dialog.dart';
+import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/ui_compornent/book_list_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

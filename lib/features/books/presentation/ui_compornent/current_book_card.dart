@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:spimo/common_widget/color/color.dart';
-import 'package:spimo/common_widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/common/widget/color/color.dart';
+import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

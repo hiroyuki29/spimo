@@ -71,5 +71,9 @@
   "sendEmailForPassword": "パスワード再設定用のリンクをメールで送信します",
   "send": "送信",
   "sentEmail": "パスワード再設定用のメールを送信しました",
-  "advertisementAppear": "要約を作成中に広告が表示されます"
+  "advertisementAppear": "要約を作成中に広告が表示されます",
+  "close": "閉じる",
+  "updateNotification": "バージョン更新のお知らせ",
+  "updateMessage": "新しいバージョンのアプリが利用可能です。ストアより更新版を入手して、ご利用下さい。",
+  "updateNow": "今すぐ更新"
 }

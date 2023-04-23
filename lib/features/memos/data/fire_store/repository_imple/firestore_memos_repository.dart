@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:spimo/common_method/datetime_formatter.dart';
+import 'package:spimo/common/method/datetime_formatter.dart';
 import 'package:spimo/features/memos/data/fire_store/model/firestore_memo.dart';
 import 'package:spimo/features/memos/data/fire_store/model/firestore_memo_length_stock.dart';
 import 'package:spimo/features/memos/domain/model/memo.dart';

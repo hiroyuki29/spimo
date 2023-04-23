@@ -73,6 +73,14 @@ class StartScreen extends HookConsumerWidget {
                       height: 260,
                       child: IconAsset.spimoLogo,
                     ),
+                    Text(
+                      AppLocalizations.of(context)!.subTitle,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      'spiMo',
+                      style: Theme.of(context).textTheme.displayMedium,
+                    ),
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.email,

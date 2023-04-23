@@ -75,5 +75,6 @@
   "close": "close",
   "updateNotification": "Version Update Notification",
   "updateMessage": "A new version of the app is available. Please get the updated version from the store and use it.",
-  "updateNow": "Update Now"
+  "updateNow": "Update Now",
+  "subTitle": "Reading notes are taken aloud to improve memory retention!"
 }

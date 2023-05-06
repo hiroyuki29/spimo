@@ -57,6 +57,7 @@ class FirebaseAuthRepository implements UserRepository {
         throw ('このメールアドレスは登録されていません');
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
+        throw ('パスワードが間違っています');
         print('パスワードが間違っています');
       }
     }
@@ -169,6 +170,39 @@ class FirebaseAuthRepository implements UserRepository {
       await auth.sendPasswordResetEmail(email: emailAddress);
     } on FirebaseAuthException {
       throw ('エラーが発生しました');
+    }
+    return;
+  }
+
+  @override
+  Future<void> editUser({
+    required String emailAddress,
+    required String password,
+    required String nickName,
+  }) async {
+    try {
+      final currentUser = auth.currentUser!;
+      await currentUser.updateEmail(emailAddress);
+      final userId = currentUser.uid;
+      await db.collection('users').doc(userId).update({
+        'id': userId,
+        'email': emailAddress,
+        'nickName': nickName,
+      });
+
+      if (password != '') {
+        await currentUser.updatePassword(password);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        throw ('パスワードは6文字以上で設定してください');
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        throw ('このメールアドレスは既に登録されています');
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
     }
     return;
   }

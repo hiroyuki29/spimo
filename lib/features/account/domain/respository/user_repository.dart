@@ -26,6 +26,12 @@ abstract class UserRepository {
 
   Future<void> signOut();
 
+  Future<void> editUser({
+    required String emailAddress,
+    required String password,
+    required String nickName,
+  });
+
   Future<void> deleteUser();
 
   Future<void> resetPassword({required String emailAddress});

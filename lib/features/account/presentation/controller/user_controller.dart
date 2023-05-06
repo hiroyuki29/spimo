@@ -41,4 +41,20 @@ class UserController extends StateNotifier<AppUser?> {
     }
     state = state!.copyWith(currentBookId: '');
   }
+
+  Future<void> editUser({
+    required String emailAddress,
+    required String password,
+    required String nickName,
+  }) async {
+    if (state == null) {
+      return;
+    }
+    await userRepository.editUser(
+      emailAddress: emailAddress,
+      password: password,
+      nickName: nickName,
+    );
+    await fetchUser(state!.id);
+  }
 }

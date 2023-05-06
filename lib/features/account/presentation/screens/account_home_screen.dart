@@ -100,7 +100,14 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
         ? const LoadingCircleIndicator()
         : Scaffold(
             backgroundColor: backgroundGray,
-            appBar: CommonAppBar(context: context, title: 'Account'),
+            appBar: CommonAppBar(
+                context: context,
+                title: 'Account',
+                action: IconButton(
+                    onPressed: () {
+                      context.goNamed(AppRoute.editAccount.name);
+                    },
+                    icon: const Icon(Icons.edit))),
             body: Center(
               child: SingleChildScrollView(
                 child: Column(

@@ -9,6 +9,7 @@ import 'package:spimo/common/widget/color/color.dart';
 import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
+import 'package:spimo/features/account/presentation/screens/account_edit_screen.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
 import 'package:spimo/features/account/presentation/screens/reset_password_screen.dart';
 import 'package:spimo/features/account/presentation/screens/start_screen.dart';
@@ -29,6 +30,7 @@ enum AppRoute {
   books,
   searchBooks,
   account,
+  editAccount,
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -125,6 +127,17 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
             path: '/account',
             name: AppRoute.account.name,
             builder: (context, state) => const AccountHomeScreen(),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                name: AppRoute.editAccount.name,
+                builder: (context, state) {
+                  FirebaseAnalytics.instance
+                      .logScreenView(screenName: state.location);
+                  return const AccountEditScreen();
+                },
+              )
+            ],
           ),
         ],
       )

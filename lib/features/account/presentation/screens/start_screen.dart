@@ -9,6 +9,7 @@ import 'package:spimo/common/provider/remote_config_provider.dart';
 import 'package:spimo/common/widget/button/long_width_button.dart';
 import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/common/widget/snackBar/custom_snack_bar.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
@@ -34,9 +35,7 @@ class StartScreen extends HookConsumerWidget {
               password: password.value,
             )
             .catchError((e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(e),
-          ));
+          customSnackBar(context, e);
           return null;
         });
         if (userId != null && context.mounted) {
@@ -52,9 +51,7 @@ class StartScreen extends HookConsumerWidget {
           .read(userRepositoryProvider)
           .signInWithApple()
           .catchError((e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e),
-        ));
+        customSnackBar(context, e);
         isLoading.value = false;
         return null;
       });
@@ -71,9 +68,7 @@ class StartScreen extends HookConsumerWidget {
           .read(userRepositoryProvider)
           .signInWithGoogle()
           .catchError((e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e),
-        ));
+        customSnackBar(context, e);
         isLoading.value = false;
         return null;
       });

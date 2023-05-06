@@ -76,5 +76,6 @@
   "updateNotification": "バージョン更新のお知らせ",
   "updateMessage": "新しいバージョンのアプリが利用可能です。ストアより更新版を入手して、ご利用下さい。",
   "updateNow": "今すぐ更新",
-  "subTitle": "読書メモは声に出して記憶定着率アップ！"
+  "subTitle": "読書メモは声に出して記憶定着率アップ！",
+  "editUserInfo": "アカウントの編集"
 }

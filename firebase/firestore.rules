@@ -25,8 +25,12 @@ service cloud.firestore {
     }
 
     function canUpdateUserInfo(user) {
-      return (('currentBookId' in user && user.currentBookId is string)
-      || ('nickName' in user && user.nickName is string));
+      return user.size() == 5
+      && 'createdAt' in user && user.createdAt is timestamp
+      && 'email' in user && user.email is string
+      && 'id' in user && user.id is string
+      && 'nickName' in user && user.nickName is string
+      && 'currentBookId' in user && user.currentBookId is string;
     }
 
 

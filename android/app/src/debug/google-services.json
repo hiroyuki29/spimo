@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "263400118297",
+    "project_id": "spimo-project-dev",
+    "storage_bucket": "spimo-project-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263400118297:android:df5545eaac106945987288",
+        "android_client_info": {
+          "package_name": "info.nasuhiro.spimo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "263400118297-fd1016rv8er5phrglvtbu3f76ghevu8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOYN0oB6jEjxfKcpIYDuLtpGdUwanOWB4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "263400118297-fd1016rv8er5phrglvtbu3f76ghevu8g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "263400118297-jedqv7f1u6gtauspdlhgmkckoo6aviii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "info.nasuhiro.spimo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

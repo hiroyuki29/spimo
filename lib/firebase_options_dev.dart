@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'firebase_options_dev.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,30 +49,21 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCX0TlO6mdeZEu7p5cz9MdmKJAk6UEjuvg',
-    appId: '1:539254845226:web:9c01af5ed1d8665b45f853',
-    messagingSenderId: '539254845226',
-    projectId: 'spimo-project',
-    authDomain: 'spimo-project.firebaseapp.com',
-    storageBucket: 'spimo-project.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAn0akHgKvAaXkU8WJzuEnHXuiayffuUDk',
-    appId: '1:539254845226:android:d5dd6095324e22f645f853',
-    messagingSenderId: '539254845226',
-    projectId: 'spimo-project',
-    storageBucket: 'spimo-project.appspot.com',
+    apiKey: 'AIzaSyAOYN0oB6jEjxfKcpIYDuLtpGdUwanOWB4',
+    appId: '1:263400118297:android:df5545eaac106945987288',
+    messagingSenderId: '263400118297',
+    projectId: 'spimo-project-dev',
+    storageBucket: 'spimo-project-dev.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDoBIgJbzC-FM5hGIWzHboh3OQpnY6-KsQ',
-    appId: '1:539254845226:ios:eda592793e4048af45f853',
-    messagingSenderId: '539254845226',
-    projectId: 'spimo-project',
-    storageBucket: 'spimo-project.appspot.com',
-    iosClientId: '539254845226-b761469v3mn2sd29glubc1jt5pl56atk.apps.googleusercontent.com',
-    iosBundleId: 'com.example.spimo',
+    apiKey: 'AIzaSyDmmaxfSSSaRPxnd-GA5Co9_kLOV3eY3qI',
+    appId: '1:263400118297:ios:e0c7e440eb83d235987288',
+    messagingSenderId: '263400118297',
+    projectId: 'spimo-project-dev',
+    storageBucket: 'spimo-project-dev.appspot.com',
+    iosClientId: '263400118297-jedqv7f1u6gtauspdlhgmkckoo6aviii.apps.googleusercontent.com',
+    iosBundleId: 'info.nasuhiro.spimo',
   );
 }

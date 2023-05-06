@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+        function isAuthenticated() { 
+            return request.auth != null;
+        }
+    
+        function isUserAuthenticated(userId) { 
+            return isAuthenticated() && userId == request.auth.uid;
+        }
+
+        function isValidUser(user) {
+            return user.size() == 5
+            && 'createdAt' in user && user.createdAt is timestamp
+            && 'email' in user && user.email is string
+            && 'id' in user && user.id is string
+            && 'nickName' in user && user.nickName is string
+            && 'currentBookId' in user && user.currentBookId is string;
+        }
+
+    match /deletedUsers/{document=**}  {
+      allow create: if isAuthenticated();
+
+    }
+
+    function canUpdateUserInfo(user) {
+      return user.size() == 5
+      && 'createdAt' in user && user.createdAt is timestamp
+      && 'email' in user && user.email is string
+      && 'id' in user && user.id is string
+      && 'nickName' in user && user.nickName is string
+      && 'currentBookId' in user && user.currentBookId is string;
+    }
+
+
+    match /users/{userId}  {
+      allow read: if isUserAuthenticated(userId);
+
+      allow create: if isUserAuthenticated(userId)
+            && isValidUser(request.resource.data)
+            && request.resource.data.id == userId;
+
+      allow update: if isUserAuthenticated(userId)
+            && canUpdateUserInfo(request.resource.data);
+      
+
+      function isValidBook(book) {
+            return book.size() == 7
+            && 'createdAt' in book && book.createdAt is timestamp
+            && 'authors' in book && book.authors is list
+            && 'id' in book && book.id is string
+            && 'imageLinks' in book && book.imageLinks is string
+            && 'pageCount' in book && book.pageCount is int
+            && 'title' in book && book.title is string
+            && 'totalMemoCount' in book && book.totalMemoCount is int;
+        }
+      
+      function canUpdateBookInfo(book) {
+        return (('totalMemoCount' in book && book.totalMemoCount is int));
+      }
+
+      match /books/{bookId}  {
+        allow read: if isUserAuthenticated(userId);  
+
+        allow create: if isUserAuthenticated(userId)
+        && isValidBook(request.resource.data);
+
+        allow update: if isUserAuthenticated(userId)
+            && canUpdateBookInfo(request.resource.data);
+        
+        allow delete: if isUserAuthenticated(userId);
+
+        function isValidMemo(memo) {
+            return memo.size() == 6
+            && 'id' in memo && memo.id is string
+            && 'bookId' in memo && memo.bookId is string
+            && 'contents' in memo && memo.contents is list
+            && 'createdAt' in memo && memo.createdAt is timestamp
+            && 'startPage' in memo && memo.startPage is int
+            && 'isTitle' in memo && memo.isTitle is bool
+        }
+
+        match /memos/{memoId}  {
+          allow read: if isUserAuthenticated(userId);  
+
+          allow create: if isUserAuthenticated(userId)
+              && isValidMemo(request.resource.data);
+
+          allow update: if isUserAuthenticated(userId)
+        
+          allow delete: if isUserAuthenticated(userId);
+        }
+
+        function isValidSummary(summary) {
+            return summary.size() == 6
+            && 'id' in summary && summary.id is string
+            && 'text' in summary && summary.text is string
+            && 'bookId' in summary && summary.bookId is string
+            && 'createdAt' in summary && summary.createdAt is timestamp
+            && 'startPage' in summary && summary.startPage is int
+            && 'endPage' in summary && summary.endPage is int
+        }
+
+        match /summaries/{summaryId}  {
+          allow read: if isUserAuthenticated(userId);  
+
+          allow create: if isUserAuthenticated(userId)
+              && isValidSummary(request.resource.data);
+
+          allow update: if isUserAuthenticated(userId)
+        
+          allow delete: if isUserAuthenticated(userId); 
+        }
+      }
+
+      function isValidMemoLengthStock(stock) {
+            return stock.size() == 2
+            && 'date' in stock && stock.date is timestamp
+            && 'memoLength' in stock && stock.memoLength is int
+        }
+
+      match /memoLengthStock/{document=**}  {
+        allow read: if isUserAuthenticated(userId);  
+
+          allow create: if isUserAuthenticated(userId)
+              && isValidMemoLengthStock(request.resource.data);
+
+          allow update: if isUserAuthenticated(userId)
+        
+          allow delete: if isUserAuthenticated(userId);
+      }
+
+    }
+  }
+}

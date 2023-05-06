@@ -100,93 +100,103 @@ class StartScreen extends HookConsumerWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           body: SafeArea(
-              child: Form(
-            key: formKey,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 220,
-                      child: IconAsset.spimoLogo,
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.subTitle,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    Text(
-                      'spiMo',
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.email,
+            child: Form(
+              key: formKey,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 220,
+                        child: IconAsset.spimoLogo,
                       ),
-                      validator: (value) {
-                        String? checkedValue =
-                            Validator.email(context, value?.trim() ?? '');
-                        return checkedValue;
-                      },
-                      onChanged: (value) {
-                        email.value = value;
-                      },
-                    ),
-                    sizedBoxH16,
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.passoword,
+                      Text(
+                        AppLocalizations.of(context)!.subTitle,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      validator: (value) {
-                        String? checkedValue =
-                            Validator.password(context, value?.trim() ?? '');
-                        return checkedValue;
-                      },
-                      onChanged: (value) {
-                        password.value = value;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    LongWidthButton(
-                      title: AppLocalizations.of(context)!.login,
-                      onTap: email.value.isNotEmpty && password.value.isNotEmpty
-                          ? submit
-                          : null,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () =>
-                              context.goNamed(AppRoute.resetPasword.name),
-                          child: Text(
-                            AppLocalizations.of(context)!.forgotPassword,
-                            style: const TextStyle(fontSize: 10),
-                          ),
+                      Text(
+                        'spiMo',
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.email,
                         ),
-                      ],
-                    ),
-                    sizedBoxH8,
-                    SignInButton(
-                      Buttons.Apple,
-                      onPressed: appleLogin,
-                    ),
-                    sizedBoxH8,
-                    SignInButton(
-                      Buttons.Google,
-                      onPressed: googleLogin,
-                    ),
-                    TextButton(
-                      onPressed: () => context.goNamed(AppRoute.signUp.name),
-                      child: Text(AppLocalizations.of(context)!.signUp),
-                    ),
-                  ],
+                        validator: (value) {
+                          String? checkedValue =
+                              Validator.email(context, value?.trim() ?? '');
+                          return checkedValue;
+                        },
+                        onChanged: (value) {
+                          email.value = value;
+                        },
+                      ),
+                      sizedBoxH8,
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.passoword,
+                        ),
+                        validator: (value) {
+                          String? checkedValue =
+                              Validator.password(context, value?.trim() ?? '');
+                          return checkedValue;
+                        },
+                        onChanged: (value) {
+                          password.value = value;
+                        },
+                      ),
+                      sizedBoxH16,
+                      LongWidthButton(
+                        title: AppLocalizations.of(context)!.login,
+                        onTap:
+                            email.value.isNotEmpty && password.value.isNotEmpty
+                                ? submit
+                                : null,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () =>
+                                context.goNamed(AppRoute.resetPasword.name),
+                            style: TextButton.styleFrom(
+                              minimumSize: Size.zero,
+                              // padding: EdgeInsets.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)!.forgotPassword,
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () => context.goNamed(AppRoute.signUp.name),
+                        child: Text(
+                          AppLocalizations.of(context)!.signUp,
+                          style: const TextStyle(color: Colors.lightBlue),
+                        ),
+                      ),
+                      sizedBoxH8,
+                      SignInButton(
+                        Buttons.Apple,
+                        onPressed: appleLogin,
+                      ),
+                      sizedBoxH8,
+                      SignInButton(
+                        Buttons.Google,
+                        onPressed: googleLogin,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          )),
+          ),
         ),
       ),
     );

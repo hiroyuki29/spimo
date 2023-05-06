@@ -20,8 +20,10 @@ final spimoTheme = ThemeData(
     accentColor: accentSwatch,
   ),
   textTheme: const TextTheme(
-    displayMedium: TextStyle(
+    displayLarge: TextStyle(
         fontSize: 50, color: primaryDark, fontWeight: FontWeight.bold),
+    displayMedium: TextStyle(
+        fontSize: 25, color: primaryDark, fontWeight: FontWeight.bold),
     titleLarge: TextStyle(
         fontSize: 20, color: primaryDark, fontWeight: FontWeight.bold),
     titleMedium: TextStyle(

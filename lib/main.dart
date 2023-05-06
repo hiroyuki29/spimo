@@ -17,6 +17,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp(
+    name: 'spimo-project',
     options: getFirebaseOptions(),
   );
   await FirebaseAppCheck.instance.activate(

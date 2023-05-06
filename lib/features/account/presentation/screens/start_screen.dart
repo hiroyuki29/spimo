@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -7,6 +8,7 @@ import 'package:spimo/common/method/show_update_dialog.dart';
 import 'package:spimo/common/provider/remote_config_provider.dart';
 import 'package:spimo/common/widget/button/long_width_button.dart';
 import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
+import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
@@ -44,6 +46,44 @@ class StartScreen extends HookConsumerWidget {
       isLoading.value = false;
     }
 
+    Future<void> appleLogin() async {
+      isLoading.value = true;
+      final userId = await ref
+          .read(userRepositoryProvider)
+          .signInWithApple()
+          .catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e),
+        ));
+        isLoading.value = false;
+        return null;
+      });
+      if (userId != null && context.mounted) {
+        context.goNamed(AppRoute.home.name);
+      }
+
+      isLoading.value = false;
+    }
+
+    Future<void> googleLogin() async {
+      isLoading.value = true;
+      final userId = await ref
+          .read(userRepositoryProvider)
+          .signInWithGoogle()
+          .catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e),
+        ));
+        isLoading.value = false;
+        return null;
+      });
+      if (userId != null && context.mounted) {
+        context.goNamed(AppRoute.home.name);
+      }
+
+      isLoading.value = false;
+    }
+
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         ref
@@ -70,7 +110,7 @@ class StartScreen extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 260,
+                      height: 220,
                       child: IconAsset.spimoLogo,
                     ),
                     Text(
@@ -94,7 +134,7 @@ class StartScreen extends HookConsumerWidget {
                         email.value = value;
                       },
                     ),
-                    const SizedBox(height: 30),
+                    sizedBoxH16,
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.passoword,
@@ -127,6 +167,16 @@ class StartScreen extends HookConsumerWidget {
                           ),
                         ),
                       ],
+                    ),
+                    sizedBoxH8,
+                    SignInButton(
+                      Buttons.Apple,
+                      onPressed: appleLogin,
+                    ),
+                    sizedBoxH8,
+                    SignInButton(
+                      Buttons.Google,
+                      onPressed: googleLogin,
                     ),
                     TextButton(
                       onPressed: () => context.goNamed(AppRoute.signUp.name),

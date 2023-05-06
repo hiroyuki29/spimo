@@ -47,6 +47,10 @@ dependencies:
   firebase_app_check: ^0.1.2+2
   firebase_analytics: ^10.2.1
   firebase_remote_config: ^4.0.1
+
+  #認証関係
+  google_sign_in: ^6.1.0
+  sign_in_with_apple: ^4.3.0
   
   #ルーティング
   go_router: ^6.0.1
@@ -85,7 +89,7 @@ dependencies:
 
   #広告関連
   google_mobile_ads: ^2.3.0
-
+  flutter_signin_button: ^2.0.0
 
 
 dev_dependencies:
@@ -120,6 +124,8 @@ flutter:
     - assets/image/
     - assets/image/splash/
     - assets/image/app_icon/
+    - assets/image/apple/
+    - assets/image/google/
     - assets/svg/bottom_navigation/
     - .env
 

@@ -18,6 +18,10 @@ abstract class UserRepository {
     required String password,
   });
 
+  Future<String?> signInWithGoogle();
+
+  Future<String?> signInWithApple();
+
   Future<AppUser> fetchUser(String userId);
 
   Future<void> signOut();

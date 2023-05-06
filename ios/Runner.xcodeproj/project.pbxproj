@@ -9,13 +9,12 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
-		5A9AB801951E365F27B5ECA2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E69E48C1D3D95B43AD407CF4 /* GoogleService-Info.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		ADC41E6F29FD5EE200CD7406 /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADC41E6E29FD5EE200CD7406 /* GoogleService-Info-prod.plist */; };
 		ADF7F30629F260ED00C8EEB7 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = ADF7F30529F260ED00C8EEB7 /* GoogleService-Info-dev.plist */; };
-		AED11E78EF2C4ABCB165842E /* GoogleService-Info-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = E8CE1D51C15DB37DC0AC3531 /* GoogleService-Info-prod.plist */; };
 		F7FCB85D5543F26EF5F75B6F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC82DF45AE9B9AF21DE99CA /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,9 +51,9 @@
 		A6D5467746274BA568094DF3 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		AD50EF1E29ADA9E5002D245A /* RunnerProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerProfile.entitlements; sourceTree = "<group>"; };
 		AD50EF1F29ADAA53002D245A /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		ADC41E6B29F6CC3100CD7406 /* RunnerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
+		ADC41E6E29FD5EE200CD7406 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
 		ADF7F30529F260ED00C8EEB7 /* GoogleService-Info-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-dev.plist"; sourceTree = "<group>"; };
-		E69E48C1D3D95B43AD407CF4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		E8CE1D51C15DB37DC0AC3531 /* GoogleService-Info-prod.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-prod.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +95,6 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				C168E9FB42A2D400460CA5BB /* Pods */,
 				629F10072F5B8FE3DC294AFF /* Frameworks */,
-				E69E48C1D3D95B43AD407CF4 /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,8 +109,9 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				ADC41E6B29F6CC3100CD7406 /* RunnerDebug.entitlements */,
 				ADF7F30529F260ED00C8EEB7 /* GoogleService-Info-dev.plist */,
-				E8CE1D51C15DB37DC0AC3531 /* GoogleService-Info-prod.plist */,
+				ADC41E6E29FD5EE200CD7406 /* GoogleService-Info-prod.plist */,
 				AD50EF1F29ADAA53002D245A /* Runner.entitlements */,
 				AD50EF1E29ADA9E5002D245A /* RunnerProfile.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -202,13 +201,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ADC41E6F29FD5EE200CD7406 /* GoogleService-Info-prod.plist in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				ADF7F30629F260ED00C8EEB7 /* GoogleService-Info-dev.plist in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				AED11E78EF2C4ABCB165842E /* GoogleService-Info-prod.plist in Resources */,
-				5A9AB801951E365F27B5ECA2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +297,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nrm -rf \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n\nif [ \"${CONFIGURATION}\" = \"Debug\" ]  ; then\n  cp \"$SRCROOT/Runner/GoogleService-Info-dev.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n  echo \"Development GoogleService-Info copied.\"\nelif [ \"${CONFIGURATION}\" = \"Release\" ] ; then\n  cp \"$SRCROOT/Runner/GoogleService-Info-prod.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\n  echo \"Release GoogleService-Info copied.\"\nfi\n\n/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		F1289E001EF594144E1970DA /* [firebase_crashlytics] Crashlytics Upload Symbols */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -424,6 +422,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				URL_SCHEME = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Profile;
@@ -541,7 +540,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
@@ -559,6 +558,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				URL_SCHEME = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -582,6 +582,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				URL_SCHEME = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

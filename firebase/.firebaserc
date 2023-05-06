@@ -1,8 +1,5 @@
 {
-  "projects": {
-    "prod": "spimo-project",
-    "dev": "spimo-project-dev"
-  },
+  "projects": {},
   "targets": {},
   "etags": {}
 }

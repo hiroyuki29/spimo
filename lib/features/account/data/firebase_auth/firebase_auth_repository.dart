@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:spimo/features/account/domain/model/app_user.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
 
@@ -59,6 +61,60 @@ class FirebaseAuthRepository implements UserRepository {
       }
     }
     return null;
+  }
+
+  @override
+  Future<String?> signInWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+          'https://www.googleapis.com/auth/contacts.readonly',
+        ],
+      );
+// Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential.user!.uid;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
+  }
+
+  @override
+  Future<String?> signInWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      // OAthCredentialのインスタンスを作成
+      OAuthProvider oauthProvider = OAuthProvider('apple.com');
+      final credential = oauthProvider.credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential.user!.uid;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
   }
 
   @override

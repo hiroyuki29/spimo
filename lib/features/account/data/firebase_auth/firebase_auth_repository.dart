@@ -88,7 +88,15 @@ class FirebaseAuthRepository implements UserRepository {
       // Once signed in, return the UserCredential
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      return userCredential.user!.uid;
+      final userId = userCredential.user!.uid;
+      await db.collection('users').doc(userId).set({
+        'id': userId,
+        'email': userCredential.user!.email,
+        'nickName': '',
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
     } catch (e) {
       throw ('エラーが発生しました');
     }
@@ -111,10 +119,20 @@ class FirebaseAuthRepository implements UserRepository {
       );
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
-      return userCredential.user!.uid;
+      final userId = userCredential.user!.uid;
+      await db.collection('users').doc(userId).set({
+        'id': userId,
+        'email': userCredential.user!.email,
+        'nickName': '',
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
     } catch (e) {
       throw ('エラーが発生しました');
     }
+
+    return null;
   }
 
   @override

@@ -57,4 +57,8 @@ class UserController extends StateNotifier<AppUser?> {
     );
     await fetchUser(state!.id);
   }
+
+  bool isAnonymous() {
+    return userRepository.isAnonymous();
+  }
 }

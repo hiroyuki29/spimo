@@ -87,8 +87,7 @@ class FirebaseAuthRepository implements UserRepository {
       );
 
       // Once signed in, return the UserCredential
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await auth.signInWithCredential(credential);
       final userId = userCredential.user!.uid;
       await db.collection('users').doc(userId).set({
         'id': userId,
@@ -118,8 +117,7 @@ class FirebaseAuthRepository implements UserRepository {
         idToken: appleCredential.identityToken,
         accessToken: appleCredential.authorizationCode,
       );
-      final userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential = await auth.signInWithCredential(credential);
       final userId = userCredential.user!.uid;
       await db.collection('users').doc(userId).set({
         'id': userId,
@@ -132,8 +130,30 @@ class FirebaseAuthRepository implements UserRepository {
     } catch (e) {
       throw ('エラーが発生しました');
     }
+  }
 
-    return null;
+  @override
+  Future<String?> signInAnonymously() async {
+    try {
+      final userCredential = await auth.signInAnonymously();
+      final userId = userCredential.user!.uid;
+      await db.collection('users').doc(userId).set({
+        'id': userId,
+        'email': '',
+        'nickName': '',
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
+  }
+
+  @override
+  bool isAnonymous() {
+    final currentUser = auth.currentUser;
+    return currentUser != null && currentUser.isAnonymous;
   }
 
   @override
@@ -205,5 +225,93 @@ class FirebaseAuthRepository implements UserRepository {
       print(e);
     }
     return;
+  }
+
+  @override
+  Future<String?> linkWithEmailAndPassword({
+    required String emailAddress,
+    required String password,
+    required String nickName,
+  }) async {
+    try {
+      final credential =
+          EmailAuthProvider.credential(email: emailAddress, password: password);
+      final userCredential = await FirebaseAuth.instance.currentUser
+          ?.linkWithCredential(credential);
+      final userId = userCredential!.user!.uid;
+      await db.collection('users').doc(userId).update({
+        'id': userId,
+        'email': emailAddress,
+        'nickName': nickName,
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
+  }
+
+  @override
+  Future<String?> linkWithApple() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      // OAthCredentialのインスタンスを作成
+      OAuthProvider oauthProvider = OAuthProvider('apple.com');
+      final credential = oauthProvider.credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+      final userCredential = await FirebaseAuth.instance.currentUser
+          ?.linkWithCredential(credential);
+      final userId = userCredential!.user!.uid;
+      await db.collection('users').doc(userId).update({
+        'id': userId,
+        'email': userCredential.user!.email,
+        'nickName': '',
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
+  }
+
+  @override
+  Future<String?> linkWithGoogle() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+          'https://www.googleapis.com/auth/contacts.readonly',
+        ],
+      );
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+      final userCredential = await FirebaseAuth.instance.currentUser
+          ?.linkWithCredential(credential);
+      final userId = userCredential!.user!.uid;
+      await db.collection('users').doc(userId).update({
+        'id': userId,
+        'email': userCredential.user!.email,
+        'nickName': '',
+        'currentBookId': '',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      return userId;
+    } catch (e) {
+      throw ('エラーが発生しました');
+    }
   }
 }

@@ -22,6 +22,20 @@ abstract class UserRepository {
 
   Future<String?> signInWithApple();
 
+  Future<String?> signInAnonymously();
+
+  bool isAnonymous();
+
+  Future<String?> linkWithEmailAndPassword({
+    required String emailAddress,
+    required String password,
+    required String nickName,
+  });
+
+  Future<String?> linkWithGoogle();
+
+  Future<String?> linkWithApple();
+
   Future<AppUser> fetchUser(String userId);
 
   Future<void> signOut();

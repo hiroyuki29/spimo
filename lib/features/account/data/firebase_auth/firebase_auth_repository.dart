@@ -89,11 +89,9 @@ class FirebaseAuthRepository implements UserRepository {
       // Once signed in, return the UserCredential
       final userCredential = await auth.signInWithCredential(credential);
       final userId = userCredential.user!.uid;
-      await db.collection('users').doc(userId).set({
+      await db.collection('users').doc(userId).update({
         'id': userId,
         'email': userCredential.user!.email,
-        'nickName': '',
-        'currentBookId': '',
         'createdAt': FieldValue.serverTimestamp(),
       });
       return userId;
@@ -119,11 +117,9 @@ class FirebaseAuthRepository implements UserRepository {
       );
       final userCredential = await auth.signInWithCredential(credential);
       final userId = userCredential.user!.uid;
-      await db.collection('users').doc(userId).set({
+      await db.collection('users').doc(userId).update({
         'id': userId,
         'email': userCredential.user!.email,
-        'nickName': '',
-        'currentBookId': '',
         'createdAt': FieldValue.serverTimestamp(),
       });
       return userId;
@@ -273,8 +269,6 @@ class FirebaseAuthRepository implements UserRepository {
       await db.collection('users').doc(userId).update({
         'id': userId,
         'email': userCredential.user!.email,
-        'nickName': '',
-        'currentBookId': '',
         'createdAt': FieldValue.serverTimestamp(),
       });
       return userId;
@@ -305,8 +299,6 @@ class FirebaseAuthRepository implements UserRepository {
       await db.collection('users').doc(userId).update({
         'id': userId,
         'email': userCredential.user!.email,
-        'nickName': '',
-        'currentBookId': '',
         'createdAt': FieldValue.serverTimestamp(),
       });
       return userId;

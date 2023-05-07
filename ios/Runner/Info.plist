@@ -29,9 +29,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app requires to add file to your photo library your microphone</string>
+	<string>このアプリでは音声でメモを作成するためにマイクを使用します。</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>This app requires to speech recognition</string>
+	<string>音声データはメモ作成に使用します。</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

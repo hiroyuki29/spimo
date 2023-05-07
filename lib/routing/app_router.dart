@@ -11,9 +11,10 @@ import 'package:spimo/features/account/domain/respository/user_repository.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/account/presentation/screens/account_edit_screen.dart';
 import 'package:spimo/features/account/presentation/screens/account_home_screen.dart';
+import 'package:spimo/features/account/presentation/screens/login_screen.dart';
 import 'package:spimo/features/account/presentation/screens/reset_password_screen.dart';
-import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/account/presentation/screens/sign_up_screen.dart';
+import 'package:spimo/features/account/presentation/screens/start_screen.dart';
 import 'package:spimo/features/books/presentation/screens/books_home_screen.dart';
 import 'package:spimo/features/books/presentation/screens/search_books_screen.dart';
 import 'package:spimo/features/home/presentation/screens/home_screen.dart';
@@ -22,6 +23,7 @@ import 'package:spimo/features/record/presentation/record_home_screen.dart';
 
 enum AppRoute {
   start,
+  login,
   signUp,
   resetPasword,
   home,
@@ -50,7 +52,7 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
       }
       if (currentUser == null &&
           state.subloc != '/' &&
-          state.subloc != '/signUp' &&
+          state.subloc != '/login' &&
           state.subloc != '/resetPassword') {
         return '/';
       }
@@ -66,12 +68,12 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
         },
         routes: [
           GoRoute(
-            path: 'signUp',
-            name: AppRoute.signUp.name,
+            path: 'login',
+            name: AppRoute.login.name,
             builder: (context, state) {
               FirebaseAnalytics.instance
                   .logScreenView(screenName: state.location);
-              return const SignUpScreen();
+              return const LoginScreen();
             },
           ),
           GoRoute(
@@ -135,6 +137,15 @@ final goRouterProvider = Provider.autoDispose<GoRouter>((ref) {
                   FirebaseAnalytics.instance
                       .logScreenView(screenName: state.location);
                   return const AccountEditScreen();
+                },
+              ),
+              GoRoute(
+                path: 'signUp',
+                name: AppRoute.signUp.name,
+                builder: (context, state) {
+                  FirebaseAnalytics.instance
+                      .logScreenView(screenName: state.location);
+                  return const SignUpScreen();
                 },
               )
             ],

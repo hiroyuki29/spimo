@@ -29,6 +29,9 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = useState<bool>(false);
+    final user = ref.watch(userControllerProvider);
+    final isAnonymous =
+        ref.watch(userControllerProvider.notifier).isAnonymous();
 
     final Uri termsOfServiceUrl =
         Uri.parse('https://spimo-project.firebaseapp.com/terms_of_service');
@@ -94,8 +97,6 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
       );
     }
 
-    final user = ref.watch(userControllerProvider);
-
     return isLoading.value
         ? const LoadingCircleIndicator()
         : Scaffold(
@@ -104,94 +105,113 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                 context: context,
                 title: 'Account',
                 action: IconButton(
-                    onPressed: () {
-                      context.goNamed(AppRoute.editAccount.name);
-                    },
-                    icon: const Icon(Icons.edit))),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    HomeContent(
-                      title: AppLocalizations.of(context)!.nickName,
+                    onPressed: isAnonymous
+                        ? () {
+                            context.goNamed(AppRoute.signUp.name);
+                          }
+                        : () {
+                            context.goNamed(AppRoute.editAccount.name);
+                          },
+                    icon: isAnonymous
+                        ? const Icon(Icons.manage_accounts)
+                        : const Icon(Icons.edit))),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (isAnonymous)
+                    Container(
+                      color: Colors.yellow,
+                      width: double.infinity,
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: DecoratedBox(
-                            decoration: const BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: Text(
+                          'まだ本登録が完了していません。\n本登録を行うと機種変更後もデータを引き続き使用できます。',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          textAlign: TextAlign.center,
+                        )),
+                      ),
+                    ),
+                  HomeContent(
+                    title: AppLocalizations.of(context)!.nickName,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
                             ),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Center(
-                                    child: Text(
-                                  user?.nickName ?? '',
-                                  style: const TextStyle(
-                                    color: black,
-                                    fontSize: 20,
-                                  ),
-                                )),
-                              ),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Center(
+                                  child: Text(
+                                user?.nickName ?? '',
+                                style: const TextStyle(
+                                  color: black,
+                                  fontSize: 20,
+                                ),
+                              )),
                             ),
-                          )),
-                    ),
-                    sizedBoxH32,
-                    AccountButton(
-                      title: AppLocalizations.of(context)!.termsOfUse,
-                      onTap: () async {
-                        await doLaunchingUrl(termsOfServiceUrl);
-                      },
-                    ),
-                    sizedBoxH24,
-                    AccountButton(
-                      title: AppLocalizations.of(context)!.privacyPolicy,
-                      onTap: () async {
-                        await doLaunchingUrl(privacyPolicyUrl);
-                      },
-                    ),
-                    sizedBoxH24,
-                    AccountButton(
-                      title: AppLocalizations.of(context)!.inquiry,
-                      onTap: () async {
-                        await doLaunchingUrl(inquiryUrl);
-                      },
-                    ),
-                    sizedBoxH24,
-                    AccountButton(
-                      title: AppLocalizations.of(context)!.license,
-                      onTap: () async {
-                        final info = await PackageInfo.fromPlatform();
-                        if (!context.mounted) return;
-                        showLicensePage(
-                          context: context,
-                          applicationName: info.appName,
-                          applicationVersion: info.version,
-                          applicationIcon:
-                              SizedBox(height: 50, child: IconAsset.spimoLogo),
-                        );
-                      },
-                    ),
-                    sizedBoxH24,
+                          ),
+                        )),
+                  ),
+                  sizedBoxH32,
+                  AccountButton(
+                    title: AppLocalizations.of(context)!.termsOfUse,
+                    onTap: () async {
+                      await doLaunchingUrl(termsOfServiceUrl);
+                    },
+                  ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: AppLocalizations.of(context)!.privacyPolicy,
+                    onTap: () async {
+                      await doLaunchingUrl(privacyPolicyUrl);
+                    },
+                  ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: AppLocalizations.of(context)!.inquiry,
+                    onTap: () async {
+                      await doLaunchingUrl(inquiryUrl);
+                    },
+                  ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: AppLocalizations.of(context)!.license,
+                    onTap: () async {
+                      final info = await PackageInfo.fromPlatform();
+                      if (!context.mounted) return;
+                      showLicensePage(
+                        context: context,
+                        applicationName: info.appName,
+                        applicationVersion: info.version,
+                        applicationIcon:
+                            SizedBox(height: 50, child: IconAsset.spimoLogo),
+                      );
+                    },
+                  ),
+                  sizedBoxH24,
+                  if (!isAnonymous)
                     AccountButton(
                       title: AppLocalizations.of(context)!.logout,
                       onTap: () async {
                         await logout();
                       },
                     ),
-                    sizedBoxH24,
-                    AccountButton(
-                      title: AppLocalizations.of(context)!.withdrawal,
-                      onTap: () async {
-                        await deleteUser();
-                      },
-                    ),
-                    sizedBoxH24,
-                  ],
-                ),
+                  sizedBoxH24,
+                  AccountButton(
+                    title: AppLocalizations.of(context)!.withdrawal,
+                    onTap: () async {
+                      await deleteUser();
+                    },
+                  ),
+                  sizedBoxH24,
+                ],
               ),
             ),
           );

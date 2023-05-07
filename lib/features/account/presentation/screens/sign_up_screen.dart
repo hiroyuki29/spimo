@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common/widget/button/long_width_button.dart';
+import 'package:spimo/common/widget/button/minimum_text_button.dart';
 import 'package:spimo/common/widget/icon_asset/Icon_asset.dart';
 import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
+import 'package:spimo/common/widget/snackBar/custom_snack_bar.dart';
 import 'package:spimo/features/account/domain/respository/user_repository.dart';
+import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/routing/app_router.dart';
 import 'package:spimo/util/validator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -41,7 +45,7 @@ class SignUpScreen extends HookConsumerWidget {
         isLoading.value = true;
         final userId = await ref
             .read(userRepositoryProvider)
-            .createUserWithEmailAndPassword(
+            .linkWithEmailAndPassword(
               emailAddress: email.value,
               password: password.value,
               nickName: nickName.value,
@@ -53,10 +57,47 @@ class SignUpScreen extends HookConsumerWidget {
           return null;
         });
         if (userId != null && context.mounted) {
-          context.goNamed(AppRoute.home.name);
+          ref.read(userControllerProvider.notifier).fetchUser(userId);
+          context.goNamed(AppRoute.account.name);
         }
         isLoading.value = false;
       }
+    }
+
+    Future<void> appleLink() async {
+      isLoading.value = true;
+      final userId = await ref
+          .read(userRepositoryProvider)
+          .linkWithApple()
+          .catchError((e) {
+        customSnackBar(context, e);
+        isLoading.value = false;
+        return null;
+      });
+      if (userId != null && context.mounted) {
+        ref.read(userControllerProvider.notifier).fetchUser(userId);
+        context.goNamed(AppRoute.account.name);
+      }
+
+      isLoading.value = false;
+    }
+
+    Future<void> googleLink() async {
+      isLoading.value = true;
+      final userId = await ref
+          .read(userRepositoryProvider)
+          .linkWithGoogle()
+          .catchError((e) {
+        customSnackBar(context, e);
+        isLoading.value = false;
+        return null;
+      });
+      if (userId != null && context.mounted) {
+        ref.read(userControllerProvider.notifier).fetchUser(userId);
+        context.goNamed(AppRoute.account.name);
+      }
+
+      isLoading.value = false;
     }
 
     return LoadingOverlay(
@@ -75,12 +116,12 @@ class SignUpScreen extends HookConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    sizedBoxH16,
+                    sizedBoxH8,
                     SizedBox(
                       height: 160,
                       child: IconAsset.spimoLogo,
                     ),
-                    sizedBoxH32,
+                    sizedBoxH16,
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.nickName,
@@ -95,7 +136,7 @@ class SignUpScreen extends HookConsumerWidget {
                         nickName.value = value;
                       },
                     ),
-                    sizedBoxH32,
+                    sizedBoxH16,
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.email,
@@ -109,7 +150,7 @@ class SignUpScreen extends HookConsumerWidget {
                         email.value = value;
                       },
                     ),
-                    sizedBoxH32,
+                    sizedBoxH16,
                     TextFormField(
                       decoration: InputDecoration(
                         labelText: AppLocalizations.of(context)!.passoword,
@@ -124,35 +165,26 @@ class SignUpScreen extends HookConsumerWidget {
                       },
                     ),
                     const SizedBox(height: 30),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            MinimumTextButton(
-                              text: AppLocalizations.of(context)!.termsOfUse,
-                              onTap: () async {
-                                await doLaunchingUrl(termsOfServiceUrl);
-                              },
-                            ),
-                            Text(AppLocalizations.of(context)!.and),
-                            MinimumTextButton(
-                              text: AppLocalizations.of(context)!.privacyPolicy,
-                              onTap: () async {
-                                await doLaunchingUrl(privacyPolicyUrl);
-                              },
-                            ),
-                            Text(AppLocalizations.of(context)!.agreeOnlyJp),
-                          ],
+                        MinimumTextButton(
+                          text: AppLocalizations.of(context)!.termsOfUse,
+                          onTap: () async {
+                            await doLaunchingUrl(termsOfServiceUrl);
+                          },
                         ),
-                        Text(
-                          AppLocalizations.of(context)!
-                              .agreeToTheAboveAndCreateAccount,
+                        Text(AppLocalizations.of(context)!.and),
+                        MinimumTextButton(
+                          text: AppLocalizations.of(context)!.privacyPolicy,
+                          onTap: () async {
+                            await doLaunchingUrl(privacyPolicyUrl);
+                          },
                         ),
+                        Text(AppLocalizations.of(context)!.agreeOnlyJp),
                       ],
                     ),
-                    sizedBoxH16,
+                    sizedBoxH8,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: LongWidthButton(
@@ -163,6 +195,16 @@ class SignUpScreen extends HookConsumerWidget {
                                 : null,
                       ),
                     ),
+                    sizedBoxH32,
+                    SignInButton(
+                      Buttons.Apple,
+                      onPressed: appleLink,
+                    ),
+                    sizedBoxH8,
+                    SignInButton(
+                      Buttons.Google,
+                      onPressed: googleLink,
+                    ),
                   ],
                 ),
               ),
@@ -170,34 +212,6 @@ class SignUpScreen extends HookConsumerWidget {
           )),
         ),
       ),
-    );
-  }
-}
-
-class MinimumTextButton extends StatelessWidget {
-  const MinimumTextButton({
-    Key? key,
-    required this.text,
-    this.textStyle = const TextStyle(
-      decoration: TextDecoration.underline,
-    ),
-    required this.onTap,
-  }) : super(key: key);
-
-  final String text;
-  final TextStyle textStyle;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onTap,
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
-        minimumSize: MaterialStateProperty.all(Size.zero),
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      ),
-      child: Text(text, style: textStyle),
     );
   }
 }

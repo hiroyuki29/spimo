@@ -5,10 +5,14 @@ class LongWidthButton extends StatelessWidget {
     super.key,
     required this.title,
     required this.onTap,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.normal,
   });
 
   final String title;
   final VoidCallback? onTap;
+  final double fontSize;
+  final FontWeight fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,13 @@ class LongWidthButton extends StatelessWidget {
         onPressed: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(title),
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: fontWeight,
+            ),
+          ),
         ),
       ),
     );

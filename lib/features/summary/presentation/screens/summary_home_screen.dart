@@ -241,7 +241,7 @@ class AddSummaryBottomsheet extends HookConsumerWidget {
 
     useEffect(() {
       RewardedAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/1712485313',
+        adUnitId: 'ca-app-pub-7712851539992039/7178400213',
         request: const AdRequest(
           keywords: [
             'technology',

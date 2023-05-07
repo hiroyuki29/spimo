@@ -126,7 +126,7 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                             child: Text(
-                          'まだ本登録が完了していません。\n本登録を行うと機種変更をしてもデータを引き続き使用できます。',
+                          'まだ本登録が完了していません。\n本登録を行うと機種変更後もデータを引き続き使用できます。',
                           style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         )),

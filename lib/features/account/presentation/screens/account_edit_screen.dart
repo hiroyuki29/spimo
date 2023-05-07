@@ -41,7 +41,7 @@ class AccountEditScreen extends HookConsumerWidget {
           return null;
         });
         if (context.mounted) {
-          context.goNamed(AppRoute.home.name);
+          context.goNamed(AppRoute.account.name);
         }
         isLoading.value = false;
       }

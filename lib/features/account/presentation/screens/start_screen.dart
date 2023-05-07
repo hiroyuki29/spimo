@@ -125,7 +125,7 @@ class StartScreen extends HookConsumerWidget {
                       ),
                       sizedBoxH8,
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 80),
+                        padding: const EdgeInsets.symmetric(horizontal: 60),
                         child: LongWidthButton(
                           title: AppLocalizations.of(context)!.login,
                           onTap: () => context.goNamed(AppRoute.login.name),

@@ -21,8 +21,6 @@ class StartScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final email = useState<String>('');
-    final password = useState<String>('');
     final isLoading = useState<bool>(false);
 
     final Uri termsOfServiceUrl =
@@ -56,10 +54,13 @@ class StartScreen extends HookConsumerWidget {
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        ref
-            .read(remoteConfigProvider)
-            .versionCheck()
-            .then((isNeedUpdate) => showUpdateDialog(isNeedUpdate, context));
+        bool isNeedUpdate = await ref.read(remoteConfigProvider).versionCheck();
+        if (context.mounted) {
+          showUpdateDialog(isNeedUpdate, context);
+          if (!isNeedUpdate) {
+            context.goNamed(AppRoute.introduction.name);
+          }
+        }
       });
       return null;
     }, []);

@@ -5,7 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common/widget/async_value/async_value_widget.dart';
 import 'package:spimo/common/widget/color/color.dart';
+import 'package:spimo/common/widget/compornent/Bubble.dart';
 import 'package:spimo/common/widget/compornent/no_data_display_widget.dart';
+import 'package:spimo/common/widget/sized_box/constant_sized_box.dart';
 import 'package:spimo/features/account/presentation/controller/user_controller.dart';
 import 'package:spimo/features/books/domain/model/book.dart';
 import 'package:spimo/features/books/presentation/controller/books_controller.dart';
@@ -43,47 +45,74 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
 
     return Scaffold(
       backgroundColor: backgroundGray,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: accent,
-        onPressed: () {
-          context.goNamed(AppRoute.searchBooks.name);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (!books.hasValue || books.value!.isEmpty)
+            const Padding(
+              padding: EdgeInsets.only(right: 0),
+              child: Bubble(
+                  text: 'まずは本を登録しよう！',
+                  textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)),
+            ),
+          sizedBoxH16,
+          FloatingActionButton(
+            backgroundColor: accent,
+            onPressed: () {
+              context.goNamed(AppRoute.searchBooks.name);
+            },
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
       appBar: CommonAppBar(
         context: context,
         title: 'Book',
+        action: !books.hasValue || books.value!.isNotEmpty
+            ? null
+            : IconButton(
+                onPressed: () {
+                  context.pushNamed(AppRoute.introduction.name);
+                },
+                icon: const Icon(Icons.info_outline),
+              ),
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 60,
-              child: DrawerHeader(
-                  decoration: const BoxDecoration(color: primaryLight),
-                  child: Text(AppLocalizations.of(context)!.sort)),
+      endDrawer: !books.hasValue || books.value!.isEmpty
+          ? null
+          : Drawer(
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: 60,
+                    child: DrawerHeader(
+                        decoration: const BoxDecoration(color: primaryLight),
+                        child: Text(AppLocalizations.of(context)!.sort)),
+                  ),
+                  SortDrawerTile(
+                    title: AppLocalizations.of(context)!.title,
+                    isSelected: sortType == BookSortType.title,
+                    onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                        BookSortType.title,
+                  ),
+                  SortDrawerTile(
+                    title: AppLocalizations.of(context)!.registeredDay,
+                    isSelected: sortType == BookSortType.dateTime,
+                    onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                        BookSortType.dateTime,
+                  ),
+                  SortDrawerTile(
+                    title: AppLocalizations.of(context)!.characterCount,
+                    isSelected: sortType == BookSortType.ranking,
+                    onTap: () => ref.read(bookSortTypeProvider.notifier).state =
+                        BookSortType.ranking,
+                  ),
+                ],
+              ),
             ),
-            SortDrawerTile(
-              title: AppLocalizations.of(context)!.title,
-              isSelected: sortType == BookSortType.title,
-              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
-                  BookSortType.title,
-            ),
-            SortDrawerTile(
-              title: AppLocalizations.of(context)!.registeredDay,
-              isSelected: sortType == BookSortType.dateTime,
-              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
-                  BookSortType.dateTime,
-            ),
-            SortDrawerTile(
-              title: AppLocalizations.of(context)!.characterCount,
-              isSelected: sortType == BookSortType.ranking,
-              onTap: () => ref.read(bookSortTypeProvider.notifier).state =
-                  BookSortType.ranking,
-            ),
-          ],
-        ),
-      ),
       body: Column(
         children: [
           AsyncValueWidget(
@@ -192,7 +221,7 @@ class SortDrawerTile extends StatelessWidget {
           title,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.titleSmall,
         ),
       ),
     );

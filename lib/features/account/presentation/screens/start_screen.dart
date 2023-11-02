@@ -75,7 +75,7 @@ class StartScreen extends HookConsumerWidget {
               key: formKey,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
+                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

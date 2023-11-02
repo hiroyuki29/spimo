@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
@@ -12,6 +13,7 @@ import 'package:spimo/features/books/presentation/ui_compornent/current_book_car
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class RecordHomeScreen extends ConsumerStatefulWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
@@ -85,7 +87,16 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: backgroundGray,
-        appBar: CommonAppBar(context: context, title: 'Record'),
+        appBar: CommonAppBar(
+          context: context,
+          title: 'Record',
+          action: IconButton(
+            onPressed: () {
+              context.pushNamed(AppRoute.introduction.name);
+            },
+            icon: const Icon(Icons.info_outline),
+          ),
+        ),
         body: AsyncValueWidget(
           value: currentBook,
           data: (book) {

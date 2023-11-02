@@ -98,7 +98,7 @@ class SearchBooksScreen extends HookConsumerWidget {
                               color: primaryDark,
                             ),
                             hintText: AppLocalizations.of(context)!.bookName,
-                            hintStyle: Theme.of(context).textTheme.bodyText1,
+                            hintStyle: Theme.of(context).textTheme.bodyLarge,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
                               borderSide:
@@ -106,7 +106,7 @@ class SearchBooksScreen extends HookConsumerWidget {
                             ),
                           ),
                           controller: searchWord,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     ),
@@ -145,6 +145,11 @@ class SearchBooksScreen extends HookConsumerWidget {
                           final scrollProportion = notification.metrics.pixels /
                               notification.metrics.maxScrollExtent;
                           if (scrollProportion > 0.99 && !isLoading.value) {
+                            searchIndex.value += 1;
+                            fetchBooks();
+                          }
+                          if (notification.metrics.pixels < -100 &&
+                              !isLoading.value) {
                             searchIndex.value += 1;
                             fetchBooks();
                           }

@@ -139,6 +139,23 @@ class _BooksHomeScreenState extends ConsumerState<BooksHomeScreen> {
                     ),
                   ),
           ),
+          if ((!currentBook.hasValue || currentBook.value == null) &&
+              (!books.hasValue || books.value!.isNotEmpty))
+            Column(
+              children: const [
+                sizedBoxH16,
+                Padding(
+                  padding: EdgeInsets.only(right: 0),
+                  child: Bubble(
+                      text: '読書メモをしたい本をタップ！',
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18)),
+                ),
+                sizedBoxH16,
+              ],
+            ),
           Expanded(
             child: AsyncValueWidget(
               value: books,

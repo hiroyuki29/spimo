@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
@@ -15,7 +16,7 @@ import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/routing/app_router.dart';
 
-class RecordHomeScreen extends ConsumerStatefulWidget {
+class RecordHomeScreen extends StatefulHookConsumerWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -82,6 +83,15 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     final currentBook = ref.watch(currentBookControllerProvider);
     final currentBookController =
         ref.watch(currentBookControllerProvider.notifier);
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

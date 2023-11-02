@@ -41,6 +41,15 @@ class MemosHomeScreen extends HookConsumerWidget {
       ),
     ];
 
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
+
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(

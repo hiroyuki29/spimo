@@ -26,6 +26,7 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(initialLength: 2);
+    final currentBook = ref.watch(currentBookControllerProvider);
 
     List<Widget> tabs = [
       Tab(
@@ -43,6 +44,15 @@ class HomeScreen extends HookConsumerWidget {
     ];
 
     final user = ref.watch(userControllerProvider);
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
 
     return Scaffold(
       backgroundColor: backgroundGray,

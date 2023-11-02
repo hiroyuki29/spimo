@@ -238,50 +238,53 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   );
           },
         ),
-        floatingActionButton: _speechToText.isListening
-            ? Padding(
-                padding: const EdgeInsets.only(right: 5, bottom: 10),
-                child: SizedBox(
-                  height: 60,
-                  width: 150,
-                  child: ElevatedButton(
-                    onPressed: _stopListening,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: accent,
-                    ),
-                    child: Text(
-                      'Stop',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(color: white),
+        floatingActionButton: Visibility(
+          visible: currentBook.hasValue && currentBook.value != null,
+          child: _speechToText.isListening
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 5, bottom: 10),
+                  child: SizedBox(
+                    height: 60,
+                    width: 150,
+                    child: ElevatedButton(
+                      onPressed: _stopListening,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accent,
+                      ),
+                      child: Text(
+                        'Stop',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .copyWith(color: white),
+                      ),
                     ),
                   ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'red_btn',
+                        backgroundColor: Colors.red,
+                        onPressed: () => _startListening(isAccent: true),
+                        tooltip: 'Listen',
+                        child: const Icon(Icons.mic),
+                      ),
+                      sizedBoxW24,
+                      FloatingActionButton(
+                        heroTag: 'black_btn',
+                        backgroundColor: primaryDark,
+                        onPressed: () => _startListening(isAccent: false),
+                        tooltip: 'Listen',
+                        child: const Icon(Icons.mic),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(right: 10, bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: 'red_btn',
-                      backgroundColor: Colors.red,
-                      onPressed: () => _startListening(isAccent: true),
-                      tooltip: 'Listen',
-                      child: const Icon(Icons.mic),
-                    ),
-                    sizedBoxW24,
-                    FloatingActionButton(
-                      heroTag: 'black_btn',
-                      backgroundColor: primaryDark,
-                      onPressed: () => _startListening(isAccent: false),
-                      tooltip: 'Listen',
-                      child: const Icon(Icons.mic),
-                    ),
-                  ],
-                ),
-              ),
+        ),
       ),
     );
   }

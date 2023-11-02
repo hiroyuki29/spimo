@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
 import 'package:spimo/common/widget/async_value/async_value_widget.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:spimo/features/record/presentation/record_home_screen.dart';
 import 'package:spimo/features/summary/presentation/screens/summary_home_screen.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class MemosHomeScreen extends HookConsumerWidget {
   const MemosHomeScreen({super.key});
@@ -39,11 +41,26 @@ class MemosHomeScreen extends HookConsumerWidget {
       ),
     ];
 
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
+
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(
         context: context,
         title: 'Memo',
+        action: IconButton(
+          onPressed: () {
+            context.pushNamed(AppRoute.introduction.name);
+          },
+          icon: const Icon(Icons.info_outline),
+        ),
       ),
       body: AsyncValueWidget(
         value: currentBook,

@@ -45,19 +45,12 @@ FirebaseOptions getFirebaseOptions() {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       routerConfig: ref.watch(goRouterProvider),
-      title: 'Flutter Demo',
+      title: 'spiMo',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
-      // localizationsDelegates: const [
-      //   AppLocalizations.localizations.Delegates,
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
       supportedLocales: AppLocalizations.supportedLocales,
       theme: spimoTheme,
     );

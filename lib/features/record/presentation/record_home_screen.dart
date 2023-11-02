@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
@@ -12,8 +14,9 @@ import 'package:spimo/features/books/presentation/ui_compornent/current_book_car
 import 'package:spimo/features/memos/domain/model/memo.dart';
 import 'package:spimo/features/memos/domain/model/memo_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:spimo/routing/app_router.dart';
 
-class RecordHomeScreen extends ConsumerStatefulWidget {
+class RecordHomeScreen extends StatefulHookConsumerWidget {
   const RecordHomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -81,11 +84,29 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
     final currentBookController =
         ref.watch(currentBookControllerProvider.notifier);
 
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: backgroundGray,
-        appBar: CommonAppBar(context: context, title: 'Record'),
+        appBar: CommonAppBar(
+          context: context,
+          title: 'Record',
+          action: IconButton(
+            onPressed: () {
+              context.pushNamed(AppRoute.introduction.name);
+            },
+            icon: const Icon(Icons.info_outline),
+          ),
+        ),
         body: AsyncValueWidget(
           value: currentBook,
           data: (book) {
@@ -227,50 +248,53 @@ class RecordHomeScreenState extends ConsumerState<RecordHomeScreen> {
                   );
           },
         ),
-        floatingActionButton: _speechToText.isListening
-            ? Padding(
-                padding: const EdgeInsets.only(right: 5, bottom: 10),
-                child: SizedBox(
-                  height: 60,
-                  width: 150,
-                  child: ElevatedButton(
-                    onPressed: _stopListening,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: accent,
-                    ),
-                    child: Text(
-                      'Stop',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(color: white),
+        floatingActionButton: Visibility(
+          visible: currentBook.hasValue && currentBook.value != null,
+          child: _speechToText.isListening
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 5, bottom: 10),
+                  child: SizedBox(
+                    height: 60,
+                    width: 150,
+                    child: ElevatedButton(
+                      onPressed: _stopListening,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accent,
+                      ),
+                      child: Text(
+                        'Stop',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall!
+                            .copyWith(color: white),
+                      ),
                     ),
                   ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.only(right: 10, bottom: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FloatingActionButton(
+                        heroTag: 'red_btn',
+                        backgroundColor: Colors.red,
+                        onPressed: () => _startListening(isAccent: true),
+                        tooltip: 'Listen',
+                        child: const Icon(Icons.mic),
+                      ),
+                      sizedBoxW24,
+                      FloatingActionButton(
+                        heroTag: 'black_btn',
+                        backgroundColor: primaryDark,
+                        onPressed: () => _startListening(isAccent: false),
+                        tooltip: 'Listen',
+                        child: const Icon(Icons.mic),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            : Padding(
-                padding: const EdgeInsets.only(right: 10, bottom: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      heroTag: 'red_btn',
-                      backgroundColor: Colors.red,
-                      onPressed: () => _startListening(isAccent: true),
-                      tooltip: 'Listen',
-                      child: const Icon(Icons.mic),
-                    ),
-                    sizedBoxW24,
-                    FloatingActionButton(
-                      heroTag: 'black_btn',
-                      backgroundColor: primaryDark,
-                      onPressed: () => _startListening(isAccent: false),
-                      tooltip: 'Listen',
-                      child: const Icon(Icons.mic),
-                    ),
-                  ],
-                ),
-              ),
+        ),
       ),
     );
   }

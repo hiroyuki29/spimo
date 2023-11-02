@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spimo/common/method/datetime_formatter.dart';
 import 'package:spimo/common/widget/app_bar/common_app_bar.dart';
@@ -18,12 +19,14 @@ import 'package:spimo/features/home/presentation/controller/home_all_memo_chart_
 import 'package:spimo/features/home/presentation/controller/home_current_book_chart_controller.dart';
 import 'package:spimo/features/home/presentation/ui_compornent/chart_rage_chip.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:spimo/routing/app_router.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(initialLength: 2);
+    final currentBook = ref.watch(currentBookControllerProvider);
 
     List<Widget> tabs = [
       Tab(
@@ -42,6 +45,15 @@ class HomeScreen extends HookConsumerWidget {
 
     final user = ref.watch(userControllerProvider);
 
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (currentBook.hasValue && currentBook.value == null) {
+          context.goNamed(AppRoute.books.name);
+        }
+      });
+      return null;
+    }, [currentBook]);
+
     return Scaffold(
       backgroundColor: backgroundGray,
       appBar: CommonAppBar(
@@ -52,6 +64,12 @@ class HomeScreen extends HookConsumerWidget {
           indicatorColor: primaryDark,
           indicatorWeight: 3,
           tabs: tabs,
+        ),
+        action: IconButton(
+          onPressed: () {
+            context.pushNamed(AppRoute.introduction.name);
+          },
+          icon: const Icon(Icons.info_outline),
         ),
       ),
       body: Stack(
@@ -227,7 +245,7 @@ class MemoRankingTile extends StatelessWidget {
                 book.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ),
@@ -258,13 +276,13 @@ class MemoRankingTile extends StatelessWidget {
                           AppLocalizations.of(context)!.memoCharacterCounts,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText2,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         Text(
                           book.totalMemoCount.toString(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
                     ),
@@ -471,7 +489,7 @@ class HomeContent extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                 child: Text(
                   title!,
-                  style: Theme.of(context).textTheme.subtitle2,
+                  style: Theme.of(context).textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),
               )

@@ -113,7 +113,15 @@ class _AccountHomeScreenState extends ConsumerState<AccountHomeScreen> {
                             context.goNamed(AppRoute.editAccount.name);
                           },
                     icon: isAnonymous
-                        ? const Icon(Icons.manage_accounts)
+                        ? Column(
+                            children: const [
+                              Icon(Icons.manage_accounts),
+                              Text(
+                                '本登録はこちら',
+                                style: TextStyle(fontSize: 9),
+                              )
+                            ],
+                          )
                         : const Icon(Icons.edit))),
             body: SingleChildScrollView(
               child: Column(
